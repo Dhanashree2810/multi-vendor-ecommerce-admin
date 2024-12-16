@@ -1,32 +1,78 @@
-import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
-import { cn } from "@/lib/utils";
-import { ReactNode } from "react";
+'use client'
 
-interface RootLayoutProps {
-  children: ReactNode;
-}
+import { usePathname } from 'next/navigation'
+import { AdminSidebar } from "@/components/custom/admin-sidebar"
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
+import { Separator } from "@/components/ui/separator"
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar"
+import React from 'react'
 
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-poppins",
-});
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  const pathname = usePathname()
 
-export const metadata: Metadata = {
-  title: "",
-  description: "",
-};
+  const generateBreadcrumbItems = (path: string) => {
+    const parts = path.split('/').filter(Boolean)
+    return parts.map((part, index) => {
+      const href = `/${parts.slice(0, index + 1).join('/')}`
+      const label = part.charAt(0).toUpperCase() + part.slice(1)
+      const isLast = index === parts.length - 1
 
-export default function RootLayout({ children }: RootLayoutProps) {
+      return {
+        href,
+        label,
+        isLast,
+      }
+    })
+  }
+
+  const breadcrumbItems = generateBreadcrumbItems(pathname)
+
   return (
-    <div
-      className={cn(
-        "min-h-screen bg-background font-sans antialiased flex flex-col h-[100dvh]",
-        poppins.variable
-      )}
-    >
-      <main>{children}</main>
-    </div>
-  );
+    <SidebarProvider>
+      <AdminSidebar />
+      <SidebarInset className="bg-[#CDCAE9]">
+        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+          <div className="flex items-center gap-2 px-4">
+            <SidebarTrigger className="-ml-1" />
+            <Separator orientation="vertical" className="mr-2 h-4" />
+            <Breadcrumb>
+              <BreadcrumbList>
+                {breadcrumbItems.map((item, index) => (
+                  <React.Fragment key={item.href}>
+                    <BreadcrumbItem>
+                      {item.isLast ? (
+                        <BreadcrumbPage>{item.label}</BreadcrumbPage>
+                      ) : (
+                        <BreadcrumbLink href={item.href}>{item.label}</BreadcrumbLink>
+                      )}
+                    </BreadcrumbItem>
+                    {index < breadcrumbItems.length - 1 && <BreadcrumbSeparator />}
+                  </React.Fragment>
+                ))}
+              </BreadcrumbList>
+            </Breadcrumb>
+          </div>
+        </header>
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+          {children}
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
+  )
 }
+

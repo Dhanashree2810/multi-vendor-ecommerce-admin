@@ -24,7 +24,9 @@ export function LoginForm() {
         if (emailId && password) {
             setLoading(true);
             // try {
-            //     const data = await loginUser({ emailId, pin: password });
+            // const response = await fetch('http://localhost:5000/api/admin-login');
+            // const data = await response.json();
+            // console.log("data", data);
 
             //     if (data && data.token) {
             //         localStorage.setItem('token', data.token);
@@ -53,7 +55,7 @@ export function LoginForm() {
     }
     return (
         <div
-            className="flex items-center justify-center w-full h-screen bg-[#CDCAE9]"          
+            className="flex items-center justify-center w-full h-screen bg-[#CDCAE9]"
         >
             <div className="w-full max-w-sm bg-[#6F68D1] p-2 rounded-lg shadow-lg">
                 <Card className=' border-none bg-[#6F68D1]'>
