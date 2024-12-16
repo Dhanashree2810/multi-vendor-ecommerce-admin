@@ -18,6 +18,7 @@ import {
 
 export default function Page() {
   return (
+    <>
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
@@ -50,5 +51,7 @@ export default function Page() {
         </div>
       </SidebarInset>
     </SidebarProvider>
+
+    </>
   )
 }

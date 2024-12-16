@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { ReactNode } from "react";
+import { Poppins } from "next/font/google";
 
 interface RootLayoutProps {
   children: ReactNode;

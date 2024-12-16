@@ -10,7 +10,7 @@ import Link from 'next/link';
 export function LoginForm() {
     const [emailId, setEmailId] = useState('');
     const [password, setPassword] = useState('');
-    const [isLoginSuccess, setIsLoginSuccess] = useState(false);
+    const [isLoginSuccess] = useState(false);
     const [errors, setErrors] = useState({ emailId: '', password: '' });
     const [loading, setLoading] = useState(false);
     const [isClient, setIsClient] = useState(false);
