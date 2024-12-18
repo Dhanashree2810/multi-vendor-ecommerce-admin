@@ -1,168 +1,168 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
+import React, { useState } from "react";
+import { Button } from "primereact/button";
+import { InputText } from "primereact/inputtext";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import { Toast } from "primereact/toast";
 import { FaEye } from "react-icons/fa";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import Pagination from "@/components/custom/Pagination";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import Tooltip from "@/components/custom/Tooltipcustom";
 
-// Define the structure of an Order
-type Order = {
-  _id: string;
-  price: string;
-  shopName: string;
-  payment: string;
-  date: string;
-};
+// Demo data
+const demoCategories = [
+  {
+    Id: "#675d143198f4ae7d19703b9e",
+    Price: "$1544",
+    PaymentStatus: "Unpaid",
+    OrderStatus: "Cancelled",
+    Date: "December 14, 2024 10:44 AM",
+  },
+  {
+    Id: "#675d143198f4ae7d19703b9e",
+    Price: "$1544",
+    PaymentStatus: "Unpaid",
+    OrderStatus: "Cancelled",
+    Date: "December 14, 2024 10:44 AM",
+  },
+  {
+    Id: "#675d143198f4ae7d19703b9e",
+    Price: "$1544",
+    PaymentStatus: "Unpaid",
+    OrderStatus: "Cancelled",
+    Date: "December 14, 2024 10:44 AM",
+  },
+];
 
-const Orders = () => {
-  // States for pagination, search, and data management
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [searchValue, setSearchValue] = useState<string>("");
-  const [itemsPerPage, setItemsPerPage] = useState<number>(5);
+const CategoryPage = () => {
+  const [categories] = useState(demoCategories);
+  const [globalFilter, setGlobalFilter] = useState("");
+  const [first, setFirst] = useState(0);
+  const [rows, setRows] = useState(5);
 
-  const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
-  const [totalOrders, setTotalOrders] = useState<number>(0);
+  // Header with Search
+  const renderHeader = () => (
+    <div className="flex justify-between items-center bg-[#EFEFEF] p-4 rounded-md border border-gray-300 shadow-sm">
+      <h2 className="text-lg font-semibold">Orders</h2>
+      <span className="p-input-icon-left">
+        <i className="pi pi-search" />
+        <InputText
+          type="search"
+          onInput={(e) => setGlobalFilter(e.currentTarget.value)}
+          placeholder="Search Orders"
+          className="p-inputtext-sm h-10 w-[300px] p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0097A7]"
+        />
+      </span>
+    </div>
+  );
 
-  // Mock order data
-  const mockOrders: Order[] = [
-    {
-      _id: "#675d143198f4ae7d19703b9e",
-      price: "$1544",
-      shopName: "John's Shop",
-      payment: "Cancelled",
-      date: "December 14, 2024 10:44 AM",
-    },
-    {
-      _id: "#675d143198f4ae7d19703b9f",
-      price: "$2000",
-      shopName: "Emily's Store",
-      payment: "Paid",
-      date: "December 15, 2024 11:30 AM",
-    },
-    {
-      _id: "#675d143198f4ae7d19703b9g",
-      price: "$1799",
-      shopName: "Smith Mart",
-      payment: "Pending",
-      date: "December 16, 2024 09:15 AM",
-    },
-  ];
+  // Action Buttons
+  const actionTemplate = (rowData) => (
+    <div className="flex gap-2">
+      <Tooltip message="View">
+        <Button icon={<FaEye />} severity="info" size="small" />
+      </Tooltip>
+    </div>
+  );
 
-  // Filter orders based on search input
-  useEffect(() => {
-    const filtered = mockOrders.filter((order) =>
-      order.shopName.toLowerCase().includes(searchValue.toLowerCase())
-    );
-    setFilteredOrders(filtered);
-    setTotalOrders(filtered.length);
-  }, [searchValue, currentPage, itemsPerPage]);
+  // Pagination Handler
+  const onPageChange = (e) => {
+    setFirst(e.first);
+    setRows(e.rows);
+  };
 
   return (
-    <div className="px-4 lg:px-8 py-6">
-      <h1 className="text-xl font-bold mb-4">Orders</h1>
+    <div className="p-4">
+      <Toast />
+      <div className="bg-white shadow-md rounded-md p-4">
+        <div className="pb-4 mb-4">{renderHeader()}</div>
+        <DataTable
+          value={categories}
+          paginator
+          rowsPerPageOptions={[5, 10, 25, 50]}
+          rows={rows}
+          first={first}
+          onPage={onPageChange}
+          globalFilter={globalFilter}
+          emptyMessage="No categories found."
+          responsiveLayout="scroll"
+        >
+     
 
-      {/* Top Bar: Items Per Page and Search */}
-      <div className="w-full p-4 bg-indigo-600 rounded-md">
-        <div className="flex justify-between items-center mb-4">
-          <Select
-            value={String(itemsPerPage)}
-            onValueChange={(value) => setItemsPerPage(Number(value))}
-          >
-            <SelectTrigger className="bg-indigo-600 text-[#D0D2D6] border border-slate-700 rounded-md">
-              <SelectValue placeholder="Items per page" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Items per page</SelectLabel>
-                <SelectItem value="5" className="text-[#D0D2D6]">
-                  5
-                </SelectItem>
-                <SelectItem value="10" className="text-[#D0D2D6]">
-                  10
-                </SelectItem>
-                <SelectItem value="20" className="text-[#D0D2D6]">
-                  20
-                </SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-
-          <Input
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            placeholder="Search by shop name..."
-            className="bg-indigo-600 text-[#D0D2D6] border border-slate-700 rounded-md"
+             {/* Price Column */}
+             <Column
+            field="Id"
+            header="Order ID"
+            sortable
+            headerStyle={{
+              background: "#0097A7",
+              fontWeight: "bold",
+              color: "white",
+            }}
           />
-        </div>
 
-        {/* Orders Table */}
-        <div className="relative overflow-x-auto">
-          <Table className="w-full text-sm text-left text-[#D0D2D6]">
-            <TableHeader className="text-sm uppercase border-b border-slate-700">
-              <TableRow>
-                <TableHead className="py-3 px-4">Order ID</TableHead>
-                <TableHead className="py-3 px-4">Price</TableHead>
-                <TableHead className="py-3 px-4">Shop Name</TableHead>
-                <TableHead className="py-3 px-4">Payment Status</TableHead>
-                <TableHead className="py-3 px-4">Date</TableHead>
-                <TableHead className="py-3 px-4">Action</TableHead>
-              </TableRow>
-            </TableHeader>
+          {/* Price Column */}
+          <Column
+            field="Price"
+            header="Price"
+            sortable
+            headerStyle={{
+              background: "#0097A7",
+              fontWeight: "bold",
+              color: "white",
+            }}
+          />
 
-            <TableBody>
-              {filteredOrders.map((order) => (
-                <TableRow key={order._id}>
-                  <TableCell className="py-1 px-4">{order._id}</TableCell>
-                  <TableCell className="py-1 px-4">{order.price}</TableCell>
-                  <TableCell className="py-1 px-4">{order.shopName}</TableCell>
-                  <TableCell className="py-1 px-4">{order.payment}</TableCell>
-                  <TableCell className="py-1 px-4">{order.date}</TableCell>
-                  <TableCell className="py-1 px-4">
-                    <Link href={`/admin/dashboard/seller/details/${order._id}`}>
-                      <Button className="bg-green-500 hover:shadow-lg hover:shadow-green-500/50">
-                        <FaEye />
-                      </Button>
-                    </Link>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+          {/* Payment Status Column */}
+          <Column
+            field="PaymentStatus"
+            header="Payment Status"
+            sortable
+            headerStyle={{
+              background: "#0097A7",
+              fontWeight: "bold",
+              color: "white",
+            }}
+          />
 
-        {/* Pagination */}
-        {totalOrders > itemsPerPage && (
-          <div className="flex justify-end mt-4">
-            <Pagination
-              pageNumber={currentPage}
-              setPageNumber={setCurrentPage}
-              totalItem={totalOrders}
-              parPage={itemsPerPage}
-              showItem={4}
-            />
-          </div>
-        )}
+          {/* Order Status Column */}
+          <Column
+            field="OrderStatus"
+            header="Order Status"
+            sortable
+            headerStyle={{
+              background: "#0097A7",
+              fontWeight: "bold",
+              color: "white",
+            }}
+          />
+
+          {/* Date Column */}
+          <Column
+            field="Date"
+            header="Date"
+            body={(data) => data.Date}
+            sortable
+            headerStyle={{
+              background: "#0097A7",
+              fontWeight: "bold",
+              color: "white",
+            }}
+          />
+
+          {/* Actions Column */}
+          <Column
+            header="Actions"
+            body={actionTemplate}
+            headerStyle={{
+              background: "#0097A7",
+              fontWeight: "bold",
+              color: "white",
+            }}
+          />
+        </DataTable>
       </div>
     </div>
   );
 };
 
-export default Orders;
+export default CategoryPage;
