@@ -1,4 +1,6 @@
 import React, { ChangeEvent } from "react";
+import { Input } from "../ui/input";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 interface SearchProps {
   setParPage: (value: number) => void;
@@ -6,9 +8,9 @@ interface SearchProps {
   searchValue: string;
 }
 
-const Search = ({ setParPage, setSearchValue, searchValue }:SearchProps) => {
-  const handleParPageChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setParPage(parseInt(e.target.value, 10));
+const Search = ({ setParPage, setSearchValue, searchValue }: SearchProps) => {
+  const handleParPageChange = (value: string) => {
+    setParPage(parseInt(value, 10));
   };
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -17,20 +19,25 @@ const Search = ({ setParPage, setSearchValue, searchValue }:SearchProps) => {
 
   return (
     <div className="flex justify-between items-center">
-      <select
-        onChange={handleParPageChange}
-        className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]"
-      >
-        <option value="5">5</option>
-        <option value="10">10</option>
-        <option value="20">20</option>
-      </select>
-      <input
+      <Select onValueChange={handleParPageChange}>
+        <SelectTrigger className="px-4 py-2 cursor-pointer bg-[#FDF6EC] border border-slate-700 rounded-md text-[#d0d2d6] w-[120px]">
+          <SelectValue placeholder="Items per page" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectItem value="5">5</SelectItem>
+            <SelectItem value="10">10</SelectItem>
+            <SelectItem value="20">20</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+
+      <Input
+        type="text"
         onChange={handleSearchChange}
         value={searchValue}
-        className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]"
-        type="text"
         placeholder="Search"
+        className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#FDF6EC] border border-slate-700 rounded-md text-white w-60"
       />
     </div>
   );

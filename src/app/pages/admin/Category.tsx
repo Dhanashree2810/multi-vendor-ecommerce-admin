@@ -1,6 +1,5 @@
 'use client'
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import { FaEdit, FaTrash, FaImage } from "react-icons/fa";
 import { IoMdCloseCircle } from "react-icons/io";
 import Pagination from "@/components/custom/Pagination";
@@ -103,7 +102,7 @@ const Category = () => {
         if (typeof category.image === "string") {
             setImagePreview(category.image);
         } else {
-            setImagePreview(category.image.src); // Use the `src` property of StaticImageData
+            setImagePreview(category.image.src);
         }
 
         setEditId(category.id);
@@ -141,15 +140,15 @@ const Category = () => {
                 <h1 className="text-lg font-semibold text-gray-200">Categories</h1>
                 <button
                     onClick={() => setShowSidebar(true)}
-                    className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+                    className="bg-red-500 text-[#4B5563] px-4 py-2 rounded-md hover:bg-red-600"
                 >
                     Add Category
                 </button>
             </div> */}
 
             <div className="flex flex-wrap gap-5">
-                <div className="w-full lg:w-7/12 ">
-                    <div className="bg-[#6A5FDF] p-3 rounded-md">
+                <div className="w-full  lg:w-7/12 ">
+                    <div className="bg-[#FFF7E6] p-3 rounded-md">
                         <Search
                             setSearchValue={setSearchValue}
                             setParPage={setParPage}
@@ -157,13 +156,13 @@ const Category = () => {
                         />
 
                         <div className="overflow-x-auto mt-4">
-                            <Table className="w-full text-sm bg-[#6A5FDF] text-white">
+                            <Table className="w-full text-sm bg-[#FFF7E6] text-[#4B5563]">
                                 <TableHeader className="uppercase border-b border-gray-700">
                                     <TableRow>
-                                        <TableHead className="py-2 px-4 text-white">No</TableHead>
-                                        <TableHead className="py-2 px-4 text-white">Image</TableHead>
-                                        <TableHead className="py-2 px-4 text-white">Name</TableHead>
-                                        <TableHead className="py-2 px-4 text-white">Actions</TableHead>
+                                        <TableHead className="py-2 px-4 text-[#4B5563]">No</TableHead>
+                                        <TableHead className="py-2 px-4 text-[#4B5563]">Image</TableHead>
+                                        <TableHead className="py-2 px-4 text-[#4B5563]">Name</TableHead>
+                                        <TableHead className="py-2 px-4 text-[#4B5563]">Actions</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -209,10 +208,9 @@ const Category = () => {
                         </div>
                     </div>
                 </div>
-
-                {/* Sidebar */}
+                
                 <div
-                    className={`fixed top-0 right-0 w-80 bg-[#6A5FDF] h-full p-4 transition-transform transform ${showSidebar ? "translate-x-0" : "translate-x-full"
+                    className={`fixed top-0 right-0 w-80 bg-[#FFF7E6] h-full p-4 transition-transform transform ${showSidebar ? "translate-x-0" : "translate-x-full"
                         } lg:translate-x-0 lg:relative lg:w-[40%]`}
                 >
                     <div className="flex justify-between items-center mb-4">
@@ -228,7 +226,7 @@ const Category = () => {
                     </div>
                     <form onSubmit={handleFormSubmit}>
                         <div className="mb-4">
-                            <Label htmlFor="name" className="block text-[#B9CED6] mb-1 text-[16px]">
+                            <Label htmlFor="name" className="block text-[#FFF7E6] mb-1 text-[16px]">
                                 Category Name
                             </Label>
                             <Input

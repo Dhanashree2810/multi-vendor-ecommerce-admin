@@ -3,18 +3,16 @@ import { useState, useEffect } from 'react';
 import { BsArrowDownSquareFill } from "react-icons/bs";
 import Link from 'next/link';
 import Pagination from '@/components/custom/Pagination';
-import { Input } from '@/components/ui/input';
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
     TableHead,
     TableHeader,
     TableRow,
-  } from "@/components/ui/table"
-import { Button } from '@/components/ui/button';
-  
+} from "@/components/ui/table"
+import Search from '@/components/custom/Search';
+
 
 const demoOrders = [
     {
@@ -58,42 +56,31 @@ const OrdersList = () => {
 
     return (
         <div className="px-4 lg:px-8 pt-6">
-            <div className="w-full p-4 bg-[#6A5FDF] text-white rounded-md">
-                <div className="flex justify-between items-center">
-                    <select 
-                        onChange={(e) => setParPage(parseInt(e.target.value))} 
-                        className="px-4 py-2  bg-[#6A5FDF] border border-gray-700 rounded-md text-white hover:bg-[#6A5FDF]"
-                    >
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="20">20</option>
-                    </select>
-                    <Input 
-                        onChange={(e) => setSearchValue(e.target.value)} 
-                        value={searchValue} 
-                        className="px-4 py-2 bg-[#6A5FDF] border border-gray-700 text-white rounded-md" 
-                        placeholder="Search..."
-                    />
-                </div>
+            <div className="w-full p-4 bg-[#FFF7E6] text-[#4B5563] rounded-md">               
+                <Search
+                    setSearchValue={setSearchValue}
+                    setParPage={setParPage}
+                    searchValue={searchValue}
+                />
 
                 <div className="relative mt-5 overflow-x-auto">
-                    <Table className="w-full text-sm text-left text-white">
-                    <TableHeader className=' text-[#D0C9D9]'>
+                    <Table className="w-full text-sm text-left text-[#4B5563]">
+                        <TableHeader className=' text-[#D0C9D9]'>
                             <TableRow>
-                                <TableHead>Order ID</TableHead>
-                                <TableHead>Price</TableHead>
-                                <TableHead>Payment Status</TableHead>
-                                <TableHead>Order Status</TableHead>
-                                <TableHead>Action</TableHead>
-                                <TableHead><BsArrowDownSquareFill /></TableHead>
+                                <TableHead className="text-[#4B5563]">Order ID</TableHead>
+                                <TableHead className="text-[#4B5563]">Price</TableHead>
+                                <TableHead className="text-[#4B5563]">Payment Status</TableHead>
+                                <TableHead className="text-[#4B5563]">Order Status</TableHead>
+                                <TableHead className="text-[#4B5563]">Action</TableHead>
+                                <TableHead className="text-[#4B5563]"><BsArrowDownSquareFill /></TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {filteredOrders.slice((currentPage - 1) * parPage, currentPage * parPage).map((order) => (
                                 <>
-                                    <TableRow key={order.id} className="border-b border-gray-700 text-[#D0C9D9]">
+                                    <TableRow key={order.id} className="border-b border-gray-700 text-[#4B5563]">
                                         <TableCell>#{order.id}</TableCell>
-                                        <TableCell>${order.price}</TableCell>
+                                        <TableCell>₹{order.price}</TableCell>
                                         <TableCell>{order.payment_status}</TableCell>
                                         <TableCell>{order.delivery_status}</TableCell>
                                         <TableCell>
@@ -103,7 +90,7 @@ const OrdersList = () => {
                                         </TableCell>
                                         <TableCell>
                                             <div onClick={() => setShow(show === order.id ? null : order.id)}>
-                                                <BsArrowDownSquareFill />
+                                                <BsArrowDownSquareFill className=' cursor-pointer' />
                                             </div>
                                         </TableCell>
                                     </TableRow>
@@ -114,7 +101,7 @@ const OrdersList = () => {
                                                     {order.suborder.map((sub, i) => (
                                                         <div key={i} className="flex justify-start items-start border-b border-gray-700">
                                                             <div className="py-2 w-1/4 pl-3">#{sub.id}</div>
-                                                            <div className="py-2 w-1/4">${sub.price}</div>
+                                                            <div className="py-2 w-1/4">₹{sub.price}</div>
                                                             <div className="py-2 w-1/4">{sub.payment_status}</div>
                                                             <div className="py-2 w-1/4">{sub.delivery_status}</div>
                                                         </div>

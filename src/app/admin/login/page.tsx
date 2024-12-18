@@ -1,5 +1,4 @@
-import { LoginForm } from "../pages/homes/LoginForm";
-
+import { LoginForm } from "@/app/pages/homes/LoginForm";
 
 
 export default async function page() {

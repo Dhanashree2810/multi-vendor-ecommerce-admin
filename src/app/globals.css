@@ -2,9 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
+@import 'primereact/resources/themes/lara-light-blue/theme.css' layer(primereact);
+
+
+@layer tailwind-base {
+  @tailwind base;
 }
+
+@layer tailwind-utilities {
+  @tailwind components;
+  @tailwind utilities;
+}
+
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap'); */
+
+@layer utilities {
+  .custom-border {
+    border: 2px solid #000;
+  }
+}
+
+
 
 @layer base {
   :root {
@@ -41,6 +59,10 @@ body {
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    --color-primary: #1d4ed8; /* Blue */
+    --color-secondary: #9333ea; /* Purple */
+    --color-background: #ffffff;
+    --color-text: #000000;
   }
   .dark {
     --background: 240 10% 3.9%;
@@ -78,6 +100,20 @@ body {
   }
 }
 
+[data-theme='dark'] {
+  --color-primary: #9333ea; /* Purple */
+  --color-secondary: #1d4ed8; /* Blue */
+  --color-background: #1f2937;
+  --color-text: #ffffff;
+}
+
+[data-theme='red'] {
+  --color-primary: #dc2626; /* Red */
+  --color-secondary: #f87171; /* Light Red */
+  --color-background: #fef2f2;
+  --color-text: #7f1d1d;
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -85,4 +121,64 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.p-datatable-wrapper .table,
+.p-datatable-wrapper table,
+.p-datatable-wrapper .p-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "Poppins", sans-serif;
+  font-size: 13px;
+  color: #212529;
+  border-color: rgba(33, 37, 41, 0.07) !important;
+}
+.p-datatable.p-datatable-gridlines:has(.p-datatable-thead):has(.p-datatable-tbody) .p-datatable-tbody > tr > td {
+  border-width: 0 0 2px 0px !important;
+}
+
+.p-datatable .p-datatable-tbody  tr:hover
+/* .p-datatable-wrapper .table tbody tr:hover,
+.p-datatable-wrapper table tbody tr:hover,
+.p-datatable-wrapper .p-table tbody tr:hover */
+{ 
+  background-color: #f3f3f3;
+}
+
+.p-datatable-wrapper .table thead th,
+.p-datatable-wrapper .table tbody td {
+  padding: 1em !important;
+  max-width: 250px !important;
+}
+
+.p-datatable-wrapper .table tbody td,
+.p-datatable-wrapper table tbody td,
+.p-datatable-wrapper .p-table tbody td {
+  padding: 12px;
+  max-width: 300px !important;
+  border-bottom: 1px solid rgba(33, 37, 41, 0.07);
+}
+
+.p-datatable-wrapper .p-filter-column{
+  padding: 0.5em !important;
+}
+.p-column-filter-clear-button.p-link{
+  display: none;
+}
+.p-column-filter-menu-button-active + .p-column-filter-clear-button.p-link{
+  display: inline-block;
+}
+
+.p-column-filter-row{
+  gap:10px
+}
+
+.p-column-filter-row .p-column-filter-element{
+  min-width: 100px;
 }
