@@ -47,7 +47,7 @@ const Category = () => {
     return (
         <div className="p-6 w-full">
             {/* Header Section */}
-            <div className="bg-[#6A5FDF] p-3 rounded-md">
+            <div className="bg-[#FDF6EC] p-3 rounded-md">
                 {/* Search Component */}
                 <Search
                     setSearchValue={setSearchValue}
@@ -57,7 +57,7 @@ const Category = () => {
 
                 {/* Table */}
                 <div className="overflow-x-auto mt-4">
-                    <Table className="w-full text-sm bg-[#6A5FDF] text-white">
+                    <Table className="w-full text-sm bg-[#FDF6EC] text-white">
                         <TableHeader>
                             <TableRow>
                                 <TableHead className="text-white">No</TableHead>

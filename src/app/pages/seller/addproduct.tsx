@@ -29,7 +29,7 @@ const AddProduct = () => {
   };
 
   return (
-    <Card className="w-full p-4 bg-[#6a5fdf] rounded-md">
+    <Card className="w-full p-4 bg-[#FDF6EC] rounded-md">
       <CardHeader className="flex justify-between items-center pb-4">
         <h1 className="text-[#d0d2d6] text-xl font-semibold">Add Product</h1>
         <a className="bg-blue-500 hover:shadow-blue-500/50 hover:shadow-lg text-white rounded-sm px-7 py-2 my-2" href="/seller/dashboard/products">
@@ -48,7 +48,7 @@ const AddProduct = () => {
                 placeholder="Product Name"
                 value={productData.name}
                 onChange={(e) => setProductData({ ...productData, name: e.target.value })}
-                className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]"
+                className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#FDF6EC] border border-slate-700 rounded-md text-[#d0d2d6]"
               />
             </div>
             <div className="flex flex-col w-full gap-1">
@@ -60,7 +60,7 @@ const AddProduct = () => {
                 placeholder="Brand Name"
                 value={productData.brand}
                 onChange={(e) => setProductData({ ...productData, brand: e.target.value })}
-                className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]"
+                className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#FDF6EC] border border-slate-700 rounded-md text-[#d0d2d6]"
               />
             </div>
           </div>
@@ -74,7 +74,7 @@ const AddProduct = () => {
                 placeholder="--select category--"
                 value={productData.category}
                 onChange={(e) => setProductData({ ...productData, category: e.target.value })}
-                className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]"
+                className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#FDF6EC] border border-slate-700 rounded-md text-[#d0d2d6]"
               />
               {/* Implement dropdown functionality here */}
             </div>
@@ -87,7 +87,7 @@ const AddProduct = () => {
                 placeholder="Stock"
                 value={productData.stock}
                 onChange={(e) => setProductData({ ...productData, stock: e.target.value })}
-                className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]"
+                className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#FDF6EC] border border-slate-700 rounded-md text-[#d0d2d6]"
               />
             </div>
           </div>
@@ -101,7 +101,7 @@ const AddProduct = () => {
                 placeholder="Price"
                 value={productData.price}
                 onChange={(e) => setProductData({ ...productData, price: e.target.value })}
-                className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]"
+                className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#FDF6EC] border border-slate-700 rounded-md text-[#d0d2d6]"
               />
             </div>
             <div className="flex flex-col w-full gap-1">
@@ -113,7 +113,7 @@ const AddProduct = () => {
                 placeholder="Discount by %"
                 value={productData.discount}
                 onChange={(e) => setProductData({ ...productData, discount: e.target.value })}
-                className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]"
+                className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#FDF6EC] border border-slate-700 rounded-md text-[#d0d2d6]"
               />
             </div>
           </div>
@@ -125,7 +125,7 @@ const AddProduct = () => {
               placeholder="Description"
               value={productData.description}
               onChange={(e) => setProductData({ ...productData, description: e.target.value })}
-              className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]"
+              className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#FDF6EC] border border-slate-700 rounded-md text-[#d0d2d6]"
               rows={4}
             />
           </div>
