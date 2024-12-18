@@ -100,19 +100,19 @@
   }
 }
 
-[data-theme='dark'] {
-  --color-primary: #9333ea; /* Purple */
-  --color-secondary: #1d4ed8; /* Blue */
+/* [data-theme='dark'] {
+  --color-primary: #9333ea; 
+  --color-secondary: #1d4ed8; 
   --color-background: #1f2937;
   --color-text: #ffffff;
 }
 
 [data-theme='red'] {
-  --color-primary: #dc2626; /* Red */
-  --color-secondary: #f87171; /* Light Red */
-  --color-background: #fef2f2;
+  --color-primary: #dc2626; 
+  --color-secondary: #f87171; 
+  --color-background: #ffffff;
   --color-text: #7f1d1d;
-}
+} */
 
 @layer base {
   * {
@@ -144,9 +144,9 @@ body {
 }
 
 .p-datatable .p-datatable-tbody  tr:hover
-/* .p-datatable-wrapper .table tbody tr:hover,
+.p-datatable-wrapper .table tbody tr:hover,
 .p-datatable-wrapper table tbody tr:hover,
-.p-datatable-wrapper .p-table tbody tr:hover */
+.p-datatable-wrapper .p-table tbody tr:hover
 { 
   background-color: #f3f3f3;
 }
