@@ -86,7 +86,7 @@ const data = {
     },
     {
       title: "Chat-Customer",
-      url: "/seller/chat-customer",
+      url: "/seller/chatcustomer",
       icon: Settings2,
      
     },
@@ -98,7 +98,7 @@ const data = {
     },
     {
       title: "Profile",
-      url: "seller/profile",
+      url: "/seller/profile",
       icon: Settings2,
       
     },

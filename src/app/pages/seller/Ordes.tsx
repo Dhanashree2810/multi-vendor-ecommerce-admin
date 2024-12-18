@@ -1,82 +1,168 @@
 "use client";
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import { FaEye } from "react-icons/fa";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import Pagination from "@/components/custom/Pagination";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
-import React, { useState } from "react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { FaEye } from "react-icons/fa6";
-import Search from "@/components/custom/Search";
+// Define the structure of an Order
+type Order = {
+  _id: string;
+  price: string;
+  shopName: string;
+  payment: string;
+  date: string;
+};
 
-const OrdersTable = () => {
+const Orders = () => {
+  // States for pagination, search, and data management
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchValue, setSearchValue] = useState<string>("");
-  const [parPage, setParPage] = useState<number>(5);
+  const [itemsPerPage, setItemsPerPage] = useState<number>(5);
 
-  const orders = [
+  const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
+  const [totalOrders, setTotalOrders] = useState<number>(0);
+
+  // Mock order data
+  const mockOrders: Order[] = [
     {
-      id: "#675d143198f4ae7d19703b9e",
+      _id: "#675d143198f4ae7d19703b9e",
       price: "$1544",
-      paymentStatus: "unpaid",
-      orderStatus: "cancelled",
+      shopName: "John's Shop",
+      payment: "Cancelled",
       date: "December 14, 2024 10:44 AM",
     },
     {
-      id: "#675d140298f4ae7d19703440",
-      price: "$1544",
-      paymentStatus: "unpaid",
-      orderStatus: "cancelled",
-      date: "December 14, 2024 10:43 AM",
+      _id: "#675d143198f4ae7d19703b9f",
+      price: "$2000",
+      shopName: "Emily's Store",
+      payment: "Paid",
+      date: "December 15, 2024 11:30 AM",
     },
     {
-      id: "#675ace9ead866f6025725a02",
-      price: "$64125",
-      paymentStatus: "unpaid",
-      orderStatus: "cancelled",
-      date: "December 12, 2024 5:23 PM",
+      _id: "#675d143198f4ae7d19703b9g",
+      price: "$1799",
+      shopName: "Smith Mart",
+      payment: "Pending",
+      date: "December 16, 2024 09:15 AM",
     },
   ];
 
+  // Filter orders based on search input
+  useEffect(() => {
+    const filtered = mockOrders.filter((order) =>
+      order.shopName.toLowerCase().includes(searchValue.toLowerCase())
+    );
+    setFilteredOrders(filtered);
+    setTotalOrders(filtered.length);
+  }, [searchValue, currentPage, itemsPerPage]);
+
   return (
-    <div className="w-full mx-auto mt-4 p-6 bg-indigo-100 rounded-lg ">
-      {/* Heading */}
-      <h2 className="text-3xl font-bold mb-6 text-gray-800">Orders</h2>
+    <div className="px-4 lg:px-8 py-6">
+      <h1 className="text-xl font-bold mb-4">Orders</h1>
 
-      {/* Search Component */}
-      <div className="bg-indigo-100p-4 rounded-md mb-6 shadow-sm">
-        <Search setSearchValue={setSearchValue} setParPage={setParPage} searchValue={searchValue} />
-      </div>
+      {/* Top Bar: Items Per Page and Search */}
+      <div className="w-full p-4 bg-indigo-600 rounded-md">
+        <div className="flex justify-between items-center mb-4">
+          <Select
+            value={String(itemsPerPage)}
+            onValueChange={(value) => setItemsPerPage(Number(value))}
+          >
+            <SelectTrigger className="bg-indigo-600 text-[#D0D2D6] border border-slate-700 rounded-md">
+              <SelectValue placeholder="Items per page" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Items per page</SelectLabel>
+                <SelectItem value="5" className="text-[#D0D2D6]">
+                  5
+                </SelectItem>
+                <SelectItem value="10" className="text-[#D0D2D6]">
+                  10
+                </SelectItem>
+                <SelectItem value="20" className="text-[#D0D2D6]">
+                  20
+                </SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
 
-      {/* Table Section */}
-      <div className="overflow-auto rounded-lg shadow-lg">
-        <Table className="min-w-full bg-indigo-100 text-gray-800">
-          <TableHeader>
-            <TableRow className="bg-indigo-600 text-white">
-              <TableHead className="p-4">Order ID</TableHead>
-              <TableHead className="p-4">Price</TableHead>
-              <TableHead className="p-4">Payment Status</TableHead>
-              <TableHead className="p-4">Order Status</TableHead>
-              <TableHead className="p-4">Date</TableHead>
-              <TableHead className="p-4 text-center">Action</TableHead>
-            </TableRow>
-          </TableHeader>
+          <Input
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            placeholder="Search by shop name..."
+            className="bg-indigo-600 text-[#D0D2D6] border border-slate-700 rounded-md"
+          />
+        </div>
 
-          <TableBody>
-            {orders.map((order) => (
-              <TableRow key={order.id} className="border-b border-gray-200 hover:bg-indigo-100">
-                <TableCell className="p-4">{order.id}</TableCell>
-                <TableCell className="p-4">{order.price}</TableCell>
-                <TableCell className="p-4">{order.paymentStatus}</TableCell>
-                <TableCell className="p-4">{order.orderStatus}</TableCell>
-                <TableCell className="p-4">{order.date}</TableCell>
-                <TableCell className="p-4 text-center">
-                  <button className="bg-green-600 hover:bg-green-500 text-white p-2 rounded-full">
-                    <FaEye size={20} />
-                  </button>
-                </TableCell>
+        {/* Orders Table */}
+        <div className="relative overflow-x-auto">
+          <Table className="w-full text-sm text-left text-[#D0D2D6]">
+            <TableHeader className="text-sm uppercase border-b border-slate-700">
+              <TableRow>
+                <TableHead className="py-3 px-4">Order ID</TableHead>
+                <TableHead className="py-3 px-4">Price</TableHead>
+                <TableHead className="py-3 px-4">Shop Name</TableHead>
+                <TableHead className="py-3 px-4">Payment Status</TableHead>
+                <TableHead className="py-3 px-4">Date</TableHead>
+                <TableHead className="py-3 px-4">Action</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+
+            <TableBody>
+              {filteredOrders.map((order) => (
+                <TableRow key={order._id}>
+                  <TableCell className="py-1 px-4">{order._id}</TableCell>
+                  <TableCell className="py-1 px-4">{order.price}</TableCell>
+                  <TableCell className="py-1 px-4">{order.shopName}</TableCell>
+                  <TableCell className="py-1 px-4">{order.payment}</TableCell>
+                  <TableCell className="py-1 px-4">{order.date}</TableCell>
+                  <TableCell className="py-1 px-4">
+                    <Link href={`/admin/dashboard/seller/details/${order._id}`}>
+                      <Button className="bg-green-500 hover:shadow-lg hover:shadow-green-500/50">
+                        <FaEye />
+                      </Button>
+                    </Link>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+
+        {/* Pagination */}
+        {totalOrders > itemsPerPage && (
+          <div className="flex justify-end mt-4">
+            <Pagination
+              pageNumber={currentPage}
+              setPageNumber={setCurrentPage}
+              totalItem={totalOrders}
+              parPage={itemsPerPage}
+              showItem={4}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-export default OrdersTable;
+export default Orders;
