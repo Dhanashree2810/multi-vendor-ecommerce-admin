@@ -171,7 +171,7 @@ const CategoryPage = () => {
   );
 
   // Pagination Handler
-  const onPageChange = (e: any) => {
+  const onPageChange = (e) => {
     setFirst(e.first);
     setRows(e.rows);
   };

@@ -9,26 +9,47 @@ interface Customer {
   avatar: string;
 }
 
+interface Message {
+  sender: "user" | "customer";
+  text: string;
+}
+
 export default function ChatBox() {
   const [customers] = useState<Customer[]>([
-    { name: "priyanka pardeshiii", avatar: "/customer-avatar.png" },
+    { name: "Priyanka Pardeshiii", avatar: "/customer-avatar.png" },
+    { name: "John Doe", avatar: "/customer-avatar.png" },
+    { name: "Jane Smith", avatar: "/customer-avatar.png" },
   ]);
-  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
-    null
-  );
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [message, setMessage] = useState<string>("");
+  const [messages, setMessages] = useState<Message[]>([]);
 
   const handleSend = () => {
     if (message.trim() === "") return;
-    console.log(`Message sent to ${selectedCustomer?.name}: ${message}`);
-    setMessage("");
+
+    // Add user's message
+    const newMessages = [
+      ...messages,
+      { sender: "user", text: message }
+    ];
+
+    setMessages(newMessages); // Update the chat messages
+    setMessage(""); // Clear the input field
+
+    // Add customer response after a delay (for demo purposes)
+    setTimeout(() => {
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { sender: "customer", text: "Hello, how can I assist you?" }
+      ]);
+    }, 1000);
   };
 
   return (
-    <div className="h-screen bg-[#b5a3ff] flex justify-center items-center">
-      <div className="w-[900px] bg-[#6b57ff] rounded-lg shadow-lg p-4 flex">
+    <div className="h-screen flex justify-center items-center bg-[#EFEFEF]">
+      <div className="w-[900px] bg-white rounded-lg shadow-lg p-4 flex h-[600px]">
         {/* Customers List */}
-        <div className="w-1/3 bg-[#7b5df8] p-4 rounded-lg text-white">
+        <div className="w-[250px] bg-[#EFEFEF] p-4 rounded-lg text-black flex-none overflow-y-auto">
           <h2 className="text-lg font-bold mb-4">Customers</h2>
           <ul>
             {customers.map((customer, index) => (
@@ -37,8 +58,8 @@ export default function ChatBox() {
                 onClick={() => setSelectedCustomer(customer)}
                 className={`flex items-center gap-2 p-2 rounded cursor-pointer mb-2 ${
                   selectedCustomer?.name === customer.name
-                    ? "bg-[#4f39c5]"
-                    : "hover:bg-[#5c46dd]"
+                    ? "bg-[#0097A7]"
+                    : "hover:bg-[#0080a7]"
                 }`}
               >
                 <img
@@ -67,8 +88,23 @@ export default function ChatBox() {
               </div>
 
               {/* Chat Messages */}
-              <div className="flex-1 flex justify-center items-center text-gray-300">
-                Select Customer
+              <div className="flex-1 overflow-y-auto p-2 text-white space-y-4">
+                {messages.map((msg, index) => (
+                  <div
+                    key={index}
+                    className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
+                  >
+                    <div
+                      className={`p-3 rounded-lg max-w-[70%] ${
+                        msg.sender === "user"
+                          ? "bg-cyan-500 text-white"
+                          : "bg-[#6c757d] text-white"
+                      }`}
+                    >
+                      {msg.text}
+                    </div>
+                  </div>
+                ))}
               </div>
 
               {/* Input Field */}
@@ -78,11 +114,11 @@ export default function ChatBox() {
                   placeholder="Input Your Message"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  className="bg-[#574fcf] text-white border-none"
+                  className="bg-[#0097A7] text-white border-none"
                 />
                 <Button
                   onClick={handleSend}
-                  className="bg-cyan-500 hover:bg-cyan-600"
+                  className="bg-cyan-500 hover:bg-cyan-600 text-white"
                 >
                   Send
                 </Button>

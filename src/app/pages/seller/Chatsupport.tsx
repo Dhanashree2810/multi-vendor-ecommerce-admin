@@ -25,14 +25,14 @@ export default function ChatBox() {
   };
 
   return (
-    <div className="h-screen flex justify-center items-center bg-[#d9d6f2]">
-      <div className="w-[600px] bg-[#7156e9] rounded-lg p-4 shadow-lg">
+    <div className="h-screen flex justify-center items-center bg-[#EFEFEF]">
+      <div className="w-[600px] bg-white rounded-lg p-4 shadow-lg ">
         {/* Header */}
         <div className="flex items-center gap-2 mb-4">
           <div className="w-8 h-8 bg-green-400 rounded-full flex items-center justify-center">
-            <span className="text-white font-bold">Q</span>
+            <span className="text-black font-bold">Q</span>
           </div>
-          <h1 className="text-white font-bold">Support</h1>
+          <h1 className="text-black font-bold">Support</h1>
         </div>
 
         {/* Chat Area */}
@@ -78,7 +78,7 @@ export default function ChatBox() {
             onChange={(e) => setMessage(e.target.value)}
             className="flex-1 bg-[#e2e8f0] text-gray-700"
           />
-          <Button onClick={handleSend} className="bg-cyan-500 hover:bg-cyan-600">
+          <Button onClick={handleSend} className="bg-[#0097A7] hover:bg-[#0078a7] text-white">
             Send
           </Button>
         </div>

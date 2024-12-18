@@ -1,142 +1,291 @@
-'use client'
+"use client";
 import React, { useState } from "react";
-import { FaEdit, FaTrash } from "react-icons/fa";
-import Pagination from "@/components/custom/Pagination";
-import { toast } from "@/hooks/use-toast";
-import Search from "@/components/custom/Search";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import Image, { StaticImageData } from "next/image";
 
+import { Button } from "primereact/button";
+import { Paginator } from "primereact/paginator";
+import { InputText } from "primereact/inputtext";
+import Image from "next/image";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
 // Import demo images
-import HomeFurniture from '@/assets/images/Home&Furniture.jpg';
-import Electronics from '@/assets/images/electronics.png';
-import Fashion from '@/assets/images/fashion.png';
-import Appliances from '@/assets/images/appliances.jpg';
-import Mobile from '@/assets/images/mobile.png';
-import { FaEye, FaImage } from "react-icons/fa6";
+import HomeFurniture from "@/assets/images/Home&Furniture.jpg";
+import Electronics from "@/assets/images/electronics.png";
+import Fashion from "@/assets/images/fashion.png";
+import Appliances from "@/assets/images/appliances.jpg";
+import Mobile from "@/assets/images/mobile.png";
+import { Toast } from "primereact/toast";
+import { FaEdit, FaEye, FaTrash, FaImage } from "react-icons/fa";
+import Tooltip from "@/components/custom/Tooltipcustom";
 
-// Category Interface
-interface Discountproduct {
-    id: string;
-    name: string;
-    image: StaticImageData | string;
+interface Category {
+  id: string;
+  name: string;
+  image: string;
+  category: string;
+  brand: string;
+  price: number;
+  discount: number;
+  stock: number;
 }
 
-const demoCategories: Discountproduct[] = [
-    { id: "1", name: "Home & Furniture", image: HomeFurniture, category: "Furniture", brand: "IKEA", price: 1200, discount: 10, stock: 50 },
-    { id: "2", name: "Electronics", image: Electronics, category: "Gadgets", brand: "Sony", price: 2500, discount: 15, stock: 30 },
-    { id: "3", name: "Fashion", image: Fashion, category: "Clothing", brand: "Zara", price: 80, discount: 20, stock: 100 },
-    { id: "4", name: "Appliances", image: Appliances, category: "Home Appliances", brand: "LG", price: 400, discount: 5, stock: 25 },
-    { id: "5", name: "Mobile", image: Mobile, category: "Gadgets", brand: "Samsung", price: 1000, discount: 12, stock: 60 },
+const demoCategories: Category[] = [
+  {
+    id: "1",
+    name: "Home & Furniture",
+    image: HomeFurniture.src,
+    category: "Furniture",
+    brand: "IKEA",
+    price: 1200,
+    discount: 10,
+    stock: 50,
+  },
+  {
+    id: "2",
+    name: "Electronics",
+    image: Electronics.src,
+    category: "Gadgets",
+    brand: "Sony",
+    price: 2500,
+    discount: 15,
+    stock: 30,
+  },
+  {
+    id: "3",
+    name: "Fashion",
+    image: Fashion.src,
+    category: "Clothing",
+    brand: "Zara",
+    price: 80,
+    discount: 20,
+    stock: 100,
+  },
+  {
+    id: "4",
+    name: "Appliances",
+    image: Appliances.src,
+    category: "Home Appliances",
+    brand: "LG",
+    price: 400,
+    discount: 5,
+    stock: 25,
+  },
+  {
+    id: "5",
+    name: "Mobile",
+    image: Mobile.src,
+    category: "Gadgets",
+    brand: "Samsung",
+    price: 1000,
+    discount: 12,
+    stock: 60,
+  },
+  {
+    id: "6",
+    name: "Appliances",
+    image: Appliances.src,
+    category: "Home Appliances",
+    brand: "LG",
+    price: 400,
+    discount: 5,
+    stock: 25,
+  },
+  {
+    id: "7",
+    name: "Mobile",
+    image: Mobile.src,
+    category: "Gadgets",
+    brand: "Samsung",
+    price: 1000,
+    discount: 12,
+    stock: 60,
+  },
 ];
 
-const Discountproduct = () => {
-    const [categories, setCategories] = useState<Discountproduct[]>(demoCategories);
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [searchValue, setSearchValue] = useState<string>("");
-    const [parPage, setParPage] = useState<number>(5);
+const CategoryPage = () => {
+  const [categories, setCategories] = useState<Category[]>(demoCategories);
+  const [globalFilter, setGlobalFilter] = useState<string>("");
+  const [first, setFirst] = useState(0);
+  const [rows, setRows] = useState(5);
 
-    const handleDelete = (id: string) => {
-        if (confirm("Are you sure you want to delete this Discountproduct?")) {
-            setCategories((prev) => prev.filter((cat) => cat.id !== id));
-            toast({ title: "Success!", description: "Discountproduct deleted successfully!" });
-        }
-    };
+  // Handle Delete Action
+  const handleDelete = (id: string) => {
+    if (confirm("Are you sure you want to delete this category?")) {
+      setCategories(categories.filter((cat) => cat.id !== id));
+    }
+  };
 
-    return (
-        <div className="p-6 w-full">
-            {/* Header Section */}
-            <div className="bg-[#FDF6EC] p-3 rounded-md">
-                {/* Search Component */}
-                <Search
-                    setSearchValue={setSearchValue}
-                    setParPage={setParPage}
-                    searchValue={searchValue}
-                />
+  // Header with Search
+  const renderHeader = () => (
+    <div className="flex justify-between items-center  bg-[#EFEFEF] p-4 rounded-md border border-gray-300 shadow-sm">
+      <h2 className="text-lg font-semibold">Discount Product</h2>
+      <span className="p-input-icon-left">
+        <i className="pi pi-search" />
+        <InputText
+          type="search"
+          onInput={(e) => setGlobalFilter(e.currentTarget.value)}
+          placeholder="Search Discount Product"
+          className="p-inputtext-sm h-10 w-[300px] p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0097A7]"
+        />
+      </span>
+    </div>
+  );
 
-                {/* Table */}
-                <div className="overflow-x-auto mt-4">
-                    <Table className="w-full text-sm bg-[#FDF6EC] text-white">
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead className="text-white">No</TableHead>
-                                <TableHead className="text-white">Image</TableHead>
-                                <TableHead className="text-white">Name</TableHead>
-                                <TableHead className="text-white">Category</TableHead>
-                                <TableHead className="text-white">Brand</TableHead>
-                                <TableHead className="text-white">Price</TableHead>
+  // Action Buttons
+  const actionTemplate = (rowData: Category) => (
+    <div className="flex gap-2">
+    
 
-                                <TableHead className="text-white">Discount</TableHead>
-                                <TableHead className="text-white">Stock</TableHead>
-                                <TableHead className="text-white">Actions</TableHead>
+      <div className="flex gap-2">
+    <Tooltip message="Edit">
+      <Button icon={<FaEdit />} severity="warning" size="small" />
+    </Tooltip>
+    <Tooltip message="View">
+      <Button icon={<FaEye />} severity="info" size="small" />
+    </Tooltip>
+    <Tooltip message="Upload Image">
+      <Button icon={<FaImage />} severity="success" size="small" />
+    </Tooltip>
+  </div>
+  <Tooltip message="delete">
 
+      <Button
+        icon={<FaTrash />}
+        severity="danger"
+        size="small"
+        onClick={() => handleDelete(rowData.id)}
+      />
+          </Tooltip>
 
-                                
+    </div>
+  );
 
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {categories.map((Discountproduct, index) => (
-                                <TableRow key={Discountproduct.id}>
-                                    <TableCell>{index + 1}</TableCell>
-                                    <TableCell>
-                                        <Image
-                                            src={
-                                                typeof Discountproduct.image === "string"
-                                                    ? Discountproduct.image
-                                                    : Discountproduct.image.src
-                                            }
-                                            alt={Discountproduct.name}
-                                            width={40}
-                                            height={40}
-                                            className="rounded"
-                                        />
-                                    </TableCell>
-                                    <TableCell>{Discountproduct.name}</TableCell>
-                                    <TableCell>{Discountproduct.category}</TableCell>
-                                    <TableCell>{Discountproduct.brand}</TableCell>
-                                    <TableCell>${Discountproduct.price}</TableCell>
-                                    <TableCell>{Discountproduct.discount}%</TableCell>
-                                    <TableCell>{Discountproduct.stock}</TableCell>                                    <TableCell className="flex gap-3">
-                                        <Button className="bg-yellow-500 hover:bg-yellow-600">
-                                            <FaEdit />
-                                        </Button>
-                                      
-                                        <Button className="bg-blue-500 hover:bg-blue-600">
-                                            <FaEye />
-                                            
-                                        </Button>
-                                        <Button className="bg-green-500 hover:bg-green-600">
-                                        <FaImage />
+  // Image Column
+  const imageTemplate = (rowData: Category) => (
+    <Image
+      src={rowData.image}
+      alt={rowData.name}
+      width={40}
+      height={40}
+      className="rounded"
+    />
+  );
 
-                                        </Button>
-                                        <Button
-                                            className="bg-red-500 hover:bg-red-600"
-                                            onClick={() => handleDelete(Discountproduct.id)}
-                                        >
-                                            <FaTrash />
-                                        </Button>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </div>
+  // Pagination Handler
+  const onPageChange = (e) => {
+    setFirst(e.first);
+    setRows(e.rows);
+  };
 
-                {/* Pagination */}
-                <div className="mt-4 flex justify-end">
-                    <Pagination
-                        pageNumber={currentPage}
-                        setPageNumber={setCurrentPage}
-                        totalItem={categories.length}
-                        parPage={parPage}
-                        showItem={3}
-                    />
-                </div>
-            </div>
-        </div>
-    );
+  return (
+    <div className="p-4">
+      <Toast />
+      <div className="bg-white shadow-md rounded-md p-4">
+        <div className=" pb-4 mb-4">{renderHeader()}</div>
+        <DataTable
+          value={categories}
+          paginator
+          rowsPerPageOptions={[5, 10, 25, 50]}
+          rows={rows}
+          first={first}
+          onPage={onPageChange}
+          globalFilter={globalFilter}
+          emptyMessage="No categories found."
+          responsiveLayout="scroll"
+        >
+          <Column
+            header="No"
+            body={(data, options) => options.rowIndex + 1}
+            headerStyle={{
+              background: "#0097A7",
+              fontWeight: "bold",
+              color: "white",
+            }}
+          />
+
+          <Column
+            header="Image"
+            body={imageTemplate}
+            headerStyle={{
+              background: "#0097A7",
+              fontWeight: "bold",
+              color: "white",
+            }}
+          />
+          <Column
+            field="name"
+            header="Name"
+            sortable
+            headerStyle={{
+              background: "#0097A7",
+              fontWeight: "bold",
+              color: "white",
+            }}
+          />
+          <Column
+            field="category"
+            header="Category"
+            sortable
+            headerStyle={{
+              background: "#0097A7",
+              fontWeight: "bold",
+              color: "white",
+            }}
+          />
+          <Column
+            field="brand"
+            header="Brand"
+            sortable
+            headerStyle={{
+              background: "#0097A7",
+              fontWeight: "bold",
+              color: "white",
+            }}
+          />
+          <Column
+            field="price"
+            header="Price"
+            body={(data) => `$${data.price}`}
+            sortable
+            headerStyle={{
+              background: "#0097A7",
+              fontWeight: "bold",
+              color: "white",
+            }}
+          />
+          <Column
+            field="discount"
+            header="Discount"
+            body={(data) => `${data.discount}%`}
+            sortable
+            headerStyle={{
+              background: "#0097A7",
+              fontWeight: "bold",
+              color: "white",
+            }}
+          />
+          <Column
+            field="stock"
+            header="Stock"
+            sortable
+            headerStyle={{
+              background: "#0097A7",
+              fontWeight: "bold",
+              color: "white",
+            }}
+          />
+          <Column
+            header="Actions"
+            body={actionTemplate}
+            headerStyle={{
+              background: "#0097A7",
+              fontWeight: "bold",
+              color: "white",
+            }}
+          />
+        </DataTable>
+      </div>
+    </div>
+  );
 };
 
-export default Discountproduct;
+export default CategoryPage;
