@@ -44,22 +44,22 @@ const data = {
     },
     {
       title: "Payment Request",
-      url: "/admin/paymentsrequest",
+      url: "/admin/paymentrequest",
       icon: CreditCard,
     },
     {
       title: "Deactivate Sellers",
-      url: "/admin/payments",
+      url: "/admin/deactivesellers",
       icon: UserX,
     },
     {
       title: "Seller Request",
-      url: "/admin/sellerrequest",
+      url: "/admin/sellersrequest",
       icon: FilePlus,
     },
     {
       title: "Live Chat",
-      url: "/admin/chatsupport",
+      url: "/admin/chatsellers",
       icon: MessageCircle,
     },
   ],
@@ -69,15 +69,16 @@ export function AdminSidebar({ ...props }: React.ComponentProps<typeof Sidebar>)
 
   return (
     <Sidebar collapsible="icon" {...props} className=" ">
-      <SidebarHeader className="p-4 bg-[#E6E7FB]">
+      <SidebarHeader className="p-4 bg-[#EFF6FF]">
         <div className="flex items-center gap-2">
-          <Image src={logo} alt="Easy Shop" className="h-12" />
+          {/* <Image src={logo} alt="Easy Shop" className="h-12" /> */}
+          <h1 className="text-xl lg:text-3xl font-semibold italic">Easy Shop</h1>
         </div>
       </SidebarHeader>
-      <SidebarContent className="bg-[#E6E7FB]">
+      <SidebarContent className="bg-[#EFF6FF]">
         <NavMain items={data.navMain} />
       </SidebarContent>
-      <SidebarFooter className="bg-[#E6E7FB]">
+      <SidebarFooter className="bg-[#EFF6FF]">
         <NavUser user={data.user} />
       </SidebarFooter>
       <SidebarRail />
