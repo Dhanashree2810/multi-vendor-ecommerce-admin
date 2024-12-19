@@ -4,20 +4,40 @@ import { FaCartShopping } from "react-icons/fa6";
 import { MdCurrencyExchange, MdProductionQuantityLimits } from "react-icons/md";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableHeader,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-} from "@/components/ui/table";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
 import { useState } from "react";
 
 export default function Payments() {
   const [amount, setAmount] = useState("");
-  const [pendingRequests, setPendingRequests] = useState<any[]>([]);
-  const [successRequests, setSuccessRequests] = useState<any[]>([]);
+  const [pendingRequests, setPendingRequests] = useState<any[]>([
+    {
+      id: 1,
+      amount: "₹ 5000",
+      status: "Pending",
+      date: "2024-12-18",
+    },
+    {
+      id: 2,
+      amount: "₹ 3000",
+      status: "Pending",
+      date: "2024-12-19",
+    },
+  ]);
+  const [successRequests, setSuccessRequests] = useState<any[]>([
+    {
+      id: 1,
+      amount: "₹ 2000",
+      status: "Success",
+      date: "2024-12-15",
+    },
+    {
+      id: 2,
+      amount: "₹ 1500",
+      status: "Success",
+      date: "2024-12-17",
+    },
+  ]);
 
   const handleSendRequest = () => {
     if (amount) {
@@ -44,7 +64,7 @@ export default function Payments() {
       </div>
 
       {/* Request Sections */}
-      <div className="min-h-screen bg-gray-100 p-6">
+      <div className="min-h-screen bg-white p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Part 1: Send Request & Pending Requests */}
           <SendRequestSection
@@ -90,7 +110,7 @@ function SendRequestSection({
   pendingRequests: any[];
 }) {
   return (
-    <div className="bg-indigo-300 rounded-lg shadow-md p-4">
+    <div className="bg-[#EFEFEF] rounded-lg shadow-md p-4">
       <h2 className="text-lg font-semibold mb-4 text-gray-700">Send Request</h2>
       <div className="flex items-center gap-4 mb-6">
         <Input
@@ -100,40 +120,18 @@ function SendRequestSection({
           onChange={(e) => setAmount(e.target.value)}
           className="w-full"
         />
-        <Button onClick={handleSendRequest} className="bg-red-500 hover:bg-red-600">
+        <Button onClick={handleSendRequest} className="bg-[#0097A7] hover:bg-[#008ea7] text-white">
           Submit
         </Button>
       </div>
 
       <h2 className="text-lg font-semibold mb-2 text-gray-700">Pending Requests</h2>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-1/12">No</TableHead>
-            <TableHead>Amount</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Date</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {pendingRequests.length > 0 ? (
-            pendingRequests.map((request) => (
-              <TableRow key={request.id}>
-                <TableCell>{request.id}</TableCell>
-                <TableCell>{request.amount}</TableCell>
-                <TableCell>{request.status}</TableCell>
-                <TableCell>{request.date}</TableCell>
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={4} className="text-center text-gray-500">
-                No pending requests
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+      <DataTable value={pendingRequests} paginator rows={5} rowsPerPageOptions={[5, 10, 25]}>
+        <Column field="id" header="No" />
+        <Column field="amount" header="Amount" />
+        <Column field="status" header="Status" />
+        <Column field="date" header="Date" />
+      </DataTable>
     </div>
   );
 }
@@ -141,36 +139,14 @@ function SendRequestSection({
 /* Part 2: Success Withdrawal Section */
 function SuccessWithdrawalSection({ successRequests }: { successRequests: any[] }) {
   return (
-    <div className="bg-indigo-300 rounded-lg shadow-md p-4">
+    <div className="bg-[#EFEFEF] rounded-lg shadow-md p-4">
       <h2 className="text-lg font-semibold mb-2 text-gray-700">Success Withdrawals</h2>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-1/12">No</TableHead>
-            <TableHead>Amount</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Date</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {successRequests.length > 0 ? (
-            successRequests.map((request) => (
-              <TableRow key={request.id}>
-                <TableCell>{request.id}</TableCell>
-                <TableCell>{request.amount}</TableCell>
-                <TableCell>{request.status}</TableCell>
-                <TableCell>{request.date}</TableCell>
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={4} className="text-center text-gray-500">
-                No success withdrawals
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+      <DataTable value={successRequests} paginator rows={5} rowsPerPageOptions={[5, 10, 25]}>
+        <Column field="id" header="No" />
+        <Column field="amount" header="Amount" />
+        <Column field="status" header="Status" />
+        <Column field="date" header="Date" />
+      </DataTable>
     </div>
   );
 }
