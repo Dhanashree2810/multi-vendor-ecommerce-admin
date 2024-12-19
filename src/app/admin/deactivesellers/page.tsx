@@ -1,5 +1,5 @@
-import DeactiveSellers from '@/app/pages/admin/DeactivateSellers'
 import React from 'react'
+import DeactiveSellers from '@/app/pages/admin/DeactivateSellers'
 
 export default function page() {
   return (

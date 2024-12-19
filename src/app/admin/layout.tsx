@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { AdminSidebar } from "@/components/custom/admin-sidebar"
+import { AppSidebar } from "@/components/custom/seller-sidebar"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -17,6 +17,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import React from 'react'
+import { AdminSidebar } from '@/components/custom/admin-sidebar'
 
 export default function AdminLayout({
   children,
@@ -24,10 +25,6 @@ export default function AdminLayout({
   children: React.ReactNode
 }) {
   const pathname = usePathname()
-
-  const hiddenSidebarPaths = ["/admin/login"]
-
-  const hideSidebar = hiddenSidebarPaths.includes(pathname)
 
   const generateBreadcrumbItems = (path: string) => {
     const parts = path.split('/').filter(Boolean)
@@ -48,37 +45,35 @@ export default function AdminLayout({
 
   return (
     <SidebarProvider>
-      {!hideSidebar && <AdminSidebar />}
-      <SidebarInset>
-      {/* className={!hideSidebar ? "bg-[#CDCAE9]" : ""} */}
-        {!hideSidebar && (
-          <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-            <div className="flex items-center gap-2 px-4">
-              <SidebarTrigger className="-ml-1" />
-              <Separator orientation="vertical" className="mr-2 h-4" />
-              <Breadcrumb>
-                <BreadcrumbList>
-                  {breadcrumbItems.map((item, index) => (
-                    <React.Fragment key={item.href}>
-                      <BreadcrumbItem>
-                        {item.isLast ? (
-                          <BreadcrumbPage>{item.label}</BreadcrumbPage>
-                        ) : (
-                          <BreadcrumbLink href={item.href}>{item.label}</BreadcrumbLink>
-                        )}
-                      </BreadcrumbItem>
-                      {index < breadcrumbItems.length - 1 && <BreadcrumbSeparator />}
-                    </React.Fragment>
-                  ))}
-                </BreadcrumbList>
-              </Breadcrumb>
-            </div>
-          </header>
-        )}
-        <div className={`flex flex-1 flex-col gap-4 p-4 ${!hideSidebar ? "pt-0" : ""}`}>
+      <AdminSidebar />
+      <SidebarInset className="bg-[#EFEFEF]">
+        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+          <div className="flex items-center gap-2 px-4">
+            <SidebarTrigger className="-ml-1" />
+            <Separator orientation="vertical" className="mr-2 h-4" />
+            <Breadcrumb>
+              <BreadcrumbList>
+                {breadcrumbItems.map((item, index) => (
+                  <React.Fragment key={item.href}>
+                    <BreadcrumbItem>
+                      {item.isLast ? (
+                        <BreadcrumbPage>{item.label}</BreadcrumbPage>
+                      ) : (
+                        <BreadcrumbLink href={item.href}>{item.label}</BreadcrumbLink>
+                      )}
+                    </BreadcrumbItem>
+                    {index < breadcrumbItems.length - 1 && <BreadcrumbSeparator />}
+                  </React.Fragment>
+                ))}
+              </BreadcrumbList>
+            </Breadcrumb>
+          </div>
+        </header>
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
           {children}
         </div>
       </SidebarInset>
     </SidebarProvider>
   )
 }
+

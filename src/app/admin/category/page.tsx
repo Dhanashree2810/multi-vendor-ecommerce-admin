@@ -1,7 +1,8 @@
+import React from 'react'
 import Category from '@/app/pages/admin/Category'
 
 
-export default function Categorypage() {
+export default function page() {
   return (
     <div>
         <Category/>
