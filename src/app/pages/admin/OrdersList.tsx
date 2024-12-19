@@ -1,20 +1,30 @@
 'use client'
-import { useState, useEffect } from 'react';
-import { BsArrowDownSquareFill } from "react-icons/bs";
-import Link from 'next/link';
-import Pagination from '@/components/custom/Pagination';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
-import Search from '@/components/custom/Search';
 
+import React, { useState } from 'react'
+import Link from 'next/link'
+import { DataTable, DataTableExpandedRows, DataTableRowToggleEvent } from "primereact/datatable"
+import { Column } from "primereact/column"
+import { Toast } from "primereact/toast"
+import { FilterMatchMode } from "primereact/api"
+import { InputText } from "primereact/inputtext"
+import { Button } from "primereact/button"
 
-const demoOrders = [
+type Suborder = {
+    id: string
+    price: number
+    payment_status: string
+    delivery_status: string
+}
+
+type Order = {
+    id: string
+    price: number
+    payment_status: string
+    delivery_status: string
+    suborder?: Suborder[]
+}
+
+const demoOrders: Order[] = [
     {
         id: "1",
         price: 120,
@@ -35,101 +45,163 @@ const demoOrders = [
             { id: "2-2", price: 100, payment_status: "Pending", delivery_status: "Processing" }
         ]
     }
-];
+]
 
 const OrdersList = () => {
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [searchValue, setSearchValue] = useState<string>('');
-    const [parPage, setParPage] = useState<number>(5);
-    const [show, setShow] = useState<string | null>(null);
+    const [filters, setFilters] = useState({
+        global: { value: "", matchMode: FilterMatchMode.CONTAINS },
+        name: { value: "", matchMode: FilterMatchMode.CONTAINS },
+        payment: { value: "", matchMode: FilterMatchMode.CONTAINS },
+        shopName: { value: "", matchMode: FilterMatchMode.CONTAINS },
+        district: { value: "", matchMode: FilterMatchMode.CONTAINS },
+        email: { value: "", matchMode: FilterMatchMode.CONTAINS },
+    })
+    const [first, setFirst] = useState(0)
+    const [rows, setRows] = useState(5)
+    const [expandedRows, setExpandedRows] = useState<DataTableExpandedRows>({})
 
-    const [filteredOrders, setFilteredOrders] = useState(demoOrders);
+    const onRowToggle = (e: DataTableRowToggleEvent) => {
+        setExpandedRows(e.data)
+    }
 
-    useEffect(() => {
-        const filtered = demoOrders.filter(order =>
-            order.id.includes(searchValue) ||
-            order.payment_status.toLowerCase().includes(searchValue.toLowerCase()) ||
-            order.delivery_status.toLowerCase().includes(searchValue.toLowerCase())
-        );
-        setFilteredOrders(filtered);
-    }, [searchValue]);
+    const renderHeader = () => (
+        <div className="flex flex-col sm:flex-row justify-between items-center bg-[#EFEFEF] p-4 rounded-md border border-gray-300 shadow-sm">
+            <h2 className="text-lg font-semibold mb-2 sm:mb-0">All Orders</h2>
+            <span className="p-input-icon-left w-full sm:w-auto">
+                <i className="pi pi-search" />
+                <InputText
+                    type="search"
+                    onInput={(e) =>
+                        setFilters({
+                            ...filters,
+                            global: { value: e.currentTarget.value, matchMode: FilterMatchMode.CONTAINS },
+                        })
+                    }
+                    placeholder="Search Orders"
+                    className="p-inputtext-sm h-10 w-full sm:w-[300px] p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0097A7]"
+                />
+            </span>
+        </div>
+    )
+
+    const rowExpansionTemplate = (data: Order) => (
+        <div className="p-4 overflow-x-auto">
+            <h4 className="mb-4">Suborders for Order #{data.id}</h4>
+            <table className="w-full text-left border-collapse border border-gray-200">
+                <thead>
+                    <tr className="bg-gray-100">
+                        <th className="border border-gray-200 p-2">Suborder ID</th>
+                        <th className="border border-gray-200 p-2">Price</th>
+                        <th className="border border-gray-200 p-2">Payment Status</th>
+                        <th className="border border-gray-200 p-2">Delivery Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {data.suborder?.map((sub) => (
+                        <tr key={sub.id} className="border-b border-gray-200">
+                            <td className="border border-gray-200 p-2">{sub.id}</td>
+                            <td className="border border-gray-200 p-2">₹{sub.price}</td>
+                            <td className="border border-gray-200 p-2">{sub.payment_status}</td>
+                            <td className="border border-gray-200 p-2">{sub.delivery_status}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    )
+
+    const actionTemplate = (rowData: Order) => (
+        <div className="flex gap-2">
+            <Link href={`/admin/orders/${rowData.id}`}>
+                <Button label="View" className="p-button-text" />
+            </Link>
+        </div>
+    )
+
+    const onPageChange = (e: { first: number; rows: number }) => {
+        setFirst(e.first)
+        setRows(e.rows)
+    }
 
     return (
-        <div className="px-4 lg:px-8 pt-6">
-            <div className="w-full p-4 bg-[#FFF7E6] text-[#4B5563] rounded-md">               
-                <Search
-                    setSearchValue={setSearchValue}
-                    setParPage={setParPage}
-                    searchValue={searchValue}
-                />
-
-                <div className="relative mt-5 overflow-x-auto">
-                    <Table className="w-full text-sm text-left text-[#4B5563]">
-                        <TableHeader className=' text-[#D0C9D9]'>
-                            <TableRow>
-                                <TableHead className="text-[#4B5563]">Order ID</TableHead>
-                                <TableHead className="text-[#4B5563]">Price</TableHead>
-                                <TableHead className="text-[#4B5563]">Payment Status</TableHead>
-                                <TableHead className="text-[#4B5563]">Order Status</TableHead>
-                                <TableHead className="text-[#4B5563]">Action</TableHead>
-                                <TableHead className="text-[#4B5563]"><BsArrowDownSquareFill /></TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {filteredOrders.slice((currentPage - 1) * parPage, currentPage * parPage).map((order) => (
-                                <>
-                                    <TableRow key={order.id} className="border-b border-gray-700 text-[#4B5563]">
-                                        <TableCell>#{order.id}</TableCell>
-                                        <TableCell>₹{order.price}</TableCell>
-                                        <TableCell>{order.payment_status}</TableCell>
-                                        <TableCell>{order.delivery_status}</TableCell>
-                                        <TableCell>
-                                            <Link href={`/admin/dashboard/order/${order.id}`}>
-                                                <h1>View</h1>
-                                            </Link>
-                                        </TableCell>
-                                        <TableCell>
-                                            <div onClick={() => setShow(show === order.id ? null : order.id)}>
-                                                <BsArrowDownSquareFill className=' cursor-pointer' />
-                                            </div>
-                                        </TableCell>
-                                    </TableRow>
-                                    {show === order.id && (
-                                        <TableRow className="bg-indigo-600 border-b border-gray-700">
-                                            <TableCell colSpan={6}>
-                                                <div>
-                                                    {order.suborder.map((sub, i) => (
-                                                        <div key={i} className="flex justify-start items-start border-b border-gray-700">
-                                                            <div className="py-2 w-1/4 pl-3">#{sub.id}</div>
-                                                            <div className="py-2 w-1/4">₹{sub.price}</div>
-                                                            <div className="py-2 w-1/4">{sub.payment_status}</div>
-                                                            <div className="py-2 w-1/4">{sub.delivery_status}</div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </TableCell>
-                                        </TableRow>
-                                    )}
-                                </>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </div>
-
-                {filteredOrders.length > parPage && (
-                    <div className="w-full flex justify-end mt-4">
-                        <Pagination
-                            pageNumber={currentPage}
-                            setPageNumber={setCurrentPage}
-                            totalItem={filteredOrders.length}
-                            parPage={parPage}
-                            showItem={4}
+        <div className="p-4">
+            <Toast />
+            <div className="bg-white shadow-md rounded-md p-4">
+                <div className="pb-4 mb-4">{renderHeader()}</div>
+                <div className="overflow-x-auto">
+                    <DataTable
+                        value={demoOrders}
+                        paginator
+                        rowsPerPageOptions={[5, 10, 25, 50]}
+                        rows={rows}
+                        first={first}
+                        onPage={onPageChange}
+                        globalFilterFields={["id", "price", "payment_status", "delivery_status"]}
+                        filters={filters}
+                        emptyMessage="No orders found."
+                        expandedRows={expandedRows}
+                        onRowToggle={onRowToggle}
+                        rowExpansionTemplate={rowExpansionTemplate}
+                        dataKey="id"
+                        className="min-w-full"
+                        responsiveLayout="scroll"
+                    >
+                        <Column expander style={{ width: '3em' }} />
+                        <Column
+                            field="id"
+                            header="Order ID"
+                            sortable
+                            headerStyle={{
+                                background: "#0097A7",
+                                fontWeight: "bold",
+                                color: "white",
+                            }}
                         />
-                    </div>
-                )}
+                        <Column
+                            field="price"
+                            header="Price"
+                            sortable
+                            headerStyle={{
+                                background: "#0097A7",
+                                fontWeight: "bold",
+                                color: "white",
+                            }}
+                        />
+                        <Column
+                            field="payment_status"
+                            header="Payment Status"
+                            sortable
+                            headerStyle={{
+                                background: "#0097A7",
+                                fontWeight: "bold",
+                                color: "white",
+                            }}
+                        />
+                        <Column
+                            field="delivery_status"
+                            header="Order Status"
+                            sortable
+                            headerStyle={{
+                                background: "#0097A7",
+                                fontWeight: "bold",
+                                color: "white",
+                            }}
+                        />
+                        <Column
+                            header="Action"
+                            body={actionTemplate}
+                            headerStyle={{
+                                background: "#0097A7",
+                                fontWeight: "bold",
+                                color: "white",
+                            }}
+                        />
+                    </DataTable>
+                </div>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default OrdersList;
+export default OrdersList
+
