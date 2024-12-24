@@ -1,8 +1,6 @@
-"use client";
+"use client"
 import React, { useState } from "react";
-
 import { Button } from "primereact/button";
-import { Paginator } from "primereact/paginator";
 import { InputText } from "primereact/inputtext";
 import Image from "next/image";
 import { DataTable } from "primereact/datatable";
@@ -16,6 +14,7 @@ import Mobile from "@/assets/images/mobile.png";
 import { Toast } from "primereact/toast";
 import { FaEdit, FaEye, FaTrash, FaImage } from "react-icons/fa";
 import Tooltip from "@/components/custom/Tooltipcustom";
+import Link from "next/link";
 
 interface Category {
   id: string;
@@ -99,6 +98,35 @@ const demoCategories: Category[] = [
     discount: 12,
     stock: 60,
   },
+  {
+    id: "8",
+    name: "Appliances",
+    image: Appliances.src,
+    category: "Home Appliances",
+    brand: "LG",
+    price: 400,
+    discount: 5,
+    stock: 25,
+  },
+  {
+    id: "8",
+    name: "Appliances",
+    image: Appliances.src,
+    category: "Home Appliances",
+    brand: "LG",
+    price: 400,
+    discount: 5,
+    stock: 25,
+  },  {
+    id: "8",
+    name: "Appliances",
+    image: Appliances.src,
+    category: "Home Appliances",
+    brand: "LG",
+    price: 400,
+    discount: 5,
+    stock: 25,
+  },
 ];
 
 const CategoryPage = () => {
@@ -116,7 +144,7 @@ const CategoryPage = () => {
 
   // Header with Search
   const renderHeader = () => (
-    <div className="flex justify-between items-center  bg-[#EFEFEF] p-4 rounded-md border border-gray-300 shadow-sm">
+    <div className="flex justify-between items-center bg-[#EFEFEF] p-4 rounded-md border border-gray-300 shadow-sm ">
       <h2 className="text-lg font-semibold">All Products</h2>
       <span className="p-input-icon-left">
         <i className="pi pi-search" />
@@ -124,40 +152,40 @@ const CategoryPage = () => {
           type="search"
           onInput={(e) => setGlobalFilter(e.currentTarget.value)}
           placeholder="Search All Products"
-          className="p-inputtext-sm h-10 w-[300px] p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0097A7]"
+          className="p-inputtext-sm h-10 w-[300px] p-2 border  border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0097A7]"
         />
       </span>
     </div>
   );
 
   // Action Buttons
-  const actionTemplate = (rowData: Category) => (
-    <div className="flex gap-2">
-    
-
-      <div className="flex gap-2">
-    <Tooltip message="Edit">
-      <Button icon={<FaEdit />} severity="warning" size="small" />
-    </Tooltip>
-    <Tooltip message="View">
-      <Button icon={<FaEye />} severity="info" size="small" />
-    </Tooltip>
-    <Tooltip message="Upload Image">
-      <Button icon={<FaImage />} severity="success" size="small" />
-    </Tooltip>
-  </div>
-  <Tooltip message="delete">
-
-      <Button
-        icon={<FaTrash />}
-        severity="danger"
-        size="small"
-        onClick={() => handleDelete(rowData.id)}
-      />
-          </Tooltip>
-
-    </div>
-  );
+  // const actionTemplate = (rowData: Category) => (
+  //   <div className="flex gap-2">
+  //     <Tooltip message="Edit">
+  //       <Link href={`allproduct/edit/${rowData.id}`} passHref>
+  //         <Button icon={<FaEdit />} severity="warning" size="small" />
+  //       </Link>
+  //     </Tooltip>
+  //     <Tooltip message="View">
+  //       <Link href={`allproduct/view/${rowData.id}`} passHref>
+  //         <Button icon={<FaEye />} severity="info" size="small" />
+  //       </Link>
+  //     </Tooltip>
+  //     <Tooltip message="Upload Image">
+  //       <Link href={`/seller/allproduct/uploadimage/${rowData.id}`} passHref>
+  //         <Button icon={<FaImage />} severity="success" size="small" />
+  //       </Link>
+  //     </Tooltip>
+  //     <Tooltip message="Delete">
+  //       <Button
+  //         icon={<FaTrash />}
+  //         severity="danger"
+  //         size="small"
+  //         onClick={() => handleDelete(rowData.id)}
+  //       />
+  //     </Tooltip>
+  //   </div>
+  // );
 
   // Image Column
   const imageTemplate = (rowData: Category) => (
@@ -177,10 +205,13 @@ const CategoryPage = () => {
   };
 
   return (
-    <div className="p-4">
-      <Toast />
-      <div className="bg-white shadow-md rounded-md p-4">
-        <div className=" pb-4 mb-4">{renderHeader()}</div>
+
+   <div >
+      <Toast  />
+      <div className="bg-white shadow-md rounded-md p-4  dark:bg-[#18181a] text-black dark:text-black">
+        <div className="pb-4 mb-4">{renderHeader()}</div>
+        <div className="tableContainer">
+        <div className="tableResponsive">
         <DataTable
           value={categories}
           paginator
@@ -190,8 +221,60 @@ const CategoryPage = () => {
           onPage={onPageChange}
           globalFilter={globalFilter}
           emptyMessage="No categories found."
-          responsiveLayout="scroll"
+          scrollable
+          scrollHeight="400px" // Fixed height for the DataTable
+
+  style={{ overflowX: "auto", width: "90%" }} 
         >
+<Column
+  header="Actions"
+  frozen
+  alignFrozen="left"
+  style={{
+    zIndex: 1,
+
+  }}
+  headerStyle={{
+    zIndex: 2,
+    position: "sticky",
+    left: 0,
+    background: "#0097A7",
+    fontWeight: "bold",
+    color: "white",
+  }}
+  body={(rowData) => (
+    <div className="flex gap-2">
+      <Tooltip message="Edit">
+        <Link href={`allproduct/edit/${rowData.id}`} passHref>
+          <Button icon={<FaEdit />} severity="warning" size="small" />
+        </Link>
+      </Tooltip>
+      <Tooltip message="View">
+        <Link href={`allproduct/view/${rowData.id}`} passHref>
+          <Button icon={<FaEye />} severity="info" size="small" />
+        </Link>
+      </Tooltip>
+      <Tooltip message="Upload Image">
+        <Link href={`/seller/allproduct/uploadimage/${rowData.id}`} passHref>
+          <Button icon={<FaImage />} severity="success" size="small" />
+        </Link>
+      </Tooltip>
+      <Tooltip message="Delete">
+        <Button
+          icon={<FaTrash />}
+          severity="danger"
+          size="small"
+          onClick={() => handleDelete(rowData.id)}
+        />
+      </Tooltip>
+    </div>
+  )}
+/>
+
+
+
+
+          
           <Column
             header="No"
             body={(data, options) => options.rowIndex + 1}
@@ -201,7 +284,15 @@ const CategoryPage = () => {
               color: "white",
             }}
           />
-
+           <Column
+            header="No"
+            body={(data, options) => options.rowIndex + 1}
+            headerStyle={{
+              background: "#0097A7",
+              fontWeight: "bold",
+              color: "white",
+            }}
+          /> 
           <Column
             header="Image"
             body={imageTemplate}
@@ -211,6 +302,7 @@ const CategoryPage = () => {
               color: "white",
             }}
           />
+        
           <Column
             field="name"
             header="Name"
@@ -220,7 +312,8 @@ const CategoryPage = () => {
               fontWeight: "bold",
               color: "white",
             }}
-          />
+          />      
+
           <Column
             field="category"
             header="Category"
@@ -231,6 +324,19 @@ const CategoryPage = () => {
               color: "white",
             }}
           />
+
+
+<Column
+            field="category"
+            header="Category"
+            sortable
+            headerStyle={{
+              background: "#0097A7",
+              fontWeight: "bold",
+              color: "white",
+            }}
+          />
+
           <Column
             field="brand"
             header="Brand"
@@ -273,17 +379,10 @@ const CategoryPage = () => {
               color: "white",
             }}
           />
-          <Column
-            header="Actions"
-            body={actionTemplate}
-            headerStyle={{
-              background: "#0097A7",
-              fontWeight: "bold",
-              color: "white",
-            }}
-          />
         </DataTable>
       </div>
+    </div>
+    </div>
     </div>
   );
 };
