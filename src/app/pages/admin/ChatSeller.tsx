@@ -73,12 +73,12 @@ const ChatSeller = () => {
 
   return (
     <div className="px-2 lg:px-7 py-5">
-      <div className="w-full bg-[#FFF7E6] text-[#4B5563] px-4 py-4 rounded-md h-[calc(100vh-140px)]">
+      <div className="w-full bg-[#EFEFEF] text-black px-4 py-4 rounded-md h-[calc(100vh-140px)]">
         <div className="flex w-full h-full relative">
           <div className={`w-[280px] h-full absolute z-10 ${show ? '-left-[16px]' : '-left-[336px]'} md:left-0 md:relative transition-all`}>
-            <div className="w-full h-[calc(100vh-177px)] bg-[#FFF7E6] text-[#4B5563] md:bg-transparent overflow-y-auto">
-              <div className="flex text-xl justify-between items-center p-4 md:p-0 md:px-3 md:pb-3 text-[#4B5563]">
-                <h2 className='text-[#4B5563]'>Sellers</h2>
+            <div className="w-full h-[calc(100vh-177px)] bg-[#EFEFEF] text-black md:bg-transparent overflow-y-auto">
+              <div className="flex text-xl justify-between items-center p-4 md:p-0 md:px-3 md:pb-3 text-black">
+                <h2 className='text-black'>Sellers</h2>
                 <span onClick={() => setShow(!show)} className="block cursor-pointer md:hidden"><IoMdClose /></span>
               </div>
 
@@ -90,7 +90,7 @@ const ChatSeller = () => {
                   </div>
                   <div className="flex justify-center items-start flex-col w-full">
                     <div className="flex justify-between items-center w-full">
-                      <h2 className="text-base font-semibold text-[#4B5563]">{s.name}</h2>
+                      <h2 className="text-base font-semibold text-black">{s.name}</h2>
                     </div>
                   </div>
                 </Link>

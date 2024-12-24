@@ -1,100 +1,184 @@
 'use client'
+import "primeflex/primeflex.css";
+import 'primereact/resources/themes/saga-blue/theme.css';
+import "primereact/resources/primereact.min.css";
 import { useState, useEffect } from 'react';
 import { FaEye } from "react-icons/fa";
-import Pagination from '@/components/custom/Pagination';
-import Search from '@/components/custom/Search';
+import { InputText } from "primereact/inputtext";
+import Image from "next/image";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import { Toast } from "primereact/toast";
+import Tooltip from "@/components/custom/Tooltipcustom";
 import Link from 'next/link';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { FilterMatchMode } from "primereact/api";
+import { Button } from "primereact/button";
 
 interface Seller {
-  _id: string;
+  id: string;
   name: string;
   email: string;
   payment: string;
   status: string;
 }
 
+const mockSellers: Seller[] = [
+  {
+    id: '1',
+    name: 'John Doe',
+    email: 'john@example.com',
+    payment: 'Paid',
+    status: 'Active',
+  },
+  {
+    id: '2',
+    name: 'Jane Smith',
+    email: 'jane@example.com',
+    payment: 'Pending',
+    status: 'Inactive',
+  },
+  {
+    id: '3',
+    name: 'Jane Smith',
+    email: 'jane@example.com',
+    payment: 'Pending',
+    status: 'Inactive',
+  },
+];
+
+
 const SellerRequest = () => {
-  const [sellers, setSellers] = useState<Seller[]>([]);
+  const [sellers, setSellers] = useState<Seller[]>(mockSellers);
   const [currentPage, setCurrentPage] = useState(1);
   const [parPage, setParPage] = useState(5);
   const [searchValue, setSearchValue] = useState('');
+  const [filters, setFilters] = useState({
+    global: { value: "", matchMode: FilterMatchMode.CONTAINS },
+    name: { value: "", matchMode: FilterMatchMode.CONTAINS },
+    payment: { value: "", matchMode: FilterMatchMode.CONTAINS },
+    shopName: { value: "", matchMode: FilterMatchMode.CONTAINS },
+    district: { value: "", matchMode: FilterMatchMode.CONTAINS },
+    email: { value: "", matchMode: FilterMatchMode.CONTAINS },
+  });
+  const [first, setFirst] = useState(0);
+  const [rows, setRows] = useState(5);
 
-  const fetchSellers = async () => {
-    try {
-      const response = await fetch(
-        `/api/sellerRequests?page=${currentPage}&parPage=${parPage}&search=${searchValue}`
-      );
-      const data = await response.json();
-      setSellers(data.sellers);
-    } catch (error) {
-      console.error('Failed to fetch sellers', error);
-    }
+  const renderHeader = () => (
+    <div className="flex justify-between items-center bg-[#EFEFEF] p-4 rounded-md border border-gray-300 shadow-sm">
+      <h2 className="text-lg font-semibold">Seller Request</h2>
+      <span className="p-input-icon-left">
+        <i className="pi pi-search" />
+        <InputText
+          type="search"
+          onInput={(e) =>
+            setFilters({
+              ...filters,
+              global: { value: e.currentTarget.value, matchMode: FilterMatchMode.CONTAINS },
+            })
+          }
+          placeholder="Search Sellers"
+          className="p-inputtext-sm h-10 w-[300px] p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0097A7]"
+        />
+      </span>
+    </div>
+  );
+
+  const actionTemplate = (rowData: Seller) => (
+    <div className="flex gap-2">
+      <div className="flex gap-2">
+        <Link href={`/admin/sellers/${rowData.id}`}>
+          <Tooltip message="View">
+            <Button className='bg-transparent'>
+              <FaEye />
+            </Button>
+          </Tooltip>
+        </Link>
+      </div>
+    </div>
+  );
+
+  const onPageChange = (e: any) => {
+    setFirst(e.first);
+    setRows(e.rows);
   };
 
-  useEffect(() => {
-    fetchSellers();
-  }, [currentPage, parPage, searchValue]);
-
   return (
-    <div className="px-2 lg:px-7 pt-5">
-      <h1 className="text-[20px] font-bold mb-3">Seller Request</h1>
-
-      <div className="w-full p-4 bg-[#FFF7E6] rounded-md">
-        <Search setParPage={setParPage} setSearchValue={setSearchValue} searchValue={searchValue} />
-
-        <div className="relative overflow-x-auto">
-          <Table className="w-full text-sm text-left text-[#d0d2d6]">
-            <TableHeader className="text-sm uppercase border-b border-slate-700">
-              <TableRow>
-                <TableHead scope="col" className="py-3 px-4  text-[#4B5563]">No</TableHead>
-                <TableHead scope="col" className="py-3 px-4  text-[#4B5563]">Name</TableHead>
-                <TableHead scope="col" className="py-3 px-4  text-[#4B5563]">Email</TableHead>
-                <TableHead scope="col" className="py-3 px-4  text-[#4B5563]">Payment Status</TableHead>
-                <TableHead scope="col" className="py-3 px-4  text-[#4B5563]">Status</TableHead>
-                <TableHead scope="col" className="py-3 px-4  text-[#4B5563]">Action</TableHead>
-              </TableRow>
-            </TableHeader>
-
-            <TableBody>
-              {sellers.map((d, i) => (
-                <TableRow key={d._id} className="border-b border-slate-700">
-                  <TableCell scope="row" className="py-2 px-4 font-medium whitespace-nowrap">{i + 1}</TableCell>
-                  <TableCell scope="row" className="py-2 px-4 font-medium whitespace-nowrap">{d.name}</TableCell>
-                  <TableCell scope="row" className="py-2 px-4 font-medium whitespace-nowrap">{d.email}</TableCell>
-                  <TableCell scope="row" className="py-2 px-4 font-medium whitespace-nowrap">
-                    <span>{d.payment}</span>
-                  </TableCell>
-                  <TableCell scope="row" className="py-2 px-4 font-medium whitespace-nowrap">
-                    <span>{d.status}</span>
-                  </TableCell>
-
-                  <TableCell scope="row" className="py-2 px-4 font-medium whitespace-nowrap">
-                    <div className="flex justify-start items-center gap-4">
-                      <Link
-                        href={`/admin/dashboard/seller/details/${d._id}`}
-                        className="p-[6px] bg-green-500 rounded hover:shadow-lg hover:shadow-green-500/50"
-                      >
-                        <FaEye />
-                      </Link>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+    <div className="p-4">
+      <Toast />
+      <div className="bg-white shadow-md rounded-md p-4">
+        <div className=" pb-4 mb-4">{renderHeader()}</div>
+        <div className="overflow-x-auto">
+          <DataTable
+            value={sellers}
+            paginator
+            rowsPerPageOptions={[5, 10, 25, 50]}
+            rows={rows}
+            first={first}
+            onPage={onPageChange}
+            filters={filters}
+            showGridlines
+            emptyMessage="No sellers found."
+          >
+            <Column
+              header="No"
+              body={(data, options) => options.rowIndex + 1}
+              headerStyle={{
+                background: "#0097A7",
+                fontWeight: "bold",
+                color: "white",
+              }}
+            />
+            <Column
+              field="name"
+              header="Name"
+              sortable
+              headerStyle={{
+                background: "#0097A7",
+                fontWeight: "bold",
+                color: "white",
+              }}
+            />
+            <Column
+              field="email"
+              header="Email"
+              sortable
+              headerStyle={{
+                background: "#0097A7",
+                fontWeight: "bold",
+                color: "white",
+              }}
+            />
+            <Column
+              field="payment"
+              header="Payment"
+              sortable
+              headerStyle={{
+                background: "#0097A7",
+                fontWeight: "bold",
+                color: "white",
+              }}
+            />
+            <Column
+              field="status"
+              header="Status"
+              sortable
+              headerStyle={{
+                background: "#0097A7",
+                fontWeight: "bold",
+                color: "white",
+              }}
+            />
+            <Column
+              header="Actions"
+              body={actionTemplate}
+              headerStyle={{
+                background: "#0097A7",
+                fontWeight: "bold",
+                color: "white",
+              }}
+            />
+          </DataTable>
         </div>
-
-        <div className="w-full flex justify-end mt-4 bottom-4 right-4">
-          <Pagination
-            pageNumber={currentPage}
-            setPageNumber={setCurrentPage}
-            totalItem={50}  // Ideally, replace this with a dynamic total count
-            parPage={parPage}
-            showItem={3}
-          />
-        </div>
-
       </div>
     </div>
   );

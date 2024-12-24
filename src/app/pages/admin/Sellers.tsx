@@ -1,24 +1,22 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import "primeflex/primeflex.css";
+import 'primereact/resources/themes/saga-blue/theme.css';
+import "primereact/resources/primereact.min.css";
+import React, { useState } from 'react';
+import { InputText } from "primereact/inputtext";
+import Image from "next/image";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import { Toast } from "primereact/toast";
+import Tooltip from "@/components/custom/Tooltipcustom";
 import Link from 'next/link';
 import { FaEye } from 'react-icons/fa';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
-import Pagination from '@/components/custom/Pagination';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import Search from '@/components/custom/Search';
+import personImg from '@/assets/images/user.png'
+import { FilterMatchMode } from "primereact/api";
 
 type Seller = {
-    _id: string;
+    id: string;
     image: string;
     name: string;
     shopInfo?: {
@@ -30,162 +28,230 @@ type Seller = {
     status: string;
 };
 
+const mockSellers: Seller[] = [
+    {
+        id: '1',
+        image: personImg.src,
+        name: 'John Doe',
+        shopInfo: { shopName: "Jane's Store", district: 'District 1' },
+        payment: 'Paid',
+        email: 'john@example.com',
+        status: 'Active',
+    },
+    {
+        id: '2',
+        image: personImg.src,
+        name: 'Jane Smith',
+        shopInfo: { shopName: "Jane's Store", district: 'District 2' },
+        payment: 'Pending',
+        email: 'jane@example.com',
+        status: 'Inactive',
+    },
+    {
+        id: '3',
+        image: personImg.src,
+        name: 'Jane Smith',
+        shopInfo: { shopName: "Jane's Store", district: 'District 2' },
+        payment: 'Pending',
+        email: 'jane@example.com',
+        status: 'Inactive',
+    },
+    {
+        id: '4',
+        image: personImg.src,
+        name: 'Jane Smith',
+        shopInfo: { shopName: "Jane's Store", district: 'District 2' },
+        payment: 'Pending',
+        email: 'jane@example.com',
+        status: 'Inactive',
+    },
+    {
+        id: '5',
+        image: personImg.src,
+        name: 'Jane Smith',
+        shopInfo: { shopName: "Jane's Store", district: 'District 2' },
+        payment: 'Pending',
+        email: 'jane@example.com',
+        status: 'Inactive',
+    },
+];
+
+
 const Sellers = () => {
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [searchValue, setSearchValue] = useState<string>('');
-    const [parPage, setParPage] = useState<number>(5);
+    const [sellers] = useState<Seller[]>(mockSellers)
+    const [filters, setFilters] = useState({
+        global: { value: "", matchMode: FilterMatchMode.CONTAINS },
+        name: { value: "", matchMode: FilterMatchMode.CONTAINS },
+        payment: { value: "", matchMode: FilterMatchMode.CONTAINS },
+        shopName: { value: "", matchMode: FilterMatchMode.CONTAINS },
+        district: { value: "", matchMode: FilterMatchMode.CONTAINS },
+        email: { value: "", matchMode: FilterMatchMode.CONTAINS },
+    })
+    const [first, setFirst] = useState(0)
+    const [rows, setRows] = useState(5)
 
-    const [sellers, setSellers] = useState<Seller[]>([]);
-    const [totalSeller, setTotalSeller] = useState<number>(0);
+    const renderHeader = () => (
+        <div className="flex flex-col sm:flex-row justify-between items-center bg-[#EFEFEF] p-4 rounded-md border border-gray-300 shadow-sm">
+            <h2 className="text-lg font-semibold mb-2 sm:mb-0">Sellers</h2>
+            <span className="p-input-icon-left w-full sm:w-auto">
+                <i className="pi pi-search" />
+                <InputText
+                    type="search"
+                    onInput={(e) =>
+                        setFilters({
+                            ...filters,
+                            global: { value: e.currentTarget.value, matchMode: FilterMatchMode.CONTAINS },
+                        })
+                    }
+                    placeholder="Search Sellers"
+                    className="p-inputtext-sm h-10 w-full sm:w-[300px] p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0097A7]"
+                />
+            </span>
+        </div>
+    )
 
-    const mockSellers: Seller[] = [
-        {
-            _id: '1',
-            image: 'https://via.placeholder.com/45',
-            name: 'John Doe',
-            shopInfo: { shopName: "Jane's Store", district: 'District 1' },
-            payment: 'Paid',
-            email: 'john@example.com',
-            status: 'Active',
-        },
-        {
-            _id: '2',
-            image: 'https://via.placeholder.com/45',
-            name: 'Jane Smith',
-            shopInfo: { shopName: "Jane's Store", district: 'District 2' },
-            payment: 'Pending',
-            email: 'jane@example.com',
-            status: 'Inactive',
-        },
-        {
-            _id: '3',
-            image: 'https://via.placeholder.com/45',
-            name: 'Jane Smith',
-            shopInfo: { shopName: "Jane's Store", district: 'District 2' },
-            payment: 'Pending',
-            email: 'jane@example.com',
-            status: 'Inactive',
-        },
-        {
-            _id: '4',
-            image: 'https://via.placeholder.com/45',
-            name: 'Jane Smith',
-            shopInfo: { shopName: "Jane's Store", district: 'District 2' },
-            payment: 'Pending',
-            email: 'jane@example.com',
-            status: 'Inactive',
-        },
-        {
-            _id: '5',
-            image: 'https://via.placeholder.com/45',
-            name: 'Jane Smith',
-            shopInfo: { shopName: "Jane's Store", district: 'District 2' },
-            payment: 'Pending',
-            email: 'jane@example.com',
-            status: 'Inactive',
-        },
-    ];
+    const imageTemplate = (rowData: Seller) => (
+        <Image
+            src={rowData.image}
+            alt={rowData.name}
+            width={40}
+            height={40}
+            className="rounded"
+        />
+    )
 
-    useEffect(() => {
-        const filteredSellers = mockSellers.filter(seller =>
-            seller.name.toLowerCase().includes(searchValue.toLowerCase())
-        );
-        setSellers(filteredSellers);
-        setTotalSeller(filteredSellers.length);
-    }, [searchValue, currentPage, parPage]);
+    const actionTemplate = (rowData: Seller) => (
+        <div className="flex gap-2">
+            <Link href={`/admin/sellers/${rowData.id}`}>
+                <Tooltip message="View">
+                    <Button className='bg-transparent'>
+                        <FaEye />
+                    </Button>
+                </Tooltip>
+            </Link>
+        </div>
+    )
+
+    const onPageChange = (e: { first: number; rows: number }) => {
+        setFirst(e.first)
+        setRows(e.rows)
+    }
 
     return (
-        <div className='px-4 lg:px-8 py-6'>
-            <h1 className='text-xl font-bold mb-4'>Sellers</h1>
-
-            <div className='w-full p-4 bg-[#FFF7E6] text-[#4B5563] rounded-md'>
-                {/* <div className='flex justify-between items-center mb-4'>
-                    <Select
-                        value={String(parPage)}
-                        onValueChange={(value) => setParPage(Number(value))}
+        <div className="p-4">
+            <Toast />
+            <div className="bg-white shadow-md rounded-md p-4">
+                <div className="pb-4 mb-4">{renderHeader()}</div>
+                <div className="overflow-x-auto">
+                    <DataTable
+                        value={sellers}
+                        paginator
+                        rowsPerPageOptions={[5, 10, 25, 50]}
+                        rows={rows}
+                        first={first}
+                        onPage={onPageChange}
+                        filters={filters}
+                        showGridlines
+                        emptyMessage="No sellers found."
+                        className="min-w-full"
+                        responsiveLayout="scroll"
                     >
-                        <SelectTrigger className="bg-indigo-600 text-[#4B5563] border border-slate-700 rounded-md">
-                            <SelectValue placeholder="Select" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup >
-                                <SelectLabel>Items per page</SelectLabel>
-                                <SelectItem value="5" className='text-[#4B5563]' >5</SelectItem>
-                                <SelectItem value="10" className='text-[#4B5563]'>10</SelectItem>
-                                <SelectItem value="20" className='text-[#4B5563]'>20</SelectItem>
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
-                    <Input
-                        value={searchValue}
-                        onChange={(e) => setSearchValue(e.target.value)}
-                        placeholder='Search...'
-                        className='bg-indigo-600 text-[#4B5563] border border-slate-700 rounded-md'
-                    />
-                </div> */}
-
-                <Search
-                    setSearchValue={setSearchValue}
-                    setParPage={setParPage}
-                    searchValue={searchValue}
-                />
-
-                <div className='relative overflow-x-auto'>
-                    <Table className='w-full text-sm text-left text-[#4B5563]'>
-                        <TableHeader className='text-sm uppercase border-b border-slate-700'>
-                            <TableRow>
-                                <TableHead className='py-3 px-4 text-[#4B5563]'>No</TableHead>
-                                <TableHead className='py-3 px-4 text-[#4B5563]'>Image</TableHead>
-                                <TableHead className='py-3 px-4 text-[#4B5563]'>Name</TableHead>
-                                <TableHead className='py-3 px-4 text-[#4B5563]'>Shop Name</TableHead>
-                                <TableHead className='py-3 px-4 text-[#4B5563]'>Payment Status</TableHead>
-                                <TableHead className='py-3 px-4 text-[#4B5563]'>Email</TableHead>
-                                <TableHead className='py-3 px-4 text-[#4B5563]'>Status</TableHead>
-                                <TableHead className='py-3 px-4 text-[#4B5563]'>District</TableHead>
-                                <TableHead className='py-3 px-4 text-[#4B5563]'>Action</TableHead>
-                            </TableRow>
-                        </TableHeader>
-
-                        <TableBody>
-                            {sellers.map((seller, index) => (
-                                <TableRow key={seller._id}>
-                                    <TableCell className='py-1 px-4'>{index + 1}</TableCell>
-                                    <TableCell className='py-1 px-4'>
-                                        <img src={seller.image} alt={seller.name} className='w-11 h-11 rounded-full' />
-                                    </TableCell>
-                                    <TableCell className='py-1 px-4'>{seller.name}</TableCell>
-                                    <TableCell className='py-1 px-4'>{seller.shopInfo?.shopName}</TableCell>
-                                    <TableCell className='py-1 px-4'>{seller.payment}</TableCell>
-                                    <TableCell className='py-1 px-4'>{seller.email}</TableCell>
-                                    <TableCell className='py-1 px-4'>{seller.status}</TableCell>
-                                    <TableCell className='py-1 px-4'>{seller.shopInfo?.district}</TableCell>
-                                    <TableCell className='py-1 px-4'>
-                                        <Link href={`/admin/sellers/${seller._id}`}>
-                                            <Button className='bg-green-500 hover:shadow-lg hover:shadow-green-500/50'>
-                                                <FaEye />
-                                            </Button>
-                                        </Link>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </div>
-
-                {totalSeller > parPage && (
-                    <div className='flex justify-end mt-4'>
-                        <Pagination
-                            pageNumber={currentPage}
-                            setPageNumber={setCurrentPage}
-                            totalItem={totalSeller}
-                            parPage={parPage}
-                            showItem={4}
+                        <Column
+                            header="No"
+                            body={(data, options) => options.rowIndex + 1}
+                            headerStyle={{
+                                background: "#0097A7",
+                                fontWeight: "bold",
+                                color: "white",
+                            }}
+                            style={{ width: '4rem' }}
                         />
-                    </div>
-                )}
+                        <Column
+                            header="Image"
+                            body={imageTemplate}
+                            headerStyle={{
+                                background: "#0097A7",
+                                fontWeight: "bold",
+                                color: "white",
+                            }}
+                            style={{ width: '5rem' }}
+                        />
+                        <Column
+                            field="name"
+                            header="Name"
+                            sortable
+                            headerStyle={{
+                                background: "#0097A7",
+                                fontWeight: "bold",
+                                color: "white",
+                            }}
+                        />
+                        <Column
+                            header="Shop Name"
+                            sortable
+                            body={(rowData: Seller) => rowData.shopInfo?.shopName || 'N/A'}
+                            headerStyle={{
+                                background: "#0097A7",
+                                fontWeight: "bold",
+                                color: "white",
+                            }}
+                        />
+                        <Column
+                            field="payment"
+                            header="Payment"
+                            sortable
+                            headerStyle={{
+                                background: "#0097A7",
+                                fontWeight: "bold",
+                                color: "white",
+                            }}
+                        />
+                        <Column
+                            field="email"
+                            header="Email"
+                            sortable
+                            headerStyle={{
+                                background: "#0097A7",
+                                fontWeight: "bold",
+                                color: "white",
+                            }}
+                        />
+                        <Column
+                            field="status"
+                            header="Status"
+                            sortable
+                            headerStyle={{
+                                background: "#0097A7",
+                                fontWeight: "bold",
+                                color: "white",
+                            }}
+                        />
+                        <Column
+                            header="District"
+                            sortable
+                            body={(rowData: Seller) => rowData.shopInfo?.district || 'N/A'}
+                            headerStyle={{
+                                background: "#0097A7",
+                                fontWeight: "bold",
+                                color: "white",
+                            }}
+                        />
+                        <Column
+                            header="Actions"
+                            body={actionTemplate}
+                            headerStyle={{
+                                background: "#0097A7",
+                                fontWeight: "bold",
+                                color: "white",
+                            }}
+                            style={{ width: '6rem' }}
+                        />
+                    </DataTable>
+                </div>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default Sellers;
+export default Sellers
+

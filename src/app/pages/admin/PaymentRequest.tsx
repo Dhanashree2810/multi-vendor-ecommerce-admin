@@ -1,21 +1,27 @@
-'use client'
+'use client';
+import "primeflex/primeflex.css";
+import 'primereact/resources/themes/saga-blue/theme.css';
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import Tooltip from "@/components/custom/Tooltipcustom";
+import { Toast } from "primereact/toast";
 
-const PaymentRequest: React.FC = () => {
+const PaymentRequest = () => {
   const [paymentId, setPaymentId] = useState<string>('');
   const [pendingWithdrawals, setPendingWithdrawals] = useState<any[]>([]);
   const [loader, setLoader] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [globalFilter, setGlobalFilter] = useState<string>('');
+  const [first, setFirst] = useState(0);
+  const [rows, setRows] = useState(5);
 
-  // Mock API calls for fetching and confirming requests
   useEffect(() => {
     const fetchPaymentRequests = async () => {
       try {
-        // Replace with actual API call
         const response = await Promise.resolve([
           { id: '1', amount: 100, status: 'Pending', createdAt: new Date().toISOString() },
           { id: '2', amount: 200, status: 'Pending', createdAt: new Date().toISOString() },
@@ -32,7 +38,6 @@ const PaymentRequest: React.FC = () => {
     setPaymentId(id);
     setLoader(true);
     try {
-      // Replace with actual API call
       await Promise.resolve();
       setSuccessMessage('Payment request confirmed successfully!');
       setPendingWithdrawals(prev => prev.filter(request => request.id !== id));
@@ -55,58 +60,100 @@ const PaymentRequest: React.FC = () => {
     }
   }, [successMessage, errorMessage]);
 
-  const Row = ({ index, style }:{ index: number; style: React.CSSProperties }) => (
-    <div style={style} className="flex text-sm text-[#4B5563]  font-medium">
-      <div className="w-[20%] p-2">{index + 1}</div>
-      <div className="w-[20%] p-2">₹{pendingWithdrawals[index]?.amount}</div>
-      <div className="w-[20%] p-2">
-        <span className="py-1 px-2 bg-slate-300 text-blue-500 rounded-md text-sm">
-          {pendingWithdrawals[index]?.status}
-        </span>
-      </div>
-      <div className="w-[20%] p-2">
-        {moment(pendingWithdrawals[index]?.createdAt).format('LL')}
-      </div>
-      <div className="w-[20%] p-2">
-        <Button
-          onClick={() => confirmRequest(pendingWithdrawals[index]?.id)}
-          disabled={loader && paymentId === pendingWithdrawals[index]?.id}
-          className="bg-[#FFF7E6] hover:bg-[#FFF7E6] text-[#4B5563]  text-sm"
-        >
-          {loader && paymentId === pendingWithdrawals[index]?.id ? 'Loading...' : 'Confirm'}
-        </Button>
-      </div>
+  const renderHeader = () => (
+    <div className="flex justify-between items-center bg-[#EFEFEF] p-4 rounded-md border border-gray-300 shadow-sm">
+      <h2 className="text-lg font-semibold">Withdrawal Request</h2>
+      <span className="p-input-icon-left">
+        <i className="pi pi-search" />
+        <input
+          type="search"
+          onInput={(e) => setGlobalFilter(e.currentTarget.value)}
+          placeholder="Search Withdrawals"
+          className="p-inputtext-sm h-10 w-[300px] p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0097A7]"
+        />
+      </span>
     </div>
   );
 
-  return (
-    <div className="px-4 sm:px-8 py-5">
-      <Card className="w-full bg-[#FFF7E6] rounded-md">
-        <CardHeader>
-          <h2 className="text-xl font-medium pb-5 text-[#4B5563] ">Withdrawal Request</h2>
-        </CardHeader>
-        <CardContent>
-          <div className="w-full overflow-x-auto">
-            <div className="flex bg-[#a7a3de] text-[#4B5563]  uppercase text-xs font-bold min-w-[340px] rounded-md">
-              <div className="w-[20%] p-2 text-[#4B5563] ">No</div>
-              <div className="w-[20%] p-2 text-[#4B5563] ">Amount</div>
-              <div className="w-[20%] p-2 text-[#4B5563] ">Status</div>
-              <div className="w-[20%] p-2 text-[#4B5563] ">Date</div>
-              <div className="w-[20%] p-2 text-[#4B5563] ">Action</div>
-            </div>
+  const actionTemplate = (rowData: any) => (
+    <Tooltip message="Confirm Request">
+      <Button
+        onClick={() => confirmRequest(rowData.id)}
+        disabled={loader && paymentId === rowData.id}
+        className="bg-[#0097A7] text-white"
+      >
+        Confirm
+      </Button>
+    </Tooltip>
+  );
 
-            {pendingWithdrawals.length > 0 ? (
-              <div className="flex flex-col max-h-[350px] overflow-y-auto text-[#4B5563] ">
-                {pendingWithdrawals.map((_, index) => (
-                  <Row key={index} index={index} style={{}} />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-4 text-[#4B5563] ">No withdrawal requests found.</div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
+  const statusTemplate = (rowData: any) => (
+    <span
+      className={`py-1 px-2 rounded-md text-sm ${rowData.status === 'Pending' ? 'bg-yellow-200 text-yellow-800' : 'bg-green-200 text-green-800'
+        }`}
+    >
+      {rowData.status}
+    </span>
+  );
+
+  const dateTemplate = (rowData: any) => moment(rowData.createdAt).format('LL');
+
+  const onPageChange = (e: any) => {
+    setFirst(e.first);
+    setRows(e.rows);
+  };
+
+  return (
+    <div className="p-4">
+      <Toast />
+      <div className="bg-white shadow-md rounded-md p-4">
+        <div className="pb-4 mb-4">{renderHeader()}</div>
+        <div className="overflow-x-auto">
+          <DataTable
+            value={pendingWithdrawals}
+            paginator
+            rows={rows}
+            first={first}
+            onPage={onPageChange}
+            globalFilter={globalFilter}
+            emptyMessage="No payment requests found."
+            responsiveLayout="scroll"
+            rowsPerPageOptions={[5, 10, 25]}
+          >
+            <Column
+              header="No"
+              body={(data, options) => options.rowIndex + 1}
+              headerStyle={{ background: "#0097A7", fontWeight: "bold", color: "white" }}
+            />
+            <Column
+              field="amount"
+              header="Amount"
+              body={(data) => `₹${data.amount}`}
+              sortable
+              headerStyle={{ background: "#0097A7", fontWeight: "bold", color: "white" }}
+            />
+            <Column
+              field="status"
+              header="Status"
+              body={statusTemplate}
+              sortable
+              headerStyle={{ background: "#0097A7", fontWeight: "bold", color: "white" }}
+            />
+            <Column
+              field="createdAt"
+              header="Date"
+              body={dateTemplate}
+              sortable
+              headerStyle={{ background: "#0097A7", fontWeight: "bold", color: "white" }}
+            />
+            <Column
+              header="Action"
+              body={actionTemplate}
+              headerStyle={{ background: "#0097A7", fontWeight: "bold", color: "white" }}
+            />
+          </DataTable>
+        </div>
+      </div>
     </div>
   );
 };

@@ -5,7 +5,7 @@ interface TooltipProps {
   children: ReactNode;
 }
 
-const Tooltip: React.FC<TooltipProps> = ({ message, children }) => {
+const Tooltip = ({ message, children }:TooltipProps) => {
   return (
     <div className="relative group">
       {children}
