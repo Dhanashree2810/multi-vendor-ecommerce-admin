@@ -179,7 +179,7 @@ const CategoryPage = () => {
   return (
     <div className="p-4">
       <Toast />
-      <div className="bg-white shadow-md rounded-md p-4">
+      <div className="bg-white shadow-md rounded-md p-4  dark:bg-[#18181a] text-black dark:text-black">
         <div className=" pb-4 mb-4">{renderHeader()}</div>
         <DataTable
           value={categories}

@@ -22,6 +22,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import { useEffect, useState } from "react"
 
 const data = {
   user: {
@@ -52,76 +53,100 @@ const data = {
       url: "/seller/dashboard",
       icon: SquareTerminal,
       isActive: true,
-     
     },
     {
       title: "Add Product",
       url: "/seller/addproduct",
       icon: Bot,
-     
     },
     {
       title: "All Product",
       url: "/seller/allproduct",
       icon: BookOpen,
-     
     },
     {
       title: "Discount Product",
       url: "/seller/discountproduct",
       icon: Settings2,
-      
     },
     {
       title: "Orders",
       url: "/seller/orders",
       icon: Settings2,
-    
     },
     {
       title: "Payments",
       url: "/seller/payments",
       icon: Settings2,
-      
     },
     {
       title: "Chat-Customer",
       url: "/seller/chatcustomer",
       icon: Settings2,
-     
     },
     {
       title: "Chat-Support",
       url: "/seller/chatsupport",
       icon: Settings2,
-     
     },
     {
       title: "Profile",
       url: "/seller/profile",
       icon: Settings2,
-      
     },
   ],
-  projects: [
-
-  ],
+  projects: [],
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const savedMode = localStorage.getItem("theme");
+    if (savedMode === "dark") {
+      setDarkMode(true);
+      document.documentElement.classList.add("dark");
+    } else {
+      setDarkMode(false);
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    setDarkMode(!darkMode);
+    if (darkMode) {
+      localStorage.setItem("theme", "light");
+      document.documentElement.classList.remove("dark");
+    } else {
+      localStorage.setItem("theme", "dark");
+      document.documentElement.classList.add("dark");
+    }
+  };
+
   return (
-    <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
-      </SidebarHeader>
-      <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
-      </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={data.user} />
-      </SidebarFooter>
-      <SidebarRail />
-    </Sidebar>
+    <>
+      <Sidebar collapsible="icon" {...props}>
+        <SidebarHeader>
+          <TeamSwitcher teams={data.teams} />
+        </SidebarHeader>
+        <SidebarContent>
+          <NavMain items={data.navMain} />
+          <NavProjects projects={data.projects} />
+        </SidebarContent>
+        <SidebarFooter>
+          <div className="flex justify-between items-center w-full">
+            <NavUser user={data.user} />
+            {/* Theme Toggle Button */}
+            <button
+              className="p-4 border rounded-md bg-gray-200 dark:bg-gray-700 text-sm"
+              onClick={toggleTheme}
+            >
+              {darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            </button>
+          </div>
+        </SidebarFooter>
+        <SidebarRail />
+      </Sidebar>
+    </>
   )
 }
