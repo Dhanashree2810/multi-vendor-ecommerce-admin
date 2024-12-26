@@ -8,7 +8,7 @@ const OrderDetails = () => {
 
       {/* Main Content */}
       <div className="flex-1 p-10 bg-gray-100">
-        <div className="bg-[#EFEFEF] text-black p-6 rounded-lg">
+        <div className="bg-[#EFEFEF] dark-light text-black p-6 rounded-lg">
           <div className="flex justify-between items-center mb-5">
             <div>
               <h2 className="text-xl font-bold">Order Details</h2>

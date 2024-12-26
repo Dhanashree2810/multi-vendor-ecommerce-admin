@@ -25,14 +25,14 @@ export default function ChatBox() {
   };
 
   return (
-    <div className="h-screen flex justify-center items-center bg-[#EFEFEF]">
-      <div className="w-[600px] bg-white rounded-lg p-4 shadow-lg ">
+    <div className="h-screen flex justify-center items-center bg-[#EFEFEF] ">
+      <div className="w-[600px] bg-white rounded-lg p-4 shadow-lg  dark-light">
         {/* Header */}
         <div className="flex items-center gap-2 mb-4">
           <div className="w-8 h-8 bg-green-400 rounded-full flex items-center justify-center">
             <span className="text-black font-bold">Q</span>
           </div>
-          <h1 className="text-black font-bold">Support</h1>
+          <h1 className="text-black dark:text-white font-bold">Support</h1>
         </div>
 
         {/* Chat Area */}

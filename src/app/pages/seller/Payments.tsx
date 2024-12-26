@@ -56,7 +56,7 @@ export default function Payments() {
   return (
     <>
       {/* Dashboard Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7 p-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7 p-6 dark:text-black">
         <Card title="Total Sales" value="₹ 0" icon={<MdCurrencyExchange />} color="red" />
         <Card title="Products" value="27" icon={<MdProductionQuantityLimits />} color="pink" />
         <Card title="Orders" value="2" icon={<FaUsers />} color="green" />
@@ -64,7 +64,7 @@ export default function Payments() {
       </div>
 
       {/* Request Sections */}
-      <div className="min-h-screen bg-white p-6">
+      <div className="min-h-screen bg-white p-6  dark-light">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Part 1: Send Request & Pending Requests */}
           <SendRequestSection
@@ -141,7 +141,8 @@ function SuccessWithdrawalSection({ successRequests }: { successRequests: any[] 
   return (
     <div className="bg-[#EFEFEF] rounded-lg shadow-md p-4">
       <h2 className="text-lg font-semibold mb-2 text-gray-700">Success Withdrawals</h2>
-      <DataTable value={successRequests} paginator rows={5} rowsPerPageOptions={[5, 10, 25]}>
+      <DataTable value={successRequests} paginator rows={5} rowsPerPageOptions={[5, 10, 25]}
+      >
         <Column field="id" header="No" />
         <Column field="amount" header="Amount" />
         <Column field="status" header="Status" />

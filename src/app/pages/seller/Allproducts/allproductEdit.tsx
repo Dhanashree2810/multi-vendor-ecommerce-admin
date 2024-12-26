@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button";
 
 export default function EditProduct() {
   return (
-    <div className="min-h-screen bg-[#EFEFEF] p-8">
-      <div className="max-w-7xl mx-auto bg-white text-black p-6 rounded-md shadow-lg">
+    <div className="min-h-screen bg-[#EFEFEF] p-8 ">
+      <div className="max-w-7xl mx-auto bg-white  dark-light  text-black p-6 rounded-md shadow-lg">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Edit Product</h1>
-          <Button variant="secondary">All Products</Button>
+          <Button variant="secondary " className='bg-[#0097A7]  text-white'>All Products</Button>
         </div>
 
         <form className="grid grid-cols-2 gap-6">
@@ -70,7 +70,7 @@ export default function EditProduct() {
         </div>
 
         <div className="mt-8 text-right">
-          <Button variant="primary" className="bg-red-500 hover:bg-red-600">
+          <Button variant="primary" className="bg-[#0097A7] text-white  hover:bg-red-600">
             Save Changes
           </Button>
         </div>

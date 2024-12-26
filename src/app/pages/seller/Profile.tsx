@@ -13,18 +13,18 @@ export default function ProfileSettings() {
     <div className="min-h-screen bg-[#EFEFEF] p-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Left Section */}
-        <div className="bg-white rounded-lg p-6 shadow-md">
+        <div className="bg-white rounded-lg p-6 shadow-md  dark-light">
           {/* Image Upload */}
           <div className="flex flex-col items-center mb-4">
-            <label className="w-32 h-32 flex justify-center items-center border-2 border-dashed border-black rounded-lg cursor-pointer">
-              <span className="text-black text-sm">Select Image</span>
+            <label className="w-32 h-32 flex justify-center items-center dark:border-white  border-2 border-dashed border-black rounded-lg cursor-pointer">
+              <span className="text-black dark:text-white text-sm">Select Image</span>
               <input type="file" className="hidden" onChange={handleImageChange} />
             </label>
             {image && <p className="text-black mt-2 text-sm">{image.name}</p>}
           </div>
 
           {/* User Information */}
-          <div className="bg-[#1e1f29] rounded-lg p-4 text-white relative">
+          <div className="bg-[#1e1f29] rounded-lg p-4 text-white relative ">
             <div className="flex justify-between">
               <div>
                 <p className="font-semibold">Name: Priyanka Pardeshi</p>
@@ -49,7 +49,7 @@ export default function ProfileSettings() {
             {["Shop Name", "Division Name", "District Name", "Sub District Name"].map(
               (label) => (
                 <div key={label}>
-                  <label className="block text-black mb-1">{label}</label>
+                  <label className="block text-black mb-1 dark:text-white ">{label}</label>
                   <input
                     type="text"
                     placeholder={label}
@@ -66,12 +66,12 @@ export default function ProfileSettings() {
         </div>
 
         {/* Right Section */}
-        <div className="bg-white rounded-lg p-6 shadow-md">
-          <h2 className="text-black text-xl font-semibold mb-4">Change Password</h2>
+        <div className="bg-white rounded-lg p-6 shadow-md  dark-light">
+          <h2 className="text-black text-xl font-semibold mb-4 dark:text-white">Change Password</h2>
 
           {["Email", "Old Password", "New Password"].map((label) => (
             <div key={label} className="mb-4">
-              <label className="block text-black mb-1">{label}</label>
+              <label className="block text-black mb-1 dark:text-white">{label}</label>
               <input
                 type={label.includes("Password") ? "password" : "email"}
                 placeholder={label}
