@@ -2,11 +2,12 @@
 import React, { useState } from "react";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
-import { DataTable } from "primereact/datatable";
+import { DataTable, DataTableFilterMeta } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Toast } from "primereact/toast";
 import { FaEye } from "react-icons/fa";
 import Tooltip from "@/components/custom/Tooltipcustom";
+import { FilterMatchMode } from "primereact/api";
 
 // Demo data
 const demoCategories = [
@@ -26,7 +27,7 @@ const demoCategories = [
   },
   {
     Id: "#675d143198f4ae7d19703b9e",
-    Price: "$1544",
+    Price: "$1540",
     PaymentStatus: "Unpaid",
     OrderStatus: "Cancelled",
     Date: "December 14, 2024 10:44 AM",
@@ -41,8 +42,8 @@ const CategoryPage = () => {
 
   // Header with Search
   const renderHeader = () => (
-    <div className="flex justify-between items-center bg-[#EFEFEF] p-4 rounded-md border border-gray-300 shadow-sm">
-      <h2 className="text-lg font-semibold">Orders</h2>
+    <div className="flex justify-between items-center bg-[#EFEFEF]  p-4 rounded-md border border-gray-300 shadow-sm">
+      <h2 className="text-lg font-semibold dark:text-black" >Orders</h2>
       <span className="p-input-icon-left">
         <i className="pi pi-search" />
         <InputText
@@ -56,7 +57,7 @@ const CategoryPage = () => {
   );
 
   // Action Buttons
-  const actionTemplate = (rowData) => (
+  const actionTemplate = () => (
     <div className="flex gap-2">
       <Tooltip message="View">
         <Button icon={<FaEye />} severity="info" size="small" />
@@ -65,15 +66,24 @@ const CategoryPage = () => {
   );
 
   // Pagination Handler
-  const onPageChange = (e) => {
+  const onPageChange = (e:any) => {
     setFirst(e.first);
     setRows(e.rows);
   };
+  const [filters, setFilters] = useState<DataTableFilterMeta>({
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    category: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    Date: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    Price: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    PaymentStatus: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    OrderStatus: { value: null, matchMode: FilterMatchMode.STARTS_WITH }
 
+  });
   return (
-    <div className="p-4">
+    <div className="p-4 " >
       <Toast />
-      <div className="bg-white shadow-md rounded-md p-4">
+      <div className="bg-white shadow-md rounded-md p-4  dark-light" >
         <div className="pb-4 mb-4">{renderHeader()}</div>
         <DataTable
           value={categories}
@@ -85,9 +95,19 @@ const CategoryPage = () => {
           globalFilter={globalFilter}
           emptyMessage="No categories found."
           responsiveLayout="scroll"
+          filters={filters} 
+          filterDisplay="row" 
         >
      
-
+     <Column
+            header="Actions"
+            body={actionTemplate}
+            headerStyle={{
+              background: "#0097A7",
+              fontWeight: "bold",
+              color: "white",
+            }}
+          />
              {/* Price Column */}
              <Column
             field="Id"
@@ -98,6 +118,7 @@ const CategoryPage = () => {
               fontWeight: "bold",
               color: "white",
             }}
+            
           />
 
           {/* Price Column */}
@@ -110,6 +131,8 @@ const CategoryPage = () => {
               fontWeight: "bold",
               color: "white",
             }}
+            filter  style={{ minWidth: '12rem' }}
+
           />
 
           {/* Payment Status Column */}
@@ -117,11 +140,16 @@ const CategoryPage = () => {
             field="PaymentStatus"
             header="Payment Status"
             sortable
+
+
             headerStyle={{
               background: "#0097A7",
               fontWeight: "bold",
               color: "white",
+              
             }}
+            filter  style={{ minWidth: '12rem' }}
+
           />
 
           {/* Order Status Column */}
@@ -134,6 +162,8 @@ const CategoryPage = () => {
               fontWeight: "bold",
               color: "white",
             }}
+            filter style={{ minWidth: '12rem' }}
+
           />
 
           {/* Date Column */}
@@ -147,18 +177,12 @@ const CategoryPage = () => {
               fontWeight: "bold",
               color: "white",
             }}
+            filter  style={{ minWidth: '12rem' }}
+
           />
 
           {/* Actions Column */}
-          <Column
-            header="Actions"
-            body={actionTemplate}
-            headerStyle={{
-              background: "#0097A7",
-              fontWeight: "bold",
-              color: "white",
-            }}
-          />
+         
         </DataTable>
       </div>
     </div>

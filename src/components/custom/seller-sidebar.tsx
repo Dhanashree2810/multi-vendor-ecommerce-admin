@@ -130,20 +130,29 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <TeamSwitcher teams={data.teams} />
         </SidebarHeader>
         <SidebarContent>
+          
           <NavMain items={data.navMain} />
           <NavProjects projects={data.projects} />
+          
         </SidebarContent>
+
         <SidebarFooter>
-          <div className="flex justify-between items-center w-full">
-            <NavUser user={data.user} />
-            {/* Theme Toggle Button */}
-            <button
-              className="p-4 border rounded-md bg-gray-200 dark:bg-gray-700 text-sm"
-              onClick={toggleTheme}
-            >
-              {darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
-            </button>
-          </div>
+        <div className="flex justify-between items-center w-full">
+      {/* <NavUser user={data.user} /> */}
+      {/* Theme Toggle Sliding Button */}
+      <label className="relative inline-flex items-center cursor-pointer">
+        <input
+          type="checkbox"
+          className="sr-only peer"
+          checked={darkMode}
+          onChange={toggleTheme}
+        />
+        <div className="w-11 h-6 bg-gray-200 dark:bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+        <span className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+          {darkMode ? "Dark Mode" : "Light Mode"}
+        </span>
+      </label>
+    </div>
         </SidebarFooter>
         <SidebarRail />
       </Sidebar>

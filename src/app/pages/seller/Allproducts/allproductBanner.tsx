@@ -22,8 +22,8 @@ const AddBanner = () => {
 
   return (
     <div className="flex flex-col items-center bg-[#EFEFEF] min-h-screen">
-      <div className="w-full max-w-4xl p-8 bg-white rounded-lg mt-10 shadow-md">
-        <h1 className="text-2xl font-semibold text-center mb-6 text-gray-800">Add Banner</h1>
+      <div className="w-full max-w-4xl p-8 bg-white dark-light  rounded-lg mt-10 shadow-md">
+        <h1 className="text-2xl font-semibold text-center mb-6 text-gray-800 dark:text-white">Add Banner</h1>
         <div className="flex flex-col items-center bg-[#EFEFEF] p-6 rounded-md border-dashed border-2 border-black relative">
           {!selectedImage ? (
             <label
@@ -60,7 +60,7 @@ const AddBanner = () => {
         </div>
         <button
           onClick={handleAddBanner}
-          className="mt-6 bg-red-500 hover:bg-red-600 text-white py-2 px-6 rounded-md"
+          className="mt-6 hover:bg-red-600 bg-[#0097A7]  text-white py-2 px-6 rounded-md"
         >
           Add Banner
         </button>

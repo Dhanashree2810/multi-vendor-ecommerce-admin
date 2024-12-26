@@ -30,7 +30,7 @@ const AddProduct = () => {
   };
 
   return (
-    <Card className="w-full p-4 bg-[#ffffff] rounded-md border  ">
+    <Card className="w-full p-4 bg-[#ffffff] rounded-md border  dark-light ">
 <CardHeader className="flex items-center pb-4 px-4 bg-[#EFEFEF] border border-gray-300 rounded-md">
   <h1 className="text-[#6F6F6F] text-xl font-semibold ">Add Product</h1>
   <div className="flex-grow">
@@ -49,11 +49,11 @@ const AddProduct = () => {
 
 
 
-<CardContent className="p-4">
+<CardContent className="p-4   dark-light">
   <form onSubmit={handleSubmit}>
     <div className="flex flex-col mb-3 md:flex-row gap-4 w-full">
       <div className="flex flex-col w-full gap-1">
-        <Label htmlFor="name" className="text-black">Product Name</Label>
+        <Label htmlFor="name" className="text-black dark:text-white">Product Name</Label>
         <Input
           type="text"
           name="name"
@@ -65,7 +65,7 @@ const AddProduct = () => {
         />
       </div>
       <div className="flex flex-col w-full gap-1">
-        <Label htmlFor="brand" className="text-black">Product Brand</Label>
+        <Label htmlFor="brand" className="text-black dark:text-white">Product Brand</Label>
         <Input
           type="text"
           name="brand"
@@ -79,7 +79,7 @@ const AddProduct = () => {
     </div>
     <div className="flex flex-col mb-3 md:flex-row gap-4 w-full">
       <div className="flex flex-col w-full gap-1 relative">
-        <Label htmlFor="category" className="text-black">Category</Label>
+        <Label htmlFor="category" className="text-black dark:text-white">Category</Label>
         <Input
           readOnly
           type="text"
@@ -92,7 +92,7 @@ const AddProduct = () => {
         {/* Implement dropdown functionality here */}
       </div>
       <div className="flex flex-col w-full gap-1">
-        <Label htmlFor="stock" className="text-black">Product Stock</Label>
+        <Label htmlFor="stock" className="text-black dark:text-white">Product Stock</Label>
         <Input
           type="text"
           name="stock"
@@ -106,7 +106,7 @@ const AddProduct = () => {
     </div>
     <div className="flex flex-col mb-3 md:flex-row gap-4 w-full text-black">
       <div className="flex flex-col w-full gap-1">
-        <Label htmlFor="price" className="text-black">Price</Label>
+        <Label htmlFor="price" className="text-black dark:text-white">Price</Label>
         <Input
           type="number"
           name="price"
@@ -118,7 +118,7 @@ const AddProduct = () => {
         />
       </div>
       <div className="flex flex-col w-full gap-1">
-        <Label htmlFor="discount" className="text-black">Discount</Label>
+        <Label htmlFor="discount" className="text-black dark:text-white">Discount</Label>
         <Input
           type="number"
           name="discount"
@@ -131,7 +131,7 @@ const AddProduct = () => {
       </div>
     </div>
     <div className="flex flex-col w-full gap-1 mb-5">
-      <Label htmlFor="description" className="text-black">Description</Label>
+      <Label htmlFor="description" className="text-black dark:text-white">Description</Label>
       <Textarea
         name="description"
         id="description"
@@ -143,14 +143,14 @@ const AddProduct = () => {
       />
     </div>
     <div className="grid lg:grid-cols-4 grid-cols-1 md:grid-cols-3 sm:grid-cols-2 sm:gap-4 md:gap-4 gap-3 w-full text-black mb-4">
-      <label className="flex justify-center items-center flex-col h-[180px] cursor-pointer border border-dashed hover:border-[#0097A7] w-full text-black" htmlFor="image">
+      <label className="flex justify-center items-center flex-col h-[180px] dark:border-white cursor-pointer border border-dashed hover:border-[#0097A7] w-full text-black" htmlFor="image">
         <span>
           {/* Image Icon */}
         </span>
-        <span>Select Image</span>
+        <span className="dark:text-white">Select Image</span>
       </label>
       <input
-        className="hidden"
+        className="hidden "
         multiple
         type="file"
         id="image"
@@ -158,7 +158,7 @@ const AddProduct = () => {
       />
     </div>
     <div className="flex">
-      <Button type="submit" className="bg-[#0097A7] w-[280px] hover:shadow-purple-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3">
+      <Button type="submit" className="bg-[#0097A7] w-[280px]  hover:shadow-purple-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3">
         Add Product
       </Button>
     </div>

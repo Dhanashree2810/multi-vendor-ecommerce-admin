@@ -296,19 +296,19 @@ export default function Page() {
 
   return (
    
-      <div>       
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+      <div >       
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0 dark-light">
           <div className="min-h-[100vh] flex-1 rounded-xl  md:min-h-min">
             <div className="px-2 md:px-7 py-5">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
                 <div className="flex justify-between items-center p-5 bg-red-100 rounded-md gap-3">
                   <div className="">
                     <div className=" flex flex-row">
-                      <h2 className="text-3xl font-bold">₹ 0
+                      <h2 className="text-3xl font-bold text-black">₹ 0
                         {/* {dashboardData.totalSale} */}
                         </h2>
                     </div>
-                    <span className="text-md font-medium">Total Sales</span>
+                    <span className="text-md font-medium text-black">Total Sales</span>
                   </div>
                   <div className="w-10 h-10 rounded-full bg-red-600 flex justify-center items-center">
                     <MdCurrencyExchange className="text-white" />
@@ -317,11 +317,11 @@ export default function Page() {
 
                 <div className="flex justify-between items-center p-5 bg-pink-100 rounded-md gap-3">
                   <div>
-                    <h2 className="text-3xl font-bold">
+                    <h2 className="text-3xl font-bold text-black">
                       27
                       {/* {dashboardData.totalProduct} */}
                     </h2>
-                    <span className="text-md font-medium">Products</span>
+                    <span className="text-md font-medium text-black">Products</span>
                   </div>
                   <div className="w-10 h-10 rounded-full bg-pink-600 flex justify-center items-center">
                     <MdProductionQuantityLimits className="text-white" />
@@ -330,11 +330,11 @@ export default function Page() {
 
                 <div className="flex justify-between items-center p-5 bg-green-100 rounded-md gap-3">
                   <div>
-                    <h2 className="text-3xl font-bold">
+                    <h2 className="text-3xl font-bold text-black">
                       2
                       {/* {dashboardData.totalSeller} */}
                     </h2>
-                    <span className="text-md font-medium">Orders</span>
+                    <span className="text-md font-medium text-black">Orders</span>
                   </div>
                   <div className="w-10 h-10 rounded-full bg-green-600 flex justify-center items-center">
                     <FaUsers className="text-white" />
@@ -343,11 +343,11 @@ export default function Page() {
 
                 <div className="flex justify-between items-center p-5 bg-blue-100 rounded-md gap-3">
                   <div>
-                    <h2 className="text-3xl font-bold">
+                    <h2 className="text-3xl font-bold text-black">
                       4
                       {/* {dashboardData.totalOrder} */}
                     </h2>
-                    <span className="text-md font-medium">Pending Orders</span>
+                    <span className="text-md font-medium text-black">Pending Orders</span>
                   </div>
                   <div className="w-10 h-10 rounded-full bg-blue-600 flex justify-center items-center">
                     <FaCartShopping className="text-white" />
@@ -358,12 +358,44 @@ export default function Page() {
               {/* Chart and Recent Messages */}
               <div className="flex flex-wrap mt-7">
                 <div className="w-full lg:w-7/12 lg:pr-3">
-                  <div className="p-4 bg-indigo-600 rounded-md">
-                    <Chart options={chartState.options} series={chartState.series} type="bar" height={350} />
+                  <div className="p-4 bg-[#EFEFEF] rounded-md ">
+<Chart
+  options={{
+    ...chartState.options,
+    chart: {
+      ...chartState.options.chart,
+    },
+    xaxis: {
+      ...chartState.options.xaxis,
+      labels: {
+        style: {
+          colors: '#000', 
+        },
+      },
+    },
+    yaxis: {
+      labels: {
+        style: {
+          colors: '#000', 
+        },
+      },
+    },
+    title: {
+      ...chartState.options.title,
+      style: {
+        color: '#000', // Black color for the title
+      },
+    },
+   
+  }}
+  series={chartState.series}
+  type="bar"
+  height={350}
+/>
                   </div>
                 </div>
                 <div className="w-full lg:w-5/12 lg:pl-4 mt-6 lg:mt-0">
-                  <div className="p-4 bg-indigo-600 rounded-md">
+                  <div className="p-4 bg-[#EFEFEF]rounded-md">
                     <h2 className="font-semibold text-lg text-white pb-3">Recent Customer Message</h2>
                     <ol className="relative border-l border-gray-300">
                       {dashboardData.messages.map((message, index) => (
@@ -393,8 +425,8 @@ export default function Page() {
                 </div>
               </div>
 
-              <div className="p-4 bg-indigo-600 rounded-md mt-6">
-                <h2 className="font-semibold text-lg text-white pb-3">Recent Orders</h2>
+              <div className="p-4 bg-[#EFEFEF] rounded-md mt-6">
+                <h2 className="font-semibold text-lg text-black pb-3">Recent Orders</h2>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm text-left text-white">
                     <thead className="uppercase border-b border-gray-500">

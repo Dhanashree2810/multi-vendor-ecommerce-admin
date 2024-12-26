@@ -120,9 +120,39 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+
+  height: 100%;
+}
+/* .tableContainer {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+} */
+
+.p-column-filter-row .p-column-filter-element {
+  @apply border border-black rounded-md  bg-white;
+}
+.p-fluid .p-inputtext {
+  @apply bg-transparent border-transparent focus:border-transparent focus:ring-0;
+}
+.p-column-filter-menu-button,
+.p-column-filter-clear-button {
+  @apply hidden;
+}
+.dark-light {
+  @apply dark:bg-[#18181a] text-black dark:text-white;
 }
 
 
+.p-filter-column{
+  @apply  bg-[#0097A7]
+}
+.p-datatable .p-sortable-column .p-sortable-column-icon  {
+color: white;
+}
 .p-datatable-wrapper .table,
 .p-datatable-wrapper table,
 .p-datatable-wrapper .p-table {
@@ -136,6 +166,7 @@ body {
 .p-datatable.p-datatable-gridlines:has(.p-datatable-thead):has(.p-datatable-tbody) .p-datatable-tbody > tr > td {
   border-width: 0 0 2px 0px !important;
 }
+
 
 .p-datatable .p-datatable-tbody  tr:hover
 .p-datatable-wrapper .table tbody tr:hover,
@@ -298,7 +329,7 @@ p-table {
       background-color: transparent;
   }
   &.btn-info {
-      color: #17a2b8; /* Replace $info with its color code */
+      color: #17a2b8; 
       background-color: transparent;
   }
   &.btn-success {
@@ -451,4 +482,38 @@ p-table {
 .table .p-paginator .p-dropdown .p-dropdown-trigger {
   width: auto !important;
 }
+
+
+.SidebarProvider{
+  width: 20vw;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      z-index: 10;
+ 
+
+   
+
+
+}
+
+.mainsection {
+    /* width: 80vw; */
+    padding: 0px 10px;
+  }
+  .group[data-side="left"] .group-data-\[side\=left\]\:-right-4 {
+    right: unset !important; /* Resets the right property */
+}
+
+[data-side="left"] .\[\[data-side\=left\]_\&\]\:cursor-w-resize {
+    cursor: unset !important; /* Resets the cursor */
+}
+
+@media (min-width: 640px) {
+    .sm\:flex {
+        display: unset !important; /* Resets the display property */
+    }
+}
+
+
 

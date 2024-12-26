@@ -98,7 +98,7 @@ export function AdminSidebar({ ...props }: React.ComponentProps<typeof Sidebar>)
     //     </div>
     //   </SidebarHeader>
     //   <SidebarContent className="">
-    //     <NavMain items={data.navMain} />
+        // <NavMain items={data.navMain} />
     //   </SidebarContent>
     //   <SidebarFooter className="">
     //     <NavUser user={data.user} />

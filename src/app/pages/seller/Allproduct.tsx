@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import Image from "next/image";
-import { DataTable } from "primereact/datatable";
+import { DataTable, DataTableFilterMeta } from "primereact/datatable";
 import { Column } from "primereact/column";
 // Import demo images
 import HomeFurniture from "@/assets/images/Home&Furniture.jpg";
@@ -15,6 +15,7 @@ import { Toast } from "primereact/toast";
 import { FaEdit, FaEye, FaTrash, FaImage } from "react-icons/fa";
 import Tooltip from "@/components/custom/Tooltipcustom";
 import Link from "next/link";
+import { FilterMatchMode, FilterService } from 'primereact/api';
 
 interface Category {
   id: string;
@@ -117,7 +118,7 @@ const demoCategories: Category[] = [
     price: 400,
     discount: 5,
     stock: 25,
-  },  {
+  }, {
     id: "8",
     name: "Appliances",
     image: Appliances.src,
@@ -199,190 +200,211 @@ const CategoryPage = () => {
   );
 
   // Pagination Handler
-  const onPageChange = (e) => {
+  const onPageChange = (e:any) => {
     setFirst(e.first);
     setRows(e.rows);
   };
+  const [filters, setFilters] = useState<DataTableFilterMeta>({
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    category: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    brand: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    price: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    discount: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    stock: { value: null, matchMode: FilterMatchMode.STARTS_WITH }
 
+  });
   return (
 
-   <div >
-      <Toast  />
+    <div >
+      <Toast />
       <div className="bg-white shadow-md rounded-md p-4  dark:bg-[#18181a] text-black dark:text-black">
         <div className="pb-4 mb-4">{renderHeader()}</div>
         <div className="tableContainer">
-        <div className="tableResponsive">
-        <DataTable
-          value={categories}
-          paginator
-          rowsPerPageOptions={[5, 10, 25, 50]}
-          rows={rows}
-          first={first}
-          onPage={onPageChange}
-          globalFilter={globalFilter}
-          emptyMessage="No categories found."
-          scrollable
-          scrollHeight="400px" // Fixed height for the DataTable
+          <div className="tableResponsive">
+            <DataTable
+              value={categories}
+              paginator
+              rowsPerPageOptions={[5, 10, 25, 50]}
+              rows={rows}
+              first={first}
+              onPage={onPageChange}
+              globalFilter={globalFilter}
+              emptyMessage="No categories found."
+              scrollable
+              scrollHeight="400px"
+              filters={filters} 
+              filterDisplay="row" 
 
-  style={{ overflowX: "auto", width: "90%" }} 
-        >
-<Column
-  header="Actions"
-  frozen
-  alignFrozen="left"
-  style={{
-    zIndex: 1,
+              style={{ overflowX: "auto", width: "100%" }}
+            >
+              <Column
+                header="Actions"
+                frozen
+                alignFrozen="left"
+                style={{
+                  zIndex: 1,
 
-  }}
-  headerStyle={{
-    zIndex: 2,
-    position: "sticky",
-    left: 0,
-    background: "#0097A7",
-    fontWeight: "bold",
-    color: "white",
-  }}
-  body={(rowData) => (
-    <div className="flex gap-2">
-      <Tooltip message="Edit">
-        <Link href={`allproduct/edit/${rowData.id}`} passHref>
-          <Button icon={<FaEdit />} severity="warning" size="small" />
-        </Link>
-      </Tooltip>
-      <Tooltip message="View">
-        <Link href={`allproduct/view/${rowData.id}`} passHref>
-          <Button icon={<FaEye />} severity="info" size="small" />
-        </Link>
-      </Tooltip>
-      <Tooltip message="Upload Image">
-        <Link href={`/seller/allproduct/uploadimage/${rowData.id}`} passHref>
-          <Button icon={<FaImage />} severity="success" size="small" />
-        </Link>
-      </Tooltip>
-      <Tooltip message="Delete">
-        <Button
-          icon={<FaTrash />}
-          severity="danger"
-          size="small"
-          onClick={() => handleDelete(rowData.id)}
-        />
-      </Tooltip>
-    </div>
-  )}
-/>
+                }}
+                headerStyle={{
+                  zIndex: 2,
+                  position: "sticky",
+                  left: 0,
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                  
+                }}
+                
+                
+              
+                  body={(rowData) => (
+                    <div className="flex   bg-white dark:bg-[#18181a] text-black dark:text-white p-2">
+                      <Tooltip message="Edit">
+                        <Link href={`allproduct/edit/${rowData.id}`} passHref>
+                          <Button icon={<FaEdit />} severity="warning" size="small" />
+                        </Link>
+                      </Tooltip>
+                      <Tooltip message="View">
+                        <Link href={`allproduct/view/${rowData.id}`} passHref>
+                          <Button icon={<FaEye />} severity="info" size="small" />
+                        </Link>
+                      </Tooltip>
+                      <Tooltip message="Upload Image">
+                        <Link href={`/seller/allproduct/uploadimage/${rowData.id}`} passHref>
+                          <Button icon={<FaImage />} severity="success" size="small" />
+                        </Link>
+                      </Tooltip>
+                      <Tooltip message="Delete">
+                        <Button
+                          icon={<FaTrash />}
+                          severity="danger"
+                          size="small"
+                          onClick={() => handleDelete(rowData.id)}
+                        />
+                      </Tooltip>
+                    </div>
+                  )}
+                />
+                
+               
+              <Column
+                header="No"
+                body={(data, options) => options.rowIndex + 1}
+                headerStyle={{
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              />
+              <Column
+                header="No"
+                body={(data, options) => options.rowIndex + 1}
+                headerStyle={{
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              />
+              <Column
+                header="Image"
+                body={imageTemplate}
+                headerStyle={{
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              />
+              <Column
+                field="name"
+                header="Name"
+                filter  style={{ minWidth: '12rem' }}
 
+                sortable
+                headerStyle={{
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              />
+              <Column
+                field="category"
+                filter  style={{ minWidth: '12rem' }}
 
+                header="Category"
+                sortable
+                headerStyle={{
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              />
+              <Column
+                field="category"
+                filter  style={{ minWidth: '12rem' }}
 
+                header="Category"
+                sortable
+                headerStyle={{
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              />
+              <Column
+                field="brand"
+                filter  style={{ minWidth: '12rem' }}
 
-          
-          <Column
-            header="No"
-            body={(data, options) => options.rowIndex + 1}
-            headerStyle={{
-              background: "#0097A7",
-              fontWeight: "bold",
-              color: "white",
-            }}
-          />
-           <Column
-            header="No"
-            body={(data, options) => options.rowIndex + 1}
-            headerStyle={{
-              background: "#0097A7",
-              fontWeight: "bold",
-              color: "white",
-            }}
-          /> 
-          <Column
-            header="Image"
-            body={imageTemplate}
-            headerStyle={{
-              background: "#0097A7",
-              fontWeight: "bold",
-              color: "white",
-            }}
-          />
-        
-          <Column
-            field="name"
-            header="Name"
-            sortable
-            headerStyle={{
-              background: "#0097A7",
-              fontWeight: "bold",
-              color: "white",
-            }}
-          />      
+                header="Brand"
+                sortable
+                headerStyle={{
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              />
+              <Column
+                field="price"
+                filter  style={{ minWidth: '12rem' }}
 
-          <Column
-            field="category"
-            header="Category"
-            sortable
-            headerStyle={{
-              background: "#0097A7",
-              fontWeight: "bold",
-              color: "white",
-            }}
-          />
+                header="Price"
+                body={(data) => `$${data.price}`}
+                sortable
+                headerStyle={{
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              />
+              <Column
+                field="discount"
+                filter  style={{ minWidth: '12rem' }}
 
+                header="Discount"
+                body={(data) => `${data.discount}%`}
+                sortable
+                headerStyle={{
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              />
+              <Column
+                field="stock"
+                filter  style={{ minWidth: '12rem' }}
 
-<Column
-            field="category"
-            header="Category"
-            sortable
-            headerStyle={{
-              background: "#0097A7",
-              fontWeight: "bold",
-              color: "white",
-            }}
-          />
-
-          <Column
-            field="brand"
-            header="Brand"
-            sortable
-            headerStyle={{
-              background: "#0097A7",
-              fontWeight: "bold",
-              color: "white",
-            }}
-          />
-          <Column
-            field="price"
-            header="Price"
-            body={(data) => `$${data.price}`}
-            sortable
-            headerStyle={{
-              background: "#0097A7",
-              fontWeight: "bold",
-              color: "white",
-            }}
-          />
-          <Column
-            field="discount"
-            header="Discount"
-            body={(data) => `${data.discount}%`}
-            sortable
-            headerStyle={{
-              background: "#0097A7",
-              fontWeight: "bold",
-              color: "white",
-            }}
-          />
-          <Column
-            field="stock"
-            header="Stock"
-            sortable
-            headerStyle={{
-              background: "#0097A7",
-              fontWeight: "bold",
-              color: "white",
-            }}
-          />
-        </DataTable>
+                header="Stock"
+                sortable
+                headerStyle={{
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              />
+            </DataTable>
+          </div>
+        </div>
       </div>
-    </div>
-    </div>
     </div>
   );
 };
