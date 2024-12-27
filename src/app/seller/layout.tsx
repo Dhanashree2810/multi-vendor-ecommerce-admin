@@ -61,13 +61,13 @@ export default function AdminLayout({
 
           } flex flex-col p-4 transition-all duration-300`}
         >
-          <header className="flex h-16 items-center gap-2 px-4 bg-white dark:bg-[#EFEFEF]">
+          <header className="flex h-8 items-center gap-2 px-4 bg-white dark:bg-[#EFEFEF]">
             <div className="flex items-center gap-2">
               <SidebarTrigger
                 className="-ml-1"
                 onClick={() => setIsSidebarMinimized(!isSidebarMinimized)}
               />
-              <Separator orientation="vertical" className="mr-2 h-4" />
+              <Separator orientation="vertical" className="mr-2 h-2" />
               <Breadcrumb>
                 <BreadcrumbList>
                   {breadcrumbItems.map((item, index) => (

@@ -47,7 +47,7 @@ export default function ChatBox() {
 
   return (
     <div className="h-screen flex justify-center items-center bg-[#EFEFEF]">
-      <div className="w-[900px] bg-white rounded-lg shadow-lg p-4 flex h-[600px]  dark-light">
+      <div className="w-[900px] bg-white rounded-lg shadow-lg p-4 flex h-[450px]  dark-light">
         {/* Customers List */}
         <div className="w-[250px] bg-[#EFEFEF] p-4 rounded-lg text-black flex-none overflow-y-auto">
           <h2 className="text-lg font-bold mb-4">Customers</h2>

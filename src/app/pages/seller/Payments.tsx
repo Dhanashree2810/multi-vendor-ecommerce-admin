@@ -4,9 +4,10 @@ import { FaCartShopping } from "react-icons/fa6";
 import { MdCurrencyExchange, MdProductionQuantityLimits } from "react-icons/md";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { DataTable } from "primereact/datatable";
+import { DataTable, DataTableFilterMeta } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useState } from "react";
+import { FilterMatchMode } from "primereact/api";
 
 export default function Payments() {
   const [amount, setAmount] = useState("");
@@ -23,7 +24,60 @@ export default function Payments() {
       status: "Pending",
       date: "2024-12-19",
     },
+    {
+      id: 1,
+      amount: "₹ 5000",
+      status: "Pending",
+      date: "2024-12-18",
+    },
+    {
+      id: 2,
+      amount: "₹ 3000",
+      status: "Pending",
+      date: "2024-12-19",
+    },
+    {
+      id: 1,
+      amount: "₹ 5000",
+      status: "Pending",
+      date: "2024-12-18",
+    },
+    {
+      id: 2,
+      amount: "₹ 3000",
+      status: "Pending",
+      date: "2024-12-19",
+    },  {
+      id: 1,
+      amount: "₹ 5000",
+      status: "Pending",
+      date: "2024-12-18",
+    },
+    {
+      id: 2,
+      amount: "₹ 3000",
+      status: "Pending",
+      date: "2024-12-19",
+    },  {
+      id: 1,
+      amount: "₹ 5000",
+      status: "Pending",
+      date: "2024-12-18",
+    },
+    {
+      id: 2,
+      amount: "₹ 3000",
+      status: "Pending",
+      date: "2024-12-19",
+    },
+     {
+      id: 2,
+      amount: "₹ 3000",
+      status: "Pending",
+      date: "2024-12-19",
+    },
   ]);
+  
   const [successRequests, setSuccessRequests] = useState<any[]>([
     {
       id: 1,
@@ -32,10 +86,67 @@ export default function Payments() {
       date: "2024-12-15",
     },
     {
+      id: 1,
+      amount: "₹ 5000",
+      status: "Pending",
+      date: "2024-12-18",
+    },
+    {
+      id: 2,
+      amount: "₹ 3000",
+      status: "Pending",
+      date: "2024-12-19",
+    },  {
+      id: 1,
+      amount: "₹ 5000",
+      status: "Pending",
+      date: "2024-12-18",
+    },
+    {
+      id: 2,
+      amount: "₹ 3000",
+      status: "Pending",
+      date: "2024-12-19",
+    },
+    {
       id: 2,
       amount: "₹ 1500",
       status: "Success",
       date: "2024-12-17",
+    },
+    {
+      id: 1,
+      amount: "₹ 5000",
+      status: "Pending",
+      date: "2024-12-18",
+    },
+    {
+      id: 2,
+      amount: "₹ 3000",
+      status: "Pending",
+      date: "2024-12-19",
+    },  {
+      id: 1,
+      amount: "₹ 5000",
+      status: "Pending",
+      date: "2024-12-18",
+    },
+    {
+      id: 2,
+      amount: "₹ 3000",
+      status: "Pending",
+      date: "2024-12-19",
+    },
+    {
+      id: 2,
+      amount: "₹ 3000",
+      status: "Pending",
+      date: "2024-12-19",
+    },{
+      id: 2,
+      amount: "₹ 3000",
+      status: "Pending",
+      date: "2024-12-19",
     },
   ]);
 
@@ -52,7 +163,14 @@ export default function Payments() {
       setAmount(""); // Clear input
     }
   };
+  const [filters, setFilters] = useState<DataTableFilterMeta>({
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    amount: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    status: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+  
 
+  });
   return (
     <>
       {/* Dashboard Cards */}
@@ -126,11 +244,20 @@ function SendRequestSection({
       </div>
 
       <h2 className="text-lg font-semibold mb-2 text-gray-700">Pending Requests</h2>
-      <DataTable value={pendingRequests} paginator rows={5} rowsPerPageOptions={[5, 10, 25]}>
-        <Column field="id" header="No" />
-        <Column field="amount" header="Amount" />
-        <Column field="status" header="Status" />
-        <Column field="date" header="Date" />
+      <DataTable value={pendingRequests} 
+      paginator
+       rows={10} 
+      rowsPerPageOptions={[ 10, 25]} 
+              filterDisplay="row" scrollable
+              scrollHeight="300px">
+        <Column field="id" header="No"  filter style={{ minWidth: '8rem' }}                 sortable
+        />
+        <Column field="amount" header="Amount"  filter style={{ minWidth: '8rem' }}                 sortable
+        />
+        <Column field="status" header="Status"  filter style={{ minWidth: '8rem' }}                sortable
+        />
+        <Column field="date" header="Date"  filter style={{ minWidth: '8rem' }}                sortable
+        />
       </DataTable>
     </div>
   );
@@ -141,13 +268,36 @@ function SuccessWithdrawalSection({ successRequests }: { successRequests: any[] 
   return (
     <div className="bg-[#EFEFEF] rounded-lg shadow-md p-4">
       <h2 className="text-lg font-semibold mb-2 text-gray-700">Success Withdrawals</h2>
-      <DataTable value={successRequests} paginator rows={5} rowsPerPageOptions={[5, 10, 25]}
+      {/* <DataTable value={successRequests} paginator rows={10} rowsPerPageOptions={[ 10, 25]}
+      scrollable
+        scrollHeight="600px"
       >
-        <Column field="id" header="No" />
-        <Column field="amount" header="Amount" />
-        <Column field="status" header="Status" />
-        <Column field="date" header="Date" />
+        <Column field="id" header="No" filter style={{ minWidth: '8rem' }}                sortable />
+        <Column field="amount" header="Amount" filter style={{ minWidth: '8rem' }}                sortable />
+        <Column field="status" header="Status"  filter style={{ minWidth: '8rem' }}                sortable/>
+        <Column field="date" header="Date"  filter style={{ minWidth: '8rem' }}                sortable/>
+      </DataTable> */}
+
+
+      <DataTable value={successRequests} 
+      paginator
+       rows={10} 
+      rowsPerPageOptions={[ 10, 25]} 
+              filterDisplay="row"scrollable
+              scrollHeight="400px">
+        <Column field="id" header="No"  filter style={{ minWidth: '8rem' }}                 sortable
+        />
+        <Column field="amount" header="Amount"  filter style={{ minWidth: '8rem' }}                 sortable
+        />
+        <Column field="status" header="Status"  filter style={{ minWidth: '8rem' }}                sortable
+        />
+        <Column field="date" header="Date"  filter style={{ minWidth: '8rem' }}                sortable
+        />
       </DataTable>
     </div>
+
+
+
+
   );
 }

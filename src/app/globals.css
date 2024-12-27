@@ -16,9 +16,6 @@
 
 /* @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap'); */
 
-
-
-
 @layer utilities {
   .custom-border {
     border: 2px solid #000;
@@ -62,11 +59,14 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
-    --color-primary: #1d4ed8; /* Blue */
-    --color-secondary: #9333ea; /* Purple */
+    --color-primary: #1d4ed8;
+    /* Blue */
+    --color-secondary: #9333ea;
+    /* Purple */
     --color-background: #ffffff;
     --color-text: #000000;
   }
+
   .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
@@ -100,7 +100,7 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
-    --backgrountable : hsl(240deg 5.88% 10%);
+    --backgrountable: hsl(240deg 5.88% 10%);
     --tabletext: rgba(255, 255, 255, 1);
 
   }
@@ -112,6 +112,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -122,95 +123,81 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* Prevent horizontal scrolling */
+  overflow-x: hidden;
+  /* Prevent horizontal scrolling */
 
   height: 100%;
 }
-/* .tableContainer {
-  display: block;
-  width: 100%;
-  overflow-x: auto;
-} */
+
+
 
 .p-column-filter-row .p-column-filter-element {
-  @apply border border-black rounded-md  bg-white;
+  @apply border border-black rounded-md bg-white;
 }
+
 .p-fluid .p-inputtext {
   @apply bg-transparent border-transparent focus:border-transparent focus:ring-0;
 }
+
 .p-column-filter-menu-button,
 .p-column-filter-clear-button {
   @apply hidden;
 }
+
 .dark-light {
   @apply dark:bg-[#18181a] text-black dark:text-white;
 }
 
 
-.p-filter-column{
-  @apply  bg-[#0097A7]
+.p-filter-column {
+  @apply bg-[#0097A7]
 }
-.p-datatable .p-sortable-column .p-sortable-column-icon  {
-color: white;
+
+.p-datatable .p-sortable-column .p-sortable-column-icon {
+  color: white;
 }
-.p-datatable-wrapper .table,
-.p-datatable-wrapper table,
-.p-datatable-wrapper .p-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: "Poppins", sans-serif;
-  font-size: 13px;
-  color: #212529;
-  border-color: rgba(33, 37, 41, 0.07) !important;
-}
-.p-datatable.p-datatable-gridlines:has(.p-datatable-thead):has(.p-datatable-tbody) .p-datatable-tbody > tr > td {
+
+.p-datatable.p-datatable-gridlines:has(.p-datatable-thead):has(.p-datatable-tbody) .p-datatable-tbody>tr>td {
   border-width: 0 0 2px 0px !important;
+  background-color: #f3f3f3;
+
 }
 
 
-.p-datatable .p-datatable-tbody  tr:hover
-.p-datatable-wrapper .table tbody tr:hover,
+.p-datatable .p-datatable-tbody tr:hover .p-datatable-wrapper .table tbody tr:hover,
 .p-datatable-wrapper table tbody tr:hover,
-.p-datatable-wrapper .p-table tbody tr:hover
-{ 
+.p-datatable-wrapper .p-table tbody tr:hover {
   background-color: #f3f3f3;
 }
 
 .p-datatable-wrapper .table thead th,
 .p-datatable-wrapper .table tbody td {
-  padding: 1em !important;
+  /* padding: 1em !important; */
   max-width: 250px !important;
 }
 
-.p-datatable-wrapper .table tbody td,
-.p-datatable-wrapper table tbody td,
-.p-datatable-wrapper .p-table tbody td {
-  padding: 12px;
-  max-width: 300px !important;
-  border-bottom: 1px solid rgba(33, 37, 41, 0.07);
-}
 
-.p-datatable-wrapper .p-filter-column{
+
+.p-datatable-wrapper .p-filter-column {
   padding: 0.5em !important;
 }
-.p-column-filter-clear-button.p-link{
-  display: none;
-}
-.p-column-filter-menu-button-active + .p-column-filter-clear-button.p-link{
+
+
+
+.p-column-filter-menu-button-active+.p-column-filter-clear-button.p-link {
   display: inline-block;
 }
 
-.p-column-filter-row{
-  gap:10px
-}
 
-.p-column-filter-row .p-column-filter-element{
+
+.p-column-filter-row .p-column-filter-element {
   min-width: 100px;
 }
 
 
 /* Dark Mode Custom Styles */
 @layer base {
+
   .dark .p-datatable-wrapper .table,
   .dark .p-datatable-wrapper table,
   .dark .p-datatable-wrapper .p-table {
@@ -237,9 +224,10 @@ color: white;
     border: 1px solid var(--border);
   }
 }
-.p-datatable-wrapper .table tbody td, 
-.p-datatable-wrapper table tbody td, 
-.p-datatable-wrapper .p-table tbody td{
+
+.p-datatable-wrapper .table tbody td,
+.p-datatable-wrapper table tbody td,
+.p-datatable-wrapper .p-table tbody td {
   background-color: var(--backgrountable);
   color: var(--tabletext);
 }
@@ -250,65 +238,37 @@ color: white;
 }
 
 
-.p-dropdown .p-component .p-paginator .p-dropdown{
+.p-dropdown .p-component .p-paginator .p-dropdown {
   background-color: var(--backgrountable);
-  color: var(--tabletext); 
+  color: var(--tabletext);
 }
 
 
-
-
-
-.tableResponsive {
-    display: flex;
-    flex-direction: column;
-    height: 100% !important;
-
-    .p-datatable-wrapper {
-        flex: 1;
-        height: 100% !important;
-        overflow-y: auto;
-    }
-
-    .p-datatable {
-        height: 100% !important;
-        overflow-y: auto;
-        margin: 0;
-    }
-}
 .table,
 table,
 .p-table {
-    width: 100%;
-    border-collapse: collapse;
-    /* font-size: $medium;
+  width: 100%;
+  border-collapse: collapse;
+  /* font-size: $medium;
     color: $dark;
     border-color: rgb($color: $dark, $alpha: 0.07) !important; */
 
 }
 
-
-
-
-
-
-
-
-
 .tableResponsive {
   display: flex;
   flex-direction: column;
-  height: 100% !important;
+  /* height: 100% !important; */
 }
 
 .tableResponsive .p-datatable-wrapper {
   flex: 1;
-  height: 100% !important;
+  /* height: 100% !important; */
   overflow-y: auto;
 }
 
 .tableResponsive .p-datatable {
-  height: 100% !important;
+  /* height: 100% !important; */
   overflow-y: auto;
   margin: 0;
 }
@@ -318,124 +278,34 @@ table,
 p-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 16px; /* Replace $medium with an appropriate font size */
-  color: #333; /* Replace $dark with a dark color */
-  border-color: rgba(51, 51, 51, 0.07) !important; /* Replace $dark with #333 and $alpha: 0.07 */
+  font-size: 9px;
+  /* Replace $medium with an appropriate font size */
+  color: #333;
+  /* Replace $dark with a dark color */
+  border-color: rgba(51, 51, 51, 0.07) !important;
+  /* Replace $dark with #333 and $alpha: 0.07 */
 }
 
-.table .btn {
-  &.btn-primary {
-      color: #007bff; /* Replace $primary with its color code */
-      background-color: transparent;
-  }
-  &.btn-info {
-      color: #17a2b8; 
-      background-color: transparent;
-  }
-  &.btn-success {
-      color: #28a745; /* Replace $success with its color code */
-      background-color: transparent;
-  }
-  &.btn-danger {
-      color: #dc3545; /* Replace $danger with its color code */
-      background-color: transparent;
-  }
-  &:hover {
-      color: #fff !important; /* Replace $white with its color code */
-  }
-}
 
-.table thead {
-  tr {
-      th {
-          color: #333; /* Replace $dark with its color code */
-          font-weight: bold;
-          text-align: left;
-          white-space: nowrap;
-          background-color: #f8f9fa; /* Replace $light with its color code */
-          padding: 8px; /* Replace $commonHalfUnit with 8px */
-          border: none !important;
-          padding: 0.5em 0.75em !important;
-      }
-
-      &:nth-child(2) {
-          th {
-              padding-top: 0 !important;
-
-              input {
-                  height: 25px !important; /* Replace 1.5625rem with 25px */
-                  font-size: 16px; /* Replace $medium with an appropriate font size */
-                  padding: 6px 4px; /* Replace 0.375rem 0.25em with equivalent values */
-              }
-          }
-      }
-  }
-}
-
-.table tbody {
-  tr {
-      transition: background-color 0.3s;
-
-      &:nth-child(even) {
-          background-color: #f8f9fa; /* Replace $light with its color code */
-      }
-
-      &:hover {
-          background-color: #f8f9fa; /* Replace $light with its color code */
-      }
-  }
-
-  .p-highlight {
-      color: #fff !important; /* Replace $white with its color code */
-      background-color: #007bff !important; /* Replace $primary with its color code */
-  }
-
-  td {
-      padding: 0.75em !important;
-      max-width: 300px !important; /* Replace 18.75rem with 300px */
-      border-bottom: 1px solid rgba(51, 51, 51, 0.07); /* Replace $dark and $alpha with static values */
-
-      span,
-      p,
-      ul,
-      ol,
-      li,
-      div {
-          margin-bottom: 0;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          max-width: 100%;
-          max-height: 54px; /* Replace 3.375em with 54px */
-      }
-  }
-}
-
-.table tfoot {
-  td {
-      background-color: #f8f9fa; /* Replace $light with its color code */
-      color: #333; /* Replace $dark with its color code */
-      font-weight: bold;
-      text-align: left;
-      padding: 0.75em !important;
-      border-top: 2px solid rgba(51, 51, 51, 0.07); /* Replace $dark and $alpha with static values */
-  }
-}
 
 .table-scrollable-header {
-  background-color: #f8f9fa; /* Replace $light with its color code */
+  background-color: #f8f9fa;
+  /* Replace $light with its color code */
 }
 
 .table-scrollable-body {
-  background-color: rgba(51, 51, 51, 0.07); /* Replace $dark and $alpha with static values */
+  background-color: rgba(51, 51, 51, 0.07);
+  /* Replace $dark and $alpha with static values */
 }
 
 .table-scrollable-footer {
-  background-color: #f8f9fa; /* Replace $light with its color code */
+  background-color: #f8f9fa;
+  /* Replace $light with its color code */
 }
 
 .table .p-column-action {
-  width: 100px; /* Replace 6.25em with 100px */
+  width: 100px;
+  /* Replace 6.25em with 100px */
   text-align: center;
 }
 
@@ -453,24 +323,30 @@ p-table {
 
 .table th,
 .table td {
-  border: 1px solid rgba(51, 51, 51, 0.07); /* Replace $dark and $alpha with static values */
+  border: 1px solid rgba(51, 51, 51, 0.07);
+  /* Replace $dark and $alpha with static values */
 }
 
 .table thead th,
 .table tfoot td {
-  background-color: #fff; /* Replace $white with its color code */
-  color: #333; /* Replace $dark with its color code */
-  border-color: rgba(51, 51, 51, 0.07); /* Replace $dark and $alpha with static values */
+  background-color: #fff;
+  /* Replace $white with its color code */
+  color: #333;
+  /* Replace $dark with its color code */
+  border-color: rgba(51, 51, 51, 0.07);
+  /* Replace $dark and $alpha with static values */
 }
 
 .table .p-paginator {
   justify-content: flex-end;
-  padding: 8px 16px !important; /* Replace $commonHalfUnit and $commonUnit with 8px and 16px */
+  padding: 8px 16px !important;
+  /* Replace $commonHalfUnit and $commonUnit with 8px and 16px */
 }
 
 .table .p-paginator .p-dropdown {
-  height: auto !important;
-  padding: 8px !important; /* Replace 0.5em with 8px */
+  /* height: auto !important; */
+  padding: 8px !important;
+  /* Replace 0.5em with 8px */
 }
 
 .table .p-paginator .p-dropdown .p-dropdown-label {
@@ -484,36 +360,58 @@ p-table {
 }
 
 
-.SidebarProvider{
+/* .SidebarProvider {
   width: 20vw;
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      z-index: 10;
- 
-
-   
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  z-index: 10;
 
 
-}
+
+
+
+} */
 
 .mainsection {
-    /* width: 80vw; */
-    padding: 0px 10px;
-  }
-  .group[data-side="left"] .group-data-\[side\=left\]\:-right-4 {
-    right: unset !important; /* Resets the right property */
+  /* width: 80vw; */
+  padding: 0px 10px;
+}
+
+.group[data-side="left"] .group-data-\[side\=left\]\:-right-4 {
+  right: unset !important;
+  /* Resets the right property */
 }
 
 [data-side="left"] .\[\[data-side\=left\]_\&\]\:cursor-w-resize {
-    cursor: unset !important; /* Resets the cursor */
+  cursor: unset !important;
+  /* Resets the cursor */
 }
 
 @media (min-width: 640px) {
-    .sm\:flex {
-        display: unset !important; /* Resets the display property */
-    }
+  .sm\:flex {
+    display: unset !important;
+    /* Resets the display property */
+  }
 }
 
+.p-datatable-wrapper .table,
+.p-datatable-wrapper table,
+.p-datatable-wrapper .p-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "Poppins", sans-serif;
+  font-size: 10px;
+  color: #212529;
+  border-color: rgba(33, 37, 41, 0.07) !important;
+  height: 370px;
+}
 
+.p-datatable-wrapper .table tbody td,
+.p-datatable-wrapper table tbody td,
+.p-datatable-wrapper .p-table tbody td {
+  padding: 5px;
+  max-width: 300px !important;
+  border-bottom: 1px solid rgba(33, 37, 41, 0.07);
+}
 
