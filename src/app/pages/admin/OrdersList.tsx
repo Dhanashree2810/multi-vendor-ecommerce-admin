@@ -1,207 +1,400 @@
-'use client'
+"use client"
+import React, { useState } from "react";
+import { Button } from "primereact/button";
+import { InputText } from "primereact/inputtext";
+import Image from "next/image";
+import { DataTable, DataTableFilterMeta } from "primereact/datatable";
+import { Column } from "primereact/column";
+// Import demo images
+import HomeFurniture from "@/assets/images/Home&Furniture.jpg";
+import Electronics from "@/assets/images/electronics.png";
+import Fashion from "@/assets/images/fashion.png";
+import Appliances from "@/assets/images/appliances.jpg";
+import Mobile from "@/assets/images/mobile.png";
+import { Toast } from "primereact/toast";
+import { FaEdit, FaEye, FaTrash, FaImage } from "react-icons/fa";
+import Tooltip from "@/components/custom/Tooltipcustom";
+import Link from "next/link";
+import { FilterMatchMode, FilterService } from 'primereact/api';
+import { HiEye } from "react-icons/hi";
 
-import React, { useState } from 'react'
-import Link from 'next/link'
-import { DataTable, DataTableExpandedRows, DataTableRowToggleEvent } from "primereact/datatable"
-import { Column } from "primereact/column"
-import { Toast } from "primereact/toast"
-import { FilterMatchMode } from "primereact/api"
-import { InputText } from "primereact/inputtext"
-import { Button } from "primereact/button"
-
-type Suborder = {
-    id: string
-    price: number
-    payment_status: string
-    delivery_status: string
+interface Category {
+  id: string;
+  name: string;
+  image: string;
+  category: string;
+  brand: string;
+  price: number;
+  discount: number;
+  stock: number;
 }
 
-type Order = {
-    id: string
-    price: number
-    payment_status: string
-    delivery_status: string
-    suborder?: Suborder[]
-}
+const demoCategories: Category[] = [
+  {
+    id: "1",
+    name: "Home & Furniture",
+    image: HomeFurniture.src,
+    category: "Furniture",
+    brand: "IKEA",
+    price: 1200,
+    discount: 10,
+    stock: 50,
+  },
+  {
+    id: "2",
+    name: "Electronics",
+    image: Electronics.src,
+    category: "Gadgets",
+    brand: "Sony",
+    price: 2500,
+    discount: 15,
+    stock: 30,
+  },
+  {
+    id: "3",
+    name: "Fashion",
+    image: Fashion.src,
+    category: "Clothing",
+    brand: "Zara",
+    price: 80,
+    discount: 20,
+    stock: 100,
+  },
+  {
+    id: "4",
+    name: "Appliances",
+    image: Appliances.src,
+    category: "Home Appliances",
+    brand: "LG",
+    price: 400,
+    discount: 5,
+    stock: 25,
+  },
+  {
+    id: "5",
+    name: "Mobile",
+    image: Mobile.src,
+    category: "Gadgets",
+    brand: "Samsung",
+    price: 1000,
+    discount: 12,
+    stock: 60,
+  },
+  {
+    id: "6",
+    name: "Appliances",
+    image: Appliances.src,
+    category: "Home Appliances",
+    brand: "LG",
+    price: 400,
+    discount: 5,
+    stock: 25,
+  },
+  {
+    id: "7",
+    name: "Mobile",
+    image: Mobile.src,
+    category: "Gadgets",
+    brand: "Samsung",
+    price: 1000,
+    discount: 12,
+    stock: 60,
+  },
+  {
+    id: "8",
+    name: "Appliances",
+    image: Appliances.src,
+    category: "Home Appliances",
+    brand: "LG",
+    price: 400,
+    discount: 5,
+    stock: 25,
+  },
+  {
+    id: "8",
+    name: "Appliances",
+    image: Appliances.src,
+    category: "Home Appliances",
+    brand: "LG",
+    price: 400,
+    discount: 5,
+    stock: 25,
+  }, {
+    id: "8",
+    name: "Appliances",
+    image: Appliances.src,
+    category: "Home Appliances",
+    brand: "LG",
+    price: 400,
+    discount: 5,
+    stock: 25,
+  },
+  {
+    id: "8",
+    name: "Appliances",
+    image: Appliances.src,
+    category: "Home Appliances",
+    brand: "LG",
+    price: 400,
+    discount: 5,
+    stock: 25,
+  }, {
+    id: "8",
+    name: "Appliances",
+    image: Appliances.src,
+    category: "Home Appliances",
+    brand: "LG",
+    price: 400,
+    discount: 5,
+    stock: 25,
+  }, {
+    id: "8",
+    name: "Appliances",
+    image: Appliances.src,
+    category: "Home Appliances",
+    brand: "LG",
+    price: 400,
+    discount: 5,
+    stock: 25,
+  }, {
+    id: "8",
+    name: "Appliances",
+    image: Appliances.src,
+    category: "Home Appliances",
+    brand: "LG",
+    price: 400,
+    discount: 5,
+    stock: 25,
+  },
+];
 
-const demoOrders: Order[] = [
-    {
-        id: "1",
-        price: 120,
-        payment_status: "Paid",
-        delivery_status: "Delivered",
-        suborder: [
-            { id: "1-1", price: 60, payment_status: "Paid", delivery_status: "Delivered" },
-            { id: "1-2", price: 60, payment_status: "Paid", delivery_status: "Delivered" }
-        ]
-    },
-    {
-        id: "2",
-        price: 200,
-        payment_status: "Pending",
-        delivery_status: "Processing",
-        suborder: [
-            { id: "2-1", price: 100, payment_status: "Pending", delivery_status: "Processing" },
-            { id: "2-2", price: 100, payment_status: "Pending", delivery_status: "Processing" }
-        ]
+const CategoryPage = () => {
+  const [categories, setCategories] = useState<Category[]>(demoCategories);
+  const [globalFilter, setGlobalFilter] = useState<string>("");
+  const [first, setFirst] = useState(0);
+  const [rows, setRows] = useState(10);
+
+  // Handle Delete Action
+  const handleDelete = (id: string) => {
+    if (confirm("Are you sure you want to delete this category?")) {
+      setCategories(categories.filter((cat) => cat.id !== id));
     }
-]
+  };
 
-const OrdersList = () => {
-    const [filters, setFilters] = useState({
-        global: { value: "", matchMode: FilterMatchMode.CONTAINS },
-        name: { value: "", matchMode: FilterMatchMode.CONTAINS },
-        payment: { value: "", matchMode: FilterMatchMode.CONTAINS },
-        shopName: { value: "", matchMode: FilterMatchMode.CONTAINS },
-        district: { value: "", matchMode: FilterMatchMode.CONTAINS },
-        email: { value: "", matchMode: FilterMatchMode.CONTAINS },
-    })
-    const [first, setFirst] = useState(0)
-    const [rows, setRows] = useState(5)
-    const [expandedRows, setExpandedRows] = useState<DataTableExpandedRows>({})
+  // Header with Search
+  const renderHeader = () => (
+    <div className="flex flex-col md:flex-row justify-between items-center bg-[#EFEFEF] p-2 rounded-md border border-gray-300 shadow-sm">
+      <h2 className="text-base font-semibold">All Orders</h2>
+      <span className="p-input-icon-left flex items-center mt-2 md:mt-0">
+        <i className="pi pi-search" />
+        <InputText
+          type="search"
+          onInput={(e) => setGlobalFilter(e.currentTarget.value)}
+          placeholder="Search All Orders"
+          className="p-inputtext-sm h-8 w-full md:w-[300px] p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0097A7]"
+        />
+      </span>
+    </div>
 
-    const onRowToggle = (e: DataTableRowToggleEvent) => {
-        setExpandedRows(e.data)
-    }
+  );
 
-    const renderHeader = () => (
-        <div className="flex flex-col sm:flex-row justify-between items-center bg-[#EFEFEF] p-4 rounded-md border border-gray-300 shadow-sm">
-            <h2 className="text-lg font-semibold mb-2 sm:mb-0">All Orders</h2>
-            <span className="p-input-icon-left w-full sm:w-auto">
-                <i className="pi pi-search" />
-                <InputText
-                    type="search"
-                    onInput={(e) =>
-                        setFilters({
-                            ...filters,
-                            global: { value: e.currentTarget.value, matchMode: FilterMatchMode.CONTAINS },
-                        })
-                    }
-                    placeholder="Search Orders"
-                    className="p-inputtext-sm h-10 w-full sm:w-[300px] p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0097A7]"
-                />
-            </span>
+
+  const imageTemplate = (rowData: Category) => (
+    <Image
+      src={rowData.image}
+      alt={rowData.name}
+      width={20}
+      height={20}
+      className="rounded"
+    />
+  );
+
+  // Pagination Handler
+  const onPageChange = (e: any) => {
+    setFirst(e.first);
+    setRows(e.rows);
+  };
+  const [filters, setFilters] = useState<DataTableFilterMeta>({
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    category: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    brand: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    price: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    discount: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    stock: { value: null, matchMode: FilterMatchMode.STARTS_WITH }
+
+  });
+  return (
+
+    <div >
+      <Toast />
+      <div className="bg-white shadow-md rounded-md p-2  dark:bg-[#18181a] text-black dark:text-black">
+        <div className="pb-2 mb-2">{renderHeader()}</div>
+        <div className="tableContainer">
+          <div className="tableResponsive">
+            <DataTable
+              value={categories}
+              paginator
+              rowsPerPageOptions={[10, 25, 50, 75]}
+              rows={rows}
+              first={first}
+              onPage={onPageChange}
+              globalFilter={globalFilter}
+              emptyMessage="No categories found."
+              scrollable
+              scrollHeight="370px"
+              filters={filters}
+              filterDisplay="row"
+              paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+              style={{ overflowX: "auto", width: "100%" }}
+            >
+              
+
+              <Column
+                header="Actions"
+                frozen
+                alignFrozen="left"
+                style={{
+                  zIndex: 1,
+                }}
+                headerStyle={{
+                  zIndex: 2,
+                  position: "sticky",
+                  left: 0,
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+                // bodyStyle={{
+                //   backgroundColor: "#ffffff", 
+                // }}
+                body={(rowData) => (
+                  <div className="flex bg-white dark:bg-[#18181a] text-black dark:text-white gap-2">
+                   
+                    <Link href={`allproduct/view/${rowData.id}`} passHref>
+                      <FaEye className="text-black dark:text-white cursor-pointer text-xs" />
+                    </Link>
+                 
+                  
+                  </div>
+
+                )}
+              />
+
+              {/* No Column (Row Number) */}
+              <Column
+                header="No"
+                body={(data, options) => options.rowIndex + 1}
+                headerStyle={{
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              />
+
+              {/* Image Column */}
+              <Column
+                header="Image"
+                body={imageTemplate}
+                headerStyle={{
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              />
+
+              {/* Name Column */}
+              <Column
+                field="name"
+                header="Name"
+                filter
+                style={{ minWidth: "10rem" }}
+                sortable
+                headerStyle={{
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              />
+
+              {/* Category Column */}
+              <Column
+                field="category"
+                filter
+                style={{ minWidth: "10rem" }}
+                header="Category"
+                sortable
+                headerStyle={{
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              />
+
+              {/* Brand Column */}
+              <Column
+                field="brand"
+                filter
+                style={{ minWidth: "10rem" }}
+                header="Brand"
+                sortable
+                headerStyle={{
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              />
+
+              {/* Price Column */}
+              <Column
+                field="price"
+                filter
+                style={{ minWidth: "10rem" }}
+                header="Price"
+                body={(data) => `$${data.price}`}
+                sortable
+                headerStyle={{
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              />
+
+              {/* Discount Column */}
+              <Column
+                field="discount"
+                filter
+                style={{ minWidth: "10rem" }}
+                header="Discount"
+                body={(data) => `${data.discount}%`}
+                sortable
+                headerStyle={{
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              />
+
+              {/* Stock Column */}
+              <Column
+                field="stock"
+                filter
+                style={{ minWidth: "10rem" }}
+                header="Stock"
+                sortable
+                headerStyle={{
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              />
+            </DataTable>
+
+          </div>
         </div>
-    )
+      </div>
+    </div>
+  );
+};
 
-    const rowExpansionTemplate = (data: Order) => (
-        <div className="p-4 overflow-x-auto">
-            <h4 className="mb-4">Suborders for Order #{data.id}</h4>
-            <table className="w-full text-left border-collapse border border-gray-200">
-                <thead>
-                    <tr className="bg-gray-100">
-                        <th className="border border-gray-200 p-2">Suborder ID</th>
-                        <th className="border border-gray-200 p-2">Price</th>
-                        <th className="border border-gray-200 p-2">Payment Status</th>
-                        <th className="border border-gray-200 p-2">Delivery Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {data.suborder?.map((sub) => (
-                        <tr key={sub.id} className="border-b border-gray-200">
-                            <td className="border border-gray-200 p-2">{sub.id}</td>
-                            <td className="border border-gray-200 p-2">₹{sub.price}</td>
-                            <td className="border border-gray-200 p-2">{sub.payment_status}</td>
-                            <td className="border border-gray-200 p-2">{sub.delivery_status}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
-    )
-
-    const actionTemplate = (rowData: Order) => (
-        <div className="flex gap-2">
-            <Link href={`/admin/orders/${rowData.id}`}>
-                <Button label="View" className="p-button-text" />
-            </Link>
-        </div>
-    )
-
-    const onPageChange = (e: { first: number; rows: number }) => {
-        setFirst(e.first)
-        setRows(e.rows)
-    }
-
-    return (
-        <div className="p-4">
-            <Toast />
-            <div className="bg-white shadow-md rounded-md p-4">
-                <div className="pb-4 mb-4">{renderHeader()}</div>
-                <div className="overflow-x-auto">
-                    <DataTable
-                        value={demoOrders}
-                        paginator
-                        rowsPerPageOptions={[5, 10, 25, 50]}
-                        rows={rows}
-                        first={first}
-                        onPage={onPageChange}
-                        globalFilterFields={["id", "price", "payment_status", "delivery_status"]}
-                        filters={filters}
-                        emptyMessage="No orders found."
-                        expandedRows={expandedRows}
-                        onRowToggle={onRowToggle}
-                        rowExpansionTemplate={rowExpansionTemplate}
-                        dataKey="id"
-                        className="min-w-full"
-                        responsiveLayout="scroll"
-                    >
-                        <Column expander style={{ width: '3em' }} />
-                        <Column
-                            field="id"
-                            header="Order ID"
-                            sortable
-                            headerStyle={{
-                                background: "#0097A7",
-                                fontWeight: "bold",
-                                color: "white",
-                            }}
-                        />
-                        <Column
-                            field="price"
-                            header="Price"
-                            sortable
-                            headerStyle={{
-                                background: "#0097A7",
-                                fontWeight: "bold",
-                                color: "white",
-                            }}
-                        />
-                        <Column
-                            field="payment_status"
-                            header="Payment Status"
-                            sortable
-                            headerStyle={{
-                                background: "#0097A7",
-                                fontWeight: "bold",
-                                color: "white",
-                            }}
-                        />
-                        <Column
-                            field="delivery_status"
-                            header="Order Status"
-                            sortable
-                            headerStyle={{
-                                background: "#0097A7",
-                                fontWeight: "bold",
-                                color: "white",
-                            }}
-                        />
-                        <Column
-                            header="Action"
-                            body={actionTemplate}
-                            headerStyle={{
-                                background: "#0097A7",
-                                fontWeight: "bold",
-                                color: "white",
-                            }}
-                        />
-                    </DataTable>
-                </div>
-            </div>
-        </div>
-    )
-}
-
-export default OrdersList
-
+export default CategoryPage;

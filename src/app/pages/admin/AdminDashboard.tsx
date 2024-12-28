@@ -303,7 +303,7 @@ export default function AdminDashboard() {
     }, [])
 
     const renderHeader = () => (
-        <div className="flex flex-col sm:flex-row justify-between items-center bg-[#EFEFEF] p-4 rounded-md border border-gray-300 shadow-sm">
+        <div className="flex flex-col sm:flex-row justify-between items-center bg-[#EFEFEF] p-4 rounded-md border border-gray-300 shadow-sm dark-light">
             <h2 className="text-lg font-semibold mb-2 sm:mb-0">Recent Orders</h2>
             <span className="p-input-icon-left w-full sm:w-auto">
                 <i className="pi pi-search" />
