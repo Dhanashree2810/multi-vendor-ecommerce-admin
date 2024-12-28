@@ -9,6 +9,11 @@ import Chart from 'react-apexcharts';
 import Link from "next/link";
 import Sales from '@/assets/images/seller.png'
 import * as echarts from 'echarts';
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import { InputText } from "primereact/inputtext";
+import { FilterMatchMode } from "primereact/api";
+import { Toast } from "primereact/toast"
 
 
 const dashboardDemoData = {
@@ -227,10 +232,42 @@ const userinfo = {
   "updatedAt": "2024-12-13T08:11:07.185Z",
   "__v": 0
 }
-
+ const renderHeader = () => (
+        <div className="flex flex-col sm:flex-row justify-between items-center bg-[#EFEFEF] p-4 rounded-md border border-gray-300 shadow-sm dark-light">
+            <h2 className="text-lg font-semibold mb-2 sm:mb-0">Recent Orders</h2>
+            <span className="p-input-icon-left w-full sm:w-auto">
+                <i className="pi pi-search" />
+                <InputText
+                    type="search"
+                    onInput={(e) =>
+                        setFilters({
+                            ...filters,
+                            global: { value: e.currentTarget.value, matchMode: FilterMatchMode.CONTAINS },
+                        })
+                    }
+                    placeholder="Search Sellers"
+                    className="p-inputtext-sm h-10 w-full sm:w-[300px] p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0097A7]"
+                />
+            </span>
+        </div>
+    )
 export default function Page() {
   const [dashboardData, setDashboardData] = useState(dashboardDemoData);
-
+  const [first, setFirst] = useState(0)
+  const [rows, setRows] = useState(5)
+  
+  const onPageChange = (e: any) => {
+    setFirst(e.first)
+    setRows(e.rows)
+}
+  const [filters, setFilters] = useState({
+    global: { value: "", matchMode: FilterMatchMode.CONTAINS },
+    name: { value: "", matchMode: FilterMatchMode.CONTAINS },
+    price: { value: "", matchMode: FilterMatchMode.CONTAINS },
+    payment_status: { value: "", matchMode: FilterMatchMode.CONTAINS },
+    delivery_status: { value: "", matchMode: FilterMatchMode.CONTAINS },
+    id: { value: "", matchMode: FilterMatchMode.CONTAINS },
+})
   const [userInfo, setUserInfo] = useState(userinfo);
 
   // useEffect(() => {
@@ -427,34 +464,29 @@ export default function Page() {
 
               <div className="p-4 bg-[#EFEFEF] rounded-md mt-6">
                 <h2 className="font-semibold text-lg text-black pb-3">Recent Orders</h2>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm text-left text-white">
-                    <thead className="uppercase border-b border-gray-500">
-                      <tr>
-                        <th className="py-3 px-4">Order ID</th>
-                        <th className="py-3 px-4">Price</th>
-                        <th className="py-3 px-4">Payment Status</th>
-                        <th className="py-3 px-4">Order Status</th>
-                        <th className="py-3 px-4">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {dashboardData.recentOrders.map((order, index) => (
-                        <tr key={index}>
-                          <td className="py-3 px-4">#{order._id}</td>
-                          <td className="py-3 px-4">${order.price}</td>
-                          <td className="py-3 px-4">{order.payment_status}</td>
-                          <td className="py-3 px-4">{order.delivery_status}</td>
-                          <td className="py-3 px-4">
-                            <Link href={`/seller/dashboard/order/details/${order._id}`} className="text-blue-400">
-                              View
-                            </Link>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                 <div className="bg-white shadow-md rounded-lg p-4">
+                                   <Toast />
+                                   <div className="mb-4">{renderHeader()}</div>
+                                   <DataTable
+                                       value={dashboardData.recentOrders}
+                                       paginator
+                                       rowsPerPageOptions={[5, 10, 25, 50]}
+                                       rows={rows}
+                                       first={first}
+                                       onPage={onPageChange}
+                                       filters={filters}
+                                       showGridlines
+                                       emptyMessage="No sellers found."
+                                       className="p-datatable-sm"
+                                       responsiveLayout="scroll"
+                                   >
+                                       <Column field="id" header="Order ID" headerStyle={{ background: "#0097A7", color: "white" }} />
+                                       <Column field="price" header="Price" sortable headerStyle={{ background: "#0097A7", color: "white" }} />
+                                       <Column field="payment_status" header="Payment Status" sortable headerStyle={{ background: "#0097A7", color: "white" }} />
+                                       <Column field="delivery_status" header="Order Status" sortable headerStyle={{ background: "#0097A7", color: "white" }} />
+                                       {/* <Column header="Actions" body={actionTemplate} headerStyle={{ background: "#0097A7", color: "white" }} /> */}
+                                   </DataTable>
+                               </div>
               </div>
             </div>
 

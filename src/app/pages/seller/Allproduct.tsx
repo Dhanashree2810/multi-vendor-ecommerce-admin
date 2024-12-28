@@ -16,6 +16,7 @@ import { FaEdit, FaEye, FaTrash, FaImage } from "react-icons/fa";
 import Tooltip from "@/components/custom/Tooltipcustom";
 import Link from "next/link";
 import { FilterMatchMode, FilterService } from 'primereact/api';
+import { HiEye } from "react-icons/hi";
 
 interface Category {
   id: string;
@@ -128,13 +129,50 @@ const demoCategories: Category[] = [
     discount: 5,
     stock: 25,
   },
+  {
+    id: "8",
+    name: "Appliances",
+    image: Appliances.src,
+    category: "Home Appliances",
+    brand: "LG",
+    price: 400,
+    discount: 5,
+    stock: 25,
+  }, {
+    id: "8",
+    name: "Appliances",
+    image: Appliances.src,
+    category: "Home Appliances",
+    brand: "LG",
+    price: 400,
+    discount: 5,
+    stock: 25,
+  }, {
+    id: "8",
+    name: "Appliances",
+    image: Appliances.src,
+    category: "Home Appliances",
+    brand: "LG",
+    price: 400,
+    discount: 5,
+    stock: 25,
+  }, {
+    id: "8",
+    name: "Appliances",
+    image: Appliances.src,
+    category: "Home Appliances",
+    brand: "LG",
+    price: 400,
+    discount: 5,
+    stock: 25,
+  },
 ];
 
 const CategoryPage = () => {
   const [categories, setCategories] = useState<Category[]>(demoCategories);
   const [globalFilter, setGlobalFilter] = useState<string>("");
   const [first, setFirst] = useState(0);
-  const [rows, setRows] = useState(5);
+  const [rows, setRows] = useState(10);
 
   // Handle Delete Action
   const handleDelete = (id: string) => {
@@ -145,18 +183,19 @@ const CategoryPage = () => {
 
   // Header with Search
   const renderHeader = () => (
-    <div className="flex justify-between items-center bg-[#EFEFEF] p-4 rounded-md border border-gray-300 shadow-sm ">
-      <h2 className="text-lg font-semibold">All Products</h2>
-      <span className="p-input-icon-left">
+    <div className="flex flex-col md:flex-row justify-between items-center bg-[#EFEFEF] p-2 rounded-md border border-gray-300 shadow-sm">
+      <h2 className="text-base font-semibold">All Product</h2>
+      <span className="p-input-icon-left flex items-center mt-2 md:mt-0">
         <i className="pi pi-search" />
         <InputText
           type="search"
           onInput={(e) => setGlobalFilter(e.currentTarget.value)}
           placeholder="Search All Products"
-          className="p-inputtext-sm h-10 w-[300px] p-2 border  border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0097A7]"
+          className="p-inputtext-sm h-8 w-full md:w-[300px] p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0097A7]"
         />
       </span>
     </div>
+
   );
 
   // Action Buttons
@@ -193,14 +232,14 @@ const CategoryPage = () => {
     <Image
       src={rowData.image}
       alt={rowData.name}
-      width={40}
-      height={40}
+      width={20}
+      height={20}
       className="rounded"
     />
   );
 
   // Pagination Handler
-  const onPageChange = (e:any) => {
+  const onPageChange = (e: any) => {
     setFirst(e.first);
     setRows(e.rows);
   };
@@ -218,33 +257,69 @@ const CategoryPage = () => {
 
     <div >
       <Toast />
-      <div className="bg-white shadow-md rounded-md p-4  dark:bg-[#18181a] text-black dark:text-black">
-        <div className="pb-4 mb-4">{renderHeader()}</div>
+      <div className="bg-white shadow-md rounded-md p-2  dark:bg-[#18181a] text-black dark:text-black">
+        <div className="pb-2 mb-2">{renderHeader()}</div>
         <div className="tableContainer">
           <div className="tableResponsive">
             <DataTable
               value={categories}
               paginator
-              rowsPerPageOptions={[5, 10, 25, 50]}
+              rowsPerPageOptions={[10, 25, 50, 75]}
               rows={rows}
               first={first}
               onPage={onPageChange}
               globalFilter={globalFilter}
               emptyMessage="No categories found."
               scrollable
-              scrollHeight="400px"
-              filters={filters} 
-              filterDisplay="row" 
-
+              scrollHeight="370px"
+              filters={filters}
+              filterDisplay="row"
+              paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
               style={{ overflowX: "auto", width: "100%" }}
             >
+              {/* Actions Column */}
+              {/* <Column
+    header="Actions"
+    frozen
+    alignFrozen="left"
+    headerStyle={{
+      background: "#0097A7", // Header background color
+      color: "#fff", // Header text color
+      textAlign: "center",
+      padding: "0.5rem",
+      zIndex: 2,
+      position: "sticky",
+      left: 0,
+      fontWeight: "bold",
+    }}
+    style={{ width: "200px" }}
+    bodyStyle={{
+      backgroundColor: "#ffffff", 
+    }}
+    body={(rowData) => (
+      <div className="flex justify-center space-x-2 bg-white">
+        <Link href={`allproduct/view/${rowData.id}`}>
+          <HiEye className="h-6 w-6 p-1 cursor-pointer text-black border border-transparent rounded-md hover:border-black hover:bg-black hover:text-white transition-all" />
+        </Link>
+        <Link href={`allproduct/edit/${rowData.id}`}>
+          <FaEdit className="h-6 w-6 p-1 cursor-pointer text-black border border-transparent rounded-md hover:border-black hover:bg-black hover:text-white transition-all" />
+        </Link>
+        <Link href={`/admin/cropdisease_hi/edit/${rowData.id}`}>
+          <FaTrash className="h-6 w-6 p-1 cursor-pointer text-black border border-transparent rounded-md hover:border-black hover:bg-black hover:text-white transition-all" />
+        </Link>
+        <Link href={`/seller/allproduct/uploadimage/${rowData.id}`}>
+          <FaImage className="h-6 w-6 p-1 cursor-pointer text-black border border-transparent rounded-md hover:border-black hover:bg-black hover:text-white transition-all" />
+        </Link>
+      </div>
+    )}
+  /> */}
+
               <Column
                 header="Actions"
                 frozen
                 alignFrozen="left"
                 style={{
                   zIndex: 1,
-
                 }}
                 headerStyle={{
                   zIndex: 2,
@@ -253,41 +328,31 @@ const CategoryPage = () => {
                   background: "#0097A7",
                   fontWeight: "bold",
                   color: "white",
-                  
                 }}
-                
-                
-              
-                  body={(rowData) => (
-                    <div className="flex   bg-white dark:bg-[#18181a] text-black dark:text-white p-2">
-                      <Tooltip message="Edit">
-                        <Link href={`allproduct/edit/${rowData.id}`} passHref>
-                          <Button icon={<FaEdit />} severity="warning" size="small" />
-                        </Link>
-                      </Tooltip>
-                      <Tooltip message="View">
-                        <Link href={`allproduct/view/${rowData.id}`} passHref>
-                          <Button icon={<FaEye />} severity="info" size="small" />
-                        </Link>
-                      </Tooltip>
-                      <Tooltip message="Upload Image">
-                        <Link href={`/seller/allproduct/uploadimage/${rowData.id}`} passHref>
-                          <Button icon={<FaImage />} severity="success" size="small" />
-                        </Link>
-                      </Tooltip>
-                      <Tooltip message="Delete">
-                        <Button
-                          icon={<FaTrash />}
-                          severity="danger"
-                          size="small"
-                          onClick={() => handleDelete(rowData.id)}
-                        />
-                      </Tooltip>
-                    </div>
-                  )}
-                />
-                
-               
+                // bodyStyle={{
+                //   backgroundColor: "#ffffff", 
+                // }}
+                body={(rowData) => (
+                  <div className="flex bg-white dark:bg-[#18181a] text-black dark:text-white gap-2">
+                    <Link href={`allproduct/edit/${rowData.id}`} passHref>
+                      <FaEdit className="text-black dark:text-white cursor-pointer text-xs" />
+                    </Link>
+                    <Link href={`allproduct/view/${rowData.id}`} passHref>
+                      <FaEye className="text-black dark:text-white cursor-pointer text-xs" />
+                    </Link>
+                    <Link href={`/seller/allproduct/uploadimage/${rowData.id}`} passHref>
+                      <FaImage className="text-black dark:text-white cursor-pointer text-xs" />
+                    </Link>
+                    <FaTrash
+                      className="text-black dark:text-white cursor-pointer text-xs"
+                      onClick={() => handleDelete(rowData.id)}
+                    />
+                  </div>
+
+                )}
+              />
+
+              {/* No Column (Row Number) */}
               <Column
                 header="No"
                 body={(data, options) => options.rowIndex + 1}
@@ -297,15 +362,8 @@ const CategoryPage = () => {
                   color: "white",
                 }}
               />
-              <Column
-                header="No"
-                body={(data, options) => options.rowIndex + 1}
-                headerStyle={{
-                  background: "#0097A7",
-                  fontWeight: "bold",
-                  color: "white",
-                }}
-              />
+
+              {/* Image Column */}
               <Column
                 header="Image"
                 body={imageTemplate}
@@ -315,11 +373,13 @@ const CategoryPage = () => {
                   color: "white",
                 }}
               />
+
+              {/* Name Column */}
               <Column
                 field="name"
                 header="Name"
-                filter  style={{ minWidth: '12rem' }}
-
+                filter
+                style={{ minWidth: "10rem" }}
                 sortable
                 headerStyle={{
                   background: "#0097A7",
@@ -327,10 +387,12 @@ const CategoryPage = () => {
                   color: "white",
                 }}
               />
+
+              {/* Category Column */}
               <Column
                 field="category"
-                filter  style={{ minWidth: '12rem' }}
-
+                filter
+                style={{ minWidth: "10rem" }}
                 header="Category"
                 sortable
                 headerStyle={{
@@ -339,22 +401,12 @@ const CategoryPage = () => {
                   color: "white",
                 }}
               />
-              <Column
-                field="category"
-                filter  style={{ minWidth: '12rem' }}
 
-                header="Category"
-                sortable
-                headerStyle={{
-                  background: "#0097A7",
-                  fontWeight: "bold",
-                  color: "white",
-                }}
-              />
+              {/* Brand Column */}
               <Column
                 field="brand"
-                filter  style={{ minWidth: '12rem' }}
-
+                filter
+                style={{ minWidth: "10rem" }}
                 header="Brand"
                 sortable
                 headerStyle={{
@@ -363,10 +415,12 @@ const CategoryPage = () => {
                   color: "white",
                 }}
               />
+
+              {/* Price Column */}
               <Column
                 field="price"
-                filter  style={{ minWidth: '12rem' }}
-
+                filter
+                style={{ minWidth: "10rem" }}
                 header="Price"
                 body={(data) => `$${data.price}`}
                 sortable
@@ -376,10 +430,12 @@ const CategoryPage = () => {
                   color: "white",
                 }}
               />
+
+              {/* Discount Column */}
               <Column
                 field="discount"
-                filter  style={{ minWidth: '12rem' }}
-
+                filter
+                style={{ minWidth: "10rem" }}
                 header="Discount"
                 body={(data) => `${data.discount}%`}
                 sortable
@@ -389,10 +445,12 @@ const CategoryPage = () => {
                   color: "white",
                 }}
               />
+
+              {/* Stock Column */}
               <Column
                 field="stock"
-                filter  style={{ minWidth: '12rem' }}
-
+                filter
+                style={{ minWidth: "10rem" }}
                 header="Stock"
                 sortable
                 headerStyle={{
@@ -402,6 +460,7 @@ const CategoryPage = () => {
                 }}
               />
             </DataTable>
+
           </div>
         </div>
       </div>

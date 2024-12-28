@@ -1,180 +1,136 @@
-'use client'
+"use client";
 
-import React, { useEffect, useRef, useState } from 'react'
-import { FaList } from 'react-icons/fa6'
-import { IoMdClose } from "react-icons/io"
-import { FaRegFaceGrinHearts } from "react-icons/fa6"
-import Image from 'next/image'
-import Link from 'next/link'
-import { useParams } from 'next/navigation'
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
-// Types
-type Seller = {
-  _id: string
-  name: string
-  image: string
+interface Customer {
+  name: string;
+  avatar: string;
 }
 
-type Message = {
-  senderId: string
-  receiverId: string
-  message: string
-  senderName: string
+interface Message {
+  sender: "user" | "customer";
+  text: string;
 }
 
-// Mock data
-const mockSellers: Seller[] = [
-  { _id: '1', name: 'John Doe', image: '/images/seller1.jpg' },
-  { _id: '2', name: 'Jane Smith', image: '/images/seller2.jpg' },
-  { _id: '3', name: 'Bob Johnson', image: '/images/seller3.jpg' },
-]
+export default function ChatBox() {
+  const [customers] = useState<Customer[]>([
+    { name: "Priyanka Pardeshiii", avatar: "/customer-avatar.png" },
+    { name: "John Doe", avatar: "/customer-avatar.png" },
+    { name: "Jane Smith", avatar: "/customer-avatar.png" },
+  ]);
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+  const [message, setMessage] = useState<string>("");
+  const [messages, setMessages] = useState<Message[]>([]);
 
-const mockMessages: Message[] = [
-  { senderId: '1', receiverId: '', message: 'Hello, how can I help you?', senderName: 'John Doe' },
-  { senderId: '', receiverId: '1', message: 'I have a question about my order.', senderName: 'Admin Support' },
-  { senderId: '1', receiverId: '', message: 'Sure, what would you like to know?', senderName: 'John Doe' },
-]
+  const handleSend = () => {
+    if (message.trim() === "") return;
 
-const ChatSeller = () => {
-  const scrollRef = useRef<HTMLDivElement>(null)
-  const [show, setShow] = useState(false)
-  const { id: sellerId } = useParams() // Get dynamic sellerId from URL
-  const [text, setText] = useState('')
-  const [sellers, setSellers] = useState<Seller[]>(mockSellers)
-  const [messages, setMessages] = useState<Message[]>(mockMessages)
-  const [currentSeller, setCurrentSeller] = useState<Seller | null>(null)
+    // Add user's message
+    const newMessages = [
+      ...messages,
+      { sender: "user", text: message }
+    ];
 
-  useEffect(() => {
-    if (sellerId) {
-      const seller = sellers.find(s => s._id === sellerId)
-      setCurrentSeller(seller || null)
-    } else {
-      setCurrentSeller(null)
-    }
-  }, [sellerId, sellers])
+    setMessages(newMessages); // Update the chat messages
+    setMessage(""); // Clear the input field
 
-  useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
-
-  const send = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (text.trim() && sellerId) {
-      const newMessage: Message = {
-        senderId: '',
-        receiverId: sellerId,
-        message: text,
-        senderName: 'Admin Support'
-      }
-      setMessages([...messages, newMessage])
-      setText('')
-    }
-  }
+    // Add customer response after a delay (for demo purposes)
+    setTimeout(() => {
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { sender: "customer", text: "Hello, how can I assist you?" }
+      ]);
+    }, 1000);
+  };
 
   return (
-    <div className="px-2 lg:px-7 py-5">
-      <div className="w-full bg-[#EFEFEF] text-black px-4 py-4 rounded-md h-[calc(100vh-140px)]">
-        <div className="flex w-full h-full relative">
-          <div className={`w-[280px] h-full absolute z-10 ${show ? '-left-[16px]' : '-left-[336px]'} md:left-0 md:relative transition-all`}>
-            <div className="w-full h-[calc(100vh-177px)] bg-[#EFEFEF] text-black md:bg-transparent overflow-y-auto">
-              <div className="flex text-xl justify-between items-center p-4 md:p-0 md:px-3 md:pb-3 text-black">
-                <h2 className='text-black'>Sellers</h2>
-                <span onClick={() => setShow(!show)} className="block cursor-pointer md:hidden"><IoMdClose /></span>
+    <div className="h-screen flex justify-center items-center bg-[#EFEFEF]">
+      <div className="w-[900px] bg-white rounded-lg shadow-lg p-4 flex h-[450px]  dark-light">
+        {/* Customers List */}
+        <div className="w-[250px] bg-[#EFEFEF] p-4 rounded-lg text-black flex-none overflow-y-auto">
+          <h2 className="text-lg font-bold mb-4">Customers</h2>
+          <ul>
+            {customers.map((customer, index) => (
+              <li
+                key={index}
+                onClick={() => setSelectedCustomer(customer)}
+                className={`flex items-center gap-2 p-2 rounded cursor-pointer mb-2 ${
+                  selectedCustomer?.name === customer.name
+                    ? "bg-[#0097A7]"
+                    : "hover:bg-[#0080a7]"
+                }`}
+              >
+                <img
+                  src={customer.avatar}
+                  alt="Avatar"
+                  className="w-8 h-8 rounded-full border-2 border-green-400"
+                />
+                <span className="font-semibold">{customer.name}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Chat Area */}
+        <div className="flex-1 bg-[#3a3f4b] rounded-lg p-4 flex flex-col justify-between">
+          {selectedCustomer ? (
+            <>
+              {/* Header */}
+              <div className="flex items-center gap-2 mb-4 text-white">
+                <img
+                  src={selectedCustomer.avatar}
+                  alt="Avatar"
+                  className="w-8 h-8 rounded-full border-2 border-green-400"
+                />
+                <h2 className="font-bold">{selectedCustomer.name}</h2>
               </div>
 
-              {sellers.map((s, i) => (
-                <Link key={i} href={`/admin/chatsellers/${s._id}`} className={`h-[60px] flex justify-start gap-2 items-center text-white px-2 py-2 rounded-md cursor-pointer ${sellerId === s._id ? 'bg-[#FFF7E6]' : ''}`}>
-                  <div className="relative">
-                    <Image className="w-[38px] h-[38px] border-white border-2 max-w-[38px] p-[2px] rounded-full" src={s.image} alt={s.name} width={38} height={38} />
-                    <div className="w-[10px] h-[10px] bg-green-500 rounded-full absolute right-0 bottom-0"></div>
-                  </div>
-                  <div className="flex justify-center items-start flex-col w-full">
-                    <div className="flex justify-between items-center w-full">
-                      <h2 className="text-base font-semibold text-black">{s.name}</h2>
+              {/* Chat Messages */}
+              <div className="flex-1 overflow-y-auto p-2 text-white space-y-4">
+                {messages.map((msg, index) => (
+                  <div
+                    key={index}
+                    className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
+                  >
+                    <div
+                      className={`p-3 rounded-lg max-w-[70%] ${
+                        msg.sender === "user"
+                          ? "bg-cyan-500 text-white"
+                          : "bg-[#6c757d] text-white"
+                      }`}
+                    >
+                      {msg.text}
                     </div>
                   </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <div className="w-full md:w-[calc(100%-200px)] md:pl-4">
-            <div className="flex justify-between items-center">
-              {sellerId && currentSeller && (
-                <div className="flex justify-start items-center gap-3">
-                  <div className="relative">
-                    <Image className="w-[45px] h-[45px] border-green-500 border-2 max-w-[45px] p-[2px] rounded-full" src={currentSeller.image} alt={currentSeller.name} width={45} height={45} />
-                    <div className="w-[10px] h-[10px] bg-green-500 rounded-full absolute right-0 bottom-0"></div>
-                  </div>
-                  <span className="text-white">{currentSeller.name}</span>
-                </div>
-              )}
-
-              <div onClick={() => setShow(!show)} className="w-[35px] flex md:hidden h-[35px] rounded-sm bg-blue-500 shadow-lg hover:shadow-blue-500/50 justify-center cursor-pointer items-center text-white">
-                <span><FaList /></span>
+                ))}
               </div>
-            </div>
 
-            <div className="py-4">
-              <div className="bg-gray-700 h-[calc(100vh-290px)] rounded-md p-3 overflow-y-auto">
-                {sellerId ? messages.map((m, i) => {
-                  if (m.senderId === sellerId) {
-                    return (
-                      <div key={i} ref={scrollRef} className="w-full flex justify-start items-center">
-                        <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
-                          <div>
-                            <Image className="w-[38px] h-[38px] border-2 border-white rounded-full max-w-[38px] p-[3px]" src="/images/seller1.jpg" alt="Seller" width={38} height={38} />
-                          </div>
-                          <div className="flex justify-center items-start flex-col w-full bg-blue-500 shadow-lg shadow-blue-500/50 text-white py-1 px-2 rounded-sm">
-                            <span>{m.message}</span>
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  } else {
-                    return (
-                      <div key={i} ref={scrollRef} className="w-full flex justify-end items-center">
-                        <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
-                          <div className="flex justify-center items-start flex-col w-full bg-red-500 shadow-lg shadow-red-500/50 text-white py-1 px-2 rounded-sm">
-                            <span>{m.message}</span>
-                          </div>
-                          <div>
-                            <Image className="w-[38px] h-[38px] border-2 border-white rounded-full max-w-[38px] p-[3px]" src="/images/admin.jpg" alt="Admin" width={38} height={38} />
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  }
-                }) : (
-                  <div className="w-full h-full flex justify-center items-center flex-col gap-2 text-white">
-                    <span><FaRegFaceGrinHearts /></span>
-                    <span>Select Seller</span>
-                  </div>
-                )}
+              {/* Input Field */}
+              <div className="flex items-center gap-2">
+                <Input
+                  type="text"
+                  placeholder="Input Your Message"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  className="bg-[#0097A7] text-white border-none"
+                />
+                <Button
+                  onClick={handleSend}
+                  className="bg-cyan-500 hover:bg-cyan-600 text-white"
+                >
+                  Send
+                </Button>
               </div>
+            </>
+          ) : (
+            <div className="flex-1 flex justify-center items-center text-white">
+              Select a Customer
             </div>
-
-            <form onSubmit={send} className="flex gap-3">
-              <input
-                readOnly={!sellerId}
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                className="w-full flex justify-between px-2 border border-slate-700 items-center py-[5px] focus:border-blue-500 rounded-md outline-none bg-transparent text-white"
-                type="text"
-                placeholder="Input Your Message"
-              />
-              <button
-                disabled={!sellerId}
-                className="shadow-lg bg-cyan-500 hover:shadow-cyan-500/50 text-semibold w-[75px] h-[35px] rounded-md text-white flex justify-center items-center"
-              >
-                Send
-              </button>
-            </form>
-          </div>
+          )}
         </div>
       </div>
     </div>
-  )
+  );
 }
-
-export default ChatSeller

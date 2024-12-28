@@ -1,214 +1,458 @@
-'use client'
-import "primeflex/primeflex.css";
-import "primereact/resources/themes/saga-blue/theme.css";
-import "primereact/resources/primereact.min.css";
-import { useState } from "react";
-import { FaEye } from "react-icons/fa";
-import Link from "next/link";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
-import { Toast } from "primereact/toast";
-import Tooltip from "@/components/custom/Tooltipcustom";
-import { FilterMatchMode } from "primereact/api";
-import { Button } from '@/components/ui/button';
-import personImg from '@/assets/images/user.png'
-import Image from "next/image";
+"use client"
+import React, { useState } from "react";
+import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
+import Image from "next/image";
+import { DataTable, DataTableFilterMeta } from "primereact/datatable";
+import { Column } from "primereact/column";
+// Import demo images
+import HomeFurniture from "@/assets/images/Home&Furniture.jpg";
+import Electronics from "@/assets/images/electronics.png";
+import Fashion from "@/assets/images/fashion.png";
+import Appliances from "@/assets/images/appliances.jpg";
+import Mobile from "@/assets/images/mobile.png";
+import { Toast } from "primereact/toast";
+import { FaEdit, FaEye, FaTrash, FaImage } from "react-icons/fa";
+import Tooltip from "@/components/custom/Tooltipcustom";
+import Link from "next/link";
+import { FilterMatchMode, FilterService } from 'primereact/api';
+import { HiEye } from "react-icons/hi";
 
-interface Seller {
-    id: string;
-    name: string;
-    shopInfo?: {
-        shopName: string;
-        district: string;
-    };
-    email: string;
-    image: string;
-    payment: string;
-    status: string;
+interface Category {
+  id: string;
+  name: string;
+  image: string;
+  shopname: string;
+  brand: string;
+  price: number;
+  discount: number;
+  stock: number;
 }
 
-const mockSellers: Seller[] = [
-    {
-        id: '1',
-        image: personImg.src,
-        name: 'John Doe',
-        shopInfo: { shopName: "Jane's Store", district: 'District 1' },
-        payment: 'Paid',
-        email: 'john@example.com',
-        status: 'Active',
-    },
-    {
-        id: '2',
-        image: personImg.src,
-        name: 'Jane Smith',
-        shopInfo: { shopName: "Jane's Store", district: 'District 2' },
-        payment: 'Pending',
-        email: 'jane@example.com',
-        status: 'Inactive',
-    },
-    {
-        id: '3',
-        image: personImg.src,
-        name: 'Jane Smith',
-        shopInfo: { shopName: "Jane's Store", district: 'District 2' },
-        payment: 'Pending',
-        email: 'jane@example.com',
-        status: 'Inactive',
-    }
+const demoCategories: Category[] = [
+  {
+    id: "1",
+    name: "Home & Furniture",
+    image: HomeFurniture.src,
+    shopname: "Furniture",
+    brand: "IKEA",
+    price: 1200,
+    discount: 10,
+    stock: 50,
+  },
+  {
+    id: "2",
+    name: "Electronics",
+    image: Electronics.src,
+    shopname: "Gadgets",
+    brand: "Sony",
+    price: 2500,
+    discount: 15,
+    stock: 30,
+  },
+  {
+    id: "3",
+    name: "Fashion",
+    image: Fashion.src,
+    shopname: "Clothing",
+    brand: "Zara",
+    price: 80,
+    discount: 20,
+    stock: 100,
+  },
+  {
+    id: "4",
+    name: "Appliances",
+    image: Appliances.src,
+    shopname: "Home Appliances",
+    brand: "LG",
+    price: 400,
+    discount: 5,
+    stock: 25,
+  },
+  {
+    id: "5",
+    name: "Mobile",
+    image: Mobile.src,
+    shopname: "Gadgets",
+    brand: "Samsung",
+    price: 1000,
+    discount: 12,
+    stock: 60,
+  },
+  {
+    id: "6",
+    name: "Appliances",
+    image: Appliances.src,
+    shopname: "Home Appliances",
+    brand: "LG",
+    price: 400,
+    discount: 5,
+    stock: 25,
+  },
+  {
+    id: "7",
+    name: "Mobile",
+    image: Mobile.src,
+    shopname: "Gadgets",
+    brand: "Samsung",
+    price: 1000,
+    discount: 12,
+    stock: 60,
+  },
+  {
+    id: "8",
+    name: "Appliances",
+    image: Appliances.src,
+    shopname: "Home Appliances",
+    brand: "LG",
+    price: 400,
+    discount: 5,
+    stock: 25,
+  },
+  {
+    id: "8",
+    name: "Appliances",
+    image: Appliances.src,
+    shopname: "Home Appliances",
+    brand: "LG",
+    price: 400,
+    discount: 5,
+    stock: 25,
+  }, {
+    id: "8",
+    name: "Appliances",
+    image: Appliances.src,
+    shopname: "Home Appliances",
+    brand: "LG",
+    price: 400,
+    discount: 5,
+    stock: 25,
+  },
+  {
+    id: "8",
+    name: "Appliances",
+    image: Appliances.src,
+    shopname: "Home Appliances",
+    brand: "LG",
+    price: 400,
+    discount: 5,
+    stock: 25,
+  }, {
+    id: "8",
+    name: "Appliances",
+    image: Appliances.src,
+    shopname: "Home Appliances",
+    brand: "LG",
+    price: 400,
+    discount: 5,
+    stock: 25,
+  }, {
+    id: "8",
+    name: "Appliances",
+    image: Appliances.src,
+    shopname: "Home Appliances",
+    brand: "LG",
+    price: 400,
+    discount: 5,
+    stock: 25,
+  }, {
+    id: "8",
+    name: "Appliances",
+    image: Appliances.src,
+    shopname: "Home Appliances",
+    brand: "LG",
+    price: 400,
+    discount: 5,
+    stock: 25,
+  },
 ];
 
-
 const DeactiveSellers = () => {
-    const [sellers, setSellers] = useState<Seller[]>(mockSellers);
-    const [filters, setFilters] = useState({
-        global: { value: "", matchMode: FilterMatchMode.CONTAINS },
-        name: { value: "", matchMode: FilterMatchMode.CONTAINS },
-        payment: { value: "", matchMode: FilterMatchMode.CONTAINS },
-        shopName: { value: "", matchMode: FilterMatchMode.CONTAINS },
-        district: { value: "", matchMode: FilterMatchMode.CONTAINS },
-        email: { value: "", matchMode: FilterMatchMode.CONTAINS },
-    });
-    const [first, setFirst] = useState(0);
-    const [rows, setRows] = useState(5);
+  const [categories, setCategories] = useState<Category[]>(demoCategories);
+  const [globalFilter, setGlobalFilter] = useState<string>("");
+  const [first, setFirst] = useState(0);
+  const [rows, setRows] = useState(10);
 
+  // Handle Delete Action
+  const handleDelete = (id: string) => {
+    if (confirm("Are you sure you want to delete this shopname?")) {
+      setCategories(categories.filter((cat) => cat.id !== id));
+    }
+  };
 
-    const renderHeader = () => (
-        <div className="flex justify-between items-center bg-[#EFEFEF] p-4 rounded-md border border-gray-300 shadow-sm">
-            <h2 className="text-lg font-semibold">Deactive Sellers</h2>
-            <span className="p-input-icon-left">
-                <i className="pi pi-search" />
-                <InputText
-                    type="search"
-                    onInput={(e) =>
-                        setFilters({
-                            ...filters,
-                            global: { value: e.currentTarget.value, matchMode: FilterMatchMode.CONTAINS },
-                        })
-                    }
-                    placeholder="Search Sellers"
-                    className="p-inputtext-sm h-10 w-[300px] p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0097A7]"
-                />
-            </span>
-        </div>
-    );
-
-    const imageTemplate = (rowData: Seller) => (
-        <Image
-            src={rowData.image}
-            alt={rowData.name}
-            width={40}
-            height={40}
-            className="rounded"
+  // Header with Search
+  const renderHeader = () => (
+    <div className="flex flex-col md:flex-row justify-between items-center bg-[#EFEFEF] p-2 rounded-md border border-gray-300 shadow-sm">
+      <h2 className="text-base font-semibold">Deactive Sellers</h2>
+      <span className="p-input-icon-left flex items-center mt-2 md:mt-0">
+        <i className="pi pi-search" />
+        <InputText
+          type="search"
+          onInput={(e) => setGlobalFilter(e.currentTarget.value)}
+          placeholder="Search Sellers"
+          className="p-inputtext-sm h-8 w-full md:w-[300px] p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0097A7]"
         />
-    );
+      </span>
+    </div>
 
-    const actionTemplate = (rowData: Seller) => (
-        <div className="flex gap-2">
-            <div className="flex gap-2">
-                <Link href={`/admin/sellers/${rowData.id}`}>
-                    <Tooltip message="View">
-                        <Button className='bg-transparent'>
-                            <FaEye />
-                        </Button>
-                    </Tooltip>
-                </Link>
-            </div>
-        </div>
-    );
+  );
 
-    const onPageChange = (e: any) => {
-        setFirst(e.first);
-        setRows(e.rows);
-    };
+  // Action Buttons
+  // const actionTemplate = (rowData: Category) => (
+  //   <div className="flex gap-2">
+  //     <Tooltip message="Edit">
+  //       <Link href={`allproduct/edit/${rowData.id}`} passHref>
+  //         <Button icon={<FaEdit />} severity="warning" size="small" />
+  //       </Link>
+  //     </Tooltip>
+  //     <Tooltip message="View">
+  //       <Link href={`allproduct/view/${rowData.id}`} passHref>
+  //         <Button icon={<FaEye />} severity="info" size="small" />
+  //       </Link>
+  //     </Tooltip>
+  //     <Tooltip message="Upload Image">
+  //       <Link href={`/seller/allproduct/uploadimage/${rowData.id}`} passHref>
+  //         <Button icon={<FaImage />} severity="success" size="small" />
+  //       </Link>
+  //     </Tooltip>
+  //     <Tooltip message="Delete">
+  //       <Button
+  //         icon={<FaTrash />}
+  //         severity="danger"
+  //         size="small"
+  //         onClick={() => handleDelete(rowData.id)}
+  //       />
+  //     </Tooltip>
+  //   </div>
+  // );
 
-    return (
-        <div className="p-4">
-            <Toast />
-            <div className="bg-white shadow-md rounded-md p-4">
-                <div className=" pb-4 mb-4">{renderHeader()}</div>
-                <div className="overflow-x-auto">
-                    <DataTable
-                        value={sellers}
-                        paginator
-                        rowsPerPageOptions={[5, 10, 25, 50]}
-                        rows={rows}
-                        first={first}
-                        onPage={onPageChange}
-                        filters={filters}
-                        emptyMessage="No sellers found."
-                        showGridlines
-                    >
-                        <Column
-                            header="No"
-                            body={(data, options) => options.rowIndex + 1}
-                            headerStyle={{
-                                background: "#0097A7",
-                                fontWeight: "bold",
-                                color: "white",
-                            }}
-                        />
+  // Image Column
+  const imageTemplate = (rowData: Category) => (
+    <Image
+      src={rowData.image}
+      alt={rowData.name}
+      width={20}
+      height={20}
+      className="rounded"
+    />
+  );
 
-                        <Column
-                            header="Image"
-                            body={imageTemplate}
-                            headerStyle={{
-                                background: "#0097A7",
-                                fontWeight: "bold",
-                                color: "white",
-                            }}
-                        />
-                        <Column
-                            field="name"
-                            header="Name"
-                            sortable
-                            headerStyle={{
-                                background: "#0097A7",
-                                fontWeight: "bold",
-                                color: "white",
-                            }}
-                        />
-                        <Column
-                            header="Shop Name"
-                            sortable
-                            body={(rowData: Seller) => rowData.shopInfo?.shopName || 'N/A'}
-                            headerStyle={{
-                                background: "#0097A7",
-                                fontWeight: "bold",
-                                color: "white",
-                            }}
-                        />
-                        <Column
-                            field="payment"
-                            header="Payment"
-                            sortable
-                            headerStyle={{
-                                background: "#0097A7",
-                                fontWeight: "bold",
-                                color: "white",
-                            }}
-                        />
-                        <Column
-                            field="email"
-                            header="Email"
-                            sortable
-                            headerStyle={{
-                                background: "#0097A7",
-                                fontWeight: "bold",
-                                color: "white",
-                            }}
-                        />
-                        <Column
-                            field="status"
-                            header="Status"
-                            sortable
-                            headerStyle={{
-                                background: "#0097A7",
-                                fontWeight: "bold",
-                                color: "white",
-                            }}
-                        />
-                        <Column
+  // Pagination Handler
+  const onPageChange = (e: any) => {
+    setFirst(e.first);
+    setRows(e.rows);
+  };
+  const [filters, setFilters] = useState<DataTableFilterMeta>({
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    shopname: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    brand: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    price: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    discount: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    stock: { value: null, matchMode: FilterMatchMode.STARTS_WITH }
+
+  });
+  return (
+
+    <div >
+      <Toast />
+      <div className="bg-white shadow-md rounded-md p-2  dark:bg-[#18181a] text-black dark:text-black">
+        <div className="pb-2 mb-2">{renderHeader()}</div>
+        <div className="tableContainer">
+          <div className="tableResponsive">
+            <DataTable
+              value={categories}
+              paginator
+              rowsPerPageOptions={[10, 25, 50, 75]}
+              rows={rows}
+              first={first}
+              onPage={onPageChange}
+              globalFilter={globalFilter}
+              emptyMessage="No categories found."
+              scrollable
+              scrollHeight="370px"
+              filters={filters}
+              filterDisplay="row"
+              paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+              style={{ overflowX: "auto", width: "100%" }}
+            >
+              {/* Actions Column */}
+              {/* <Column
+    header="Actions"
+    frozen
+    alignFrozen="left"
+    headerStyle={{
+      background: "#0097A7", // Header background color
+      color: "#fff", // Header text color
+      textAlign: "center",
+      padding: "0.5rem",
+      zIndex: 2,
+      position: "sticky",
+      left: 0,
+      fontWeight: "bold",
+    }}
+    style={{ width: "200px" }}
+    bodyStyle={{
+      backgroundColor: "#ffffff", 
+    }}
+    body={(rowData) => (
+      <div className="flex justify-center space-x-2 bg-white">
+        <Link href={`allproduct/view/${rowData.id}`}>
+          <HiEye className="h-6 w-6 p-1 cursor-pointer text-black border border-transparent rounded-md hover:border-black hover:bg-black hover:text-white transition-all" />
+        </Link>
+        <Link href={`allproduct/edit/${rowData.id}`}>
+          <FaEdit className="h-6 w-6 p-1 cursor-pointer text-black border border-transparent rounded-md hover:border-black hover:bg-black hover:text-white transition-all" />
+        </Link>
+        <Link href={`/admin/cropdisease_hi/edit/${rowData.id}`}>
+          <FaTrash className="h-6 w-6 p-1 cursor-pointer text-black border border-transparent rounded-md hover:border-black hover:bg-black hover:text-white transition-all" />
+        </Link>
+        <Link href={`/seller/allproduct/uploadimage/${rowData.id}`}>
+          <FaImage className="h-6 w-6 p-1 cursor-pointer text-black border border-transparent rounded-md hover:border-black hover:bg-black hover:text-white transition-all" />
+        </Link>
+      </div>
+    )}
+  /> */}
+
+              <Column
+                header="Actions"
+                frozen
+                alignFrozen="left"
+                style={{
+                  zIndex: 1,
+                }}
+                headerStyle={{
+                  zIndex: 2,
+                  position: "sticky",
+                  left: 0,
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+                // bodyStyle={{
+                //   backgroundColor: "#ffffff", 
+                // }}
+                body={(rowData) => (
+                  <div className="flex bg-white dark:bg-[#18181a] text-black dark:text-white gap-2">
+                   
+                    <Link href={`allproduct/view/${rowData.id}`} passHref>
+                      <FaEye className="text-black dark:text-white cursor-pointer text-xs" />
+                    </Link>
+                  
+                  
+                  </div>
+
+                )}
+              />
+
+              {/* No Column (Row Number) */}
+              <Column
+                header="No"
+                body={(data, options) => options.rowIndex + 1}
+                headerStyle={{
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              />
+
+              {/* Image Column */}
+              <Column
+                header="Image"
+                body={imageTemplate}
+                headerStyle={{
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              />
+
+              {/* Name Column */}
+              <Column
+                field="name"
+                header="Name"
+                filter
+                style={{ minWidth: "10rem" }}
+                sortable
+                headerStyle={{
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              />
+
+              {/* Category Column */}
+              <Column
+                field="shopname"
+                filter
+                style={{ minWidth: "10rem" }}
+                header="Shop Name"
+                sortable
+                headerStyle={{
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              />
+
+              {/* Brand Column */}
+              <Column
+                field="brand"
+                filter
+                style={{ minWidth: "10rem" }}
+                header="Payment"
+                sortable
+                headerStyle={{
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              />
+
+              {/* Price Column */}
+              <Column
+                field="price"
+                filter
+                style={{ minWidth: "10rem" }}
+                header="Email"
+                body={(data) => `$${data.price}`}
+                sortable
+                headerStyle={{
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              />
+
+              {/* Discount Column */}
+              <Column
+                field="discount"
+                filter
+                style={{ minWidth: "10rem" }}
+                header="Email"
+                body={(data) => `${data.discount}%`}
+                sortable
+                headerStyle={{
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              />
+
+              {/* Stock Column */}
+              <Column
+                field="stock"
+                filter
+                style={{ minWidth: "10rem" }}
+                header="Status"
+                sortable
+                headerStyle={{
+                  background: "#0097A7",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              />
+               <Column
                             header="District"
                             sortable
                             body={(rowData: Seller) => rowData.shopInfo?.district || 'N/A'}
@@ -218,20 +462,13 @@ const DeactiveSellers = () => {
                                 color: "white",
                             }}
                         />
-                        <Column
-                            header="Actions"
-                            body={actionTemplate}
-                            headerStyle={{
-                                background: "#0097A7",
-                                fontWeight: "bold",
-                                color: "white",
-                            }}
-                        />
-                    </DataTable>
-                </div>
-            </div>
+            </DataTable>
+
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default DeactiveSellers;
