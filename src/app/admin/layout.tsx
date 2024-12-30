@@ -24,8 +24,8 @@ export default function AdminLayout({
   children: React.ReactNode
 }) {
   const pathname = usePathname()
-  let [isSidebarMinimized, setIsSidebarMinimized] = useState(false)
-  const [isMobile, setIsMobile] = useState(false);
+  const [isSidebarMinimized, setIsSidebarMinimized] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   const generateBreadcrumbItems = (path: string) => {
     const parts = path.split('/').filter(Boolean)
@@ -43,51 +43,48 @@ export default function AdminLayout({
   }
 
   const breadcrumbItems = generateBreadcrumbItems(pathname)
+
   useEffect(() => {
-    // Function to check screen width
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768); // Consider width <= 768px as mobile
-    };
-
-    // Check screen size on initial render
-    handleResize();
-
-    // Add event listener to handle window resize
-    window.addEventListener("resize", handleResize);
- 
-    if (isMobile) {
-      isSidebarMinimized=true;
+      setIsMobile(window.innerWidth <= 768) 
     }
-    // Cleanup listener on unmount
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+
+    handleResize()
+    window.addEventListener("resize", handleResize)
+
+    // Automatically minimize the sidebar for mobile screens
+    if (isMobile) {
+      setIsSidebarMinimized(true)
+    }
+
+    return () => window.removeEventListener("resize", handleResize)
+  }, [isMobile])
+
+  // Conditional rendering for the `/admin/login` route
+  if (pathname == '/admin/login') {
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        {children}
+      </div>
+    )
+  }
 
   return (
-    <>
-     <div>
-      {isMobile ? (
-        <p>This is a mobile device.</p>
-      ) : (
-        <p>This is not a mobile device.</p>
-      )}
-    </div>
     <SidebarProvider>
       <div className="userDashboard flex">
-
         {/* Sidebar Section */}
-        <aside
-
-        >
+        <aside>
           <AdminSidebar />
         </aside>
 
         {/* Main Section */}
         <main
           className={`mainsection w-[calc(100%-20vw)] ${
-            
-            !isMobile? isSidebarMinimized ? "w-[calc(100vw-5vw)]" : "w-[calc(100vw-20vw)]":'w-[calc(100vw-5vw)]'
-            
-
+            !isMobile
+              ? isSidebarMinimized
+                ? "w-[calc(100vw-5vw)]"
+                : "w-[calc(100vw-20vw)]"
+              : "w-[calc(100vw-5vw)]"
           } flex flex-col p-4 transition-all duration-300`}
         >
           <header className="flex h-8 items-center gap-2 px-4 bg-white dark:bg-[#EFEFEF]">
@@ -123,6 +120,5 @@ export default function AdminLayout({
         </main>
       </div>
     </SidebarProvider>
-    </>
   )
 }

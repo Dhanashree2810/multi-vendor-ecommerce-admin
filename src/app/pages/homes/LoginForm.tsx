@@ -55,16 +55,16 @@ export function LoginForm() {
     }
     return (
         <div
-            className="flex items-center justify-center w-full h-screen bg-[#CDCAE9]"
+            className="flex items-center justify-center w-full h-screen "
         >
-            <div className="w-full max-w-sm bg-[#6F68D1] p-2 rounded-lg shadow-lg">
-                <Card className=' border-none bg-[#6F68D1]'>
+            <div className="w-full max-w-screen-lg  p-2 rounded-lg shadow-lg">
+                <Card className=' border-none  '>
                     <CardHeader className=' text-white'>
-                        <CardTitle className="text-center font-bold text-2xl">Admin Login</CardTitle>
+                        <CardTitle className="text-center  font-bold text-2xl">Admin Login</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <form onSubmit={handleLogin} noValidate className="space-y-4 text-white">
-                            <div className="form-group mb-6">
+                            <div className="form-group  mb-6">
                                 <Label htmlFor="emailId" className='font-bold'>Email Address</Label>
                                 <Input
                                     type="text"
