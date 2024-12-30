@@ -30,142 +30,96 @@ interface Category {
 }
 
 const demoCategories: Category[] = [
+ 
+
   {
-    id: "1",
-    name: "Home & Furniture",
-    image: HomeFurniture.src,
-    shopname: "Furniture",
-    brand: "IKEA",
-    price: 1200,
-    discount: 10,
-    stock: 50,
+    id: '1',
+    name: 'John Doe',
+    email: 'john@example.com',
+    payment: 'Paid',
+    status: 'Active',
   },
   {
-    id: "2",
-    name: "Electronics",
-    image: Electronics.src,
-    shopname: "Gadgets",
-    brand: "Sony",
-    price: 2500,
-    discount: 15,
-    stock: 30,
-  },
-  {
-    id: "3",
-    name: "Fashion",
-    image: Fashion.src,
-    shopname: "Clothing",
-    brand: "Zara",
-    price: 80,
-    discount: 20,
-    stock: 100,
-  },
-  {
-    id: "4",
-    name: "Appliances",
-    image: Appliances.src,
-    shopname: "Home Appliances",
-    brand: "LG",
-    price: 400,
-    discount: 5,
-    stock: 25,
-  },
-  {
-    id: "5",
-    name: "Mobile",
-    image: Mobile.src,
-    shopname: "Gadgets",
-    brand: "Samsung",
-    price: 1000,
-    discount: 12,
-    stock: 60,
-  },
-  {
-    id: "6",
-    name: "Appliances",
-    image: Appliances.src,
-    shopname: "Home Appliances",
-    brand: "LG",
-    price: 400,
-    discount: 5,
-    stock: 25,
-  },
-  {
-    id: "7",
-    name: "Mobile",
-    image: Mobile.src,
-    shopname: "Gadgets",
-    brand: "Samsung",
-    price: 1000,
-    discount: 12,
-    stock: 60,
-  },
-  {
-    id: "8",
-    name: "Appliances",
-    image: Appliances.src,
-    shopname: "Home Appliances",
-    brand: "LG",
-    price: 400,
-    discount: 5,
-    stock: 25,
-  },
-  {
-    id: "8",
-    name: "Appliances",
-    image: Appliances.src,
-    shopname: "Home Appliances",
-    brand: "LG",
-    price: 400,
-    discount: 5,
-    stock: 25,
+    id: '1',
+    name: 'John Doe',
+    email: 'john@example.com',
+    payment: 'Paid',
+    status: 'Active',
   }, {
-    id: "8",
-    name: "Appliances",
-    image: Appliances.src,
-    shopname: "Home Appliances",
-    brand: "LG",
-    price: 400,
-    discount: 5,
-    stock: 25,
+    id: '1',
+    name: 'John Doe',
+    email: 'john@example.com',
+    payment: 'Paid',
+    status: 'Active',
+  }, {
+    id: '1',
+    name: 'John Doe',
+    email: 'john@example.com',
+    payment: 'Paid',
+    status: 'Active',
+  }, {
+    id: '1',
+    name: 'John Doe',
+    email: 'john@example.com',
+    payment: 'Paid',
+    status: 'Active',
+  }, {
+    id: '1',
+    name: 'John Doe',
+    email: 'john@example.com',
+    payment: 'Paid',
+    status: 'Active',
+  }, {
+    id: '1',
+    name: 'John Doe',
+    email: 'john@example.com',
+    payment: 'Paid',
+    status: 'Active',
+  }, {
+    id: '1',
+    name: 'John Doe',
+    email: 'john@example.com',
+    payment: 'Paid',
+    status: 'Active',
+  }, {
+    id: '1',
+    name: 'John Doe',
+    email: 'john@example.com',
+    payment: 'Paid',
+    status: 'Active',
   },
   {
-    id: "8",
-    name: "Appliances",
-    image: Appliances.src,
-    shopname: "Home Appliances",
-    brand: "LG",
-    price: 400,
-    discount: 5,
-    stock: 25,
-  }, {
-    id: "8",
-    name: "Appliances",
-    image: Appliances.src,
-    shopname: "Home Appliances",
-    brand: "LG",
-    price: 400,
-    discount: 5,
-    stock: 25,
-  }, {
-    id: "8",
-    name: "Appliances",
-    image: Appliances.src,
-    shopname: "Home Appliances",
-    brand: "LG",
-    price: 400,
-    discount: 5,
-    stock: 25,
-  }, {
-    id: "8",
-    name: "Appliances",
-    image: Appliances.src,
-    shopname: "Home Appliances",
-    brand: "LG",
-    price: 400,
-    discount: 5,
-    stock: 25,
+    id: '1',
+    name: 'John Doe',
+    email: 'john@example.com',
+    payment: 'Paid',
+    status: 'Active',
+  },{
+    id: '1',
+    name: 'John Doe',
+    email: 'john@example.com',
+    payment: 'Paid',
+    status: 'Active',
+  },{
+    id: '1',
+    name: 'John Doe',
+    email: 'john@example.com',
+    payment: 'Paid',
+    status: 'Active',
+  },{
+    id: '1',
+    name: 'John Doe',
+    email: 'john@example.com',
+    payment: 'Paid',
+    status: 'Active',
+  },{
+    id: '1',
+    name: 'John Doe',
+    email: 'john@example.com',
+    payment: 'Paid',
+    status: 'Active',
   },
+ 
 ];
 
 const SellersRequest = () => {
@@ -198,36 +152,7 @@ const SellersRequest = () => {
 
   );
 
-  // Action Buttons
-  // const actionTemplate = (rowData: Category) => (
-  //   <div className="flex gap-2">
-  //     <Tooltip message="Edit">
-  //       <Link href={`allproduct/edit/${rowData.id}`} passHref>
-  //         <Button icon={<FaEdit />} severity="warning" size="small" />
-  //       </Link>
-  //     </Tooltip>
-  //     <Tooltip message="View">
-  //       <Link href={`allproduct/view/${rowData.id}`} passHref>
-  //         <Button icon={<FaEye />} severity="info" size="small" />
-  //       </Link>
-  //     </Tooltip>
-  //     <Tooltip message="Upload Image">
-  //       <Link href={`/seller/allproduct/uploadimage/${rowData.id}`} passHref>
-  //         <Button icon={<FaImage />} severity="success" size="small" />
-  //       </Link>
-  //     </Tooltip>
-  //     <Tooltip message="Delete">
-  //       <Button
-  //         icon={<FaTrash />}
-  //         severity="danger"
-  //         size="small"
-  //         onClick={() => handleDelete(rowData.id)}
-  //       />
-  //     </Tooltip>
-  //   </div>
-  // );
 
-  // Image Column
   const imageTemplate = (rowData: Category) => (
     <Image
       src={rowData.image}
@@ -277,42 +202,7 @@ const SellersRequest = () => {
               paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
               style={{ overflowX: "auto", width: "100%" }}
             >
-              {/* Actions Column */}
-              {/* <Column
-    header="Actions"
-    frozen
-    alignFrozen="left"
-    headerStyle={{
-      background: "#0097A7", // Header background color
-      color: "#fff", // Header text color
-      textAlign: "center",
-      padding: "0.5rem",
-      zIndex: 2,
-      position: "sticky",
-      left: 0,
-      fontWeight: "bold",
-    }}
-    style={{ width: "200px" }}
-    bodyStyle={{
-      backgroundColor: "#ffffff", 
-    }}
-    body={(rowData) => (
-      <div className="flex justify-center space-x-2 bg-white">
-        <Link href={`allproduct/view/${rowData.id}`}>
-          <HiEye className="h-6 w-6 p-1 cursor-pointer text-black border border-transparent rounded-md hover:border-black hover:bg-black hover:text-white transition-all" />
-        </Link>
-        <Link href={`allproduct/edit/${rowData.id}`}>
-          <FaEdit className="h-6 w-6 p-1 cursor-pointer text-black border border-transparent rounded-md hover:border-black hover:bg-black hover:text-white transition-all" />
-        </Link>
-        <Link href={`/admin/cropdisease_hi/edit/${rowData.id}`}>
-          <FaTrash className="h-6 w-6 p-1 cursor-pointer text-black border border-transparent rounded-md hover:border-black hover:bg-black hover:text-white transition-all" />
-        </Link>
-        <Link href={`/seller/allproduct/uploadimage/${rowData.id}`}>
-          <FaImage className="h-6 w-6 p-1 cursor-pointer text-black border border-transparent rounded-md hover:border-black hover:bg-black hover:text-white transition-all" />
-        </Link>
-      </div>
-    )}
-  /> */}
+
 
               <Column
                 header="Actions"
@@ -356,16 +246,7 @@ const SellersRequest = () => {
                 }}
               />
 
-              {/* Image Column */}
-              <Column
-                header="Image"
-                body={imageTemplate}
-                headerStyle={{
-                  background: "#0097A7",
-                  fontWeight: "bold",
-                  color: "white",
-                }}
-              />
+            
 
               {/* Name Column */}
               <Column
@@ -381,19 +262,7 @@ const SellersRequest = () => {
                 }}
               />
 
-              {/* Category Column */}
-              <Column
-                field="shopname"
-                filter
-                style={{ minWidth: "10rem" }}
-                header="Shop Name"
-                sortable
-                headerStyle={{
-                  background: "#0097A7",
-                  fontWeight: "bold",
-                  color: "white",
-                }}
-              />
+              
 
               {/* Brand Column */}
               <Column
@@ -409,35 +278,22 @@ const SellersRequest = () => {
                 }}
               />
 
-              {/* Price Column */}
-              <Column
-                field="price"
-                filter
-                style={{ minWidth: "10rem" }}
-                header="Email"
-                body={(data) => `$${data.price}`}
-                sortable
-                headerStyle={{
-                  background: "#0097A7",
-                  fontWeight: "bold",
-                  color: "white",
-                }}
-              />
+<Column
+    field="email"
+    header="Email"
+    sortable
+    filter
+    style={{ minWidth: "10rem" }}
+    headerStyle={{
+      background: "#0097A7",
+      fontWeight: "bold",
+      color: "white",
+    }}
+  />
 
-              {/* Discount Column */}
-              <Column
-                field="discount"
-                filter
-                style={{ minWidth: "10rem" }}
-                header="Email"
-                body={(data) => `${data.discount}%`}
-                sortable
-                headerStyle={{
-                  background: "#0097A7",
-                  fontWeight: "bold",
-                  color: "white",
-                }}
-              />
+              
+
+              
 
               {/* Stock Column */}
               <Column
@@ -452,16 +308,7 @@ const SellersRequest = () => {
                   color: "white",
                 }}
               />
-               {/* <Column
-                            header="District"
-                            sortable
-                            body={(rowData: Seller) => rowData.shopInfo?.district || 'N/A'}
-                            headerStyle={{
-                                background: "#0097A7",
-                                fontWeight: "bold",
-                                color: "white",
-                            }}
-                        /> */}
+              
             </DataTable>
 
           </div>
